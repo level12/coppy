@@ -2,3 +2,4 @@
 
 blazeutils
 pytest
+nox

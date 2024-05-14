@@ -1,0 +1,31 @@
+version: 2
+jobs:
+    build:
+        docker:
+            - image: cimg/python:3.12
+        steps:
+            - checkout
+
+            - run:
+                name: folder listing for debugging
+                command: ls -al
+
+            - run:
+                name: install testing helpers needed at OS level
+                command: >
+                    python -m pip install nox
+
+                    python --version
+
+                    python -m nox --version
+
+            - run:
+                name: run nox
+                command: python -m nox
+
+            # - store_test_results:
+            #     path: .ci/test-reports/
+
+            # - run:
+            #     name: push code coverage
+            #     command: bash scripts/codecov-verify && bash codecov -X coveragepy -t 197f7fad-3f49-49fc-a2ec-2dbee41989f0
