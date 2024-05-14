@@ -3,3 +3,4 @@
 blazeutils
 pytest
 nox
+uv

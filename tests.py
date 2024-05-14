@@ -1,3 +1,4 @@
+from os import environ
 from pathlib import Path
 import subprocess
 import tomllib
@@ -58,6 +59,16 @@ class Package:
     def sub_run(self, *args, **kwargs) -> subprocess.CompletedProcess:
         return sub_run(*args, cwd=self.dpath, **kwargs)
 
+    def mise(self, *args, **kwargs) -> subprocess.CompletedProcess:
+        venv_dpath = self.path('.venv')
+        if not venv_dpath.exists():
+            self.sub_run('uv', 'venv')
+
+        env = environ.copy()
+        env['WORKON_HOME'] = venv_dpath.as_posix()
+
+        return self.sub_run('mise', *args, env=env, **kwargs)
+
     def toml_config(self, fname):
         with self.dpath.joinpath(fname).open('rb') as f:
             return LazyDict(tomllib.load(f))
@@ -95,6 +106,8 @@ class TestProject:
 
         proj = package.toml_config('pyproject.toml')
         assert proj.project.scripts['ent'] == 'enterprise.cli:main'
+
+        # TODO: when reqs supports uv, make this this uses it so its faster
         package.sub_run('reqs', 'compile', '--force')
         result = package.sub_run('hatch', 'run', 'ent')
         assert 'Hello from enterprise.cli' in result.stdout.decode('utf-8')
@@ -102,13 +115,13 @@ class TestProject:
     def test_mise(self, package: Package):
         package.generate()
 
-        config = package.toml_config('.mise/config.toml')
+        config = package.toml_config('mise/config.toml')
         venv = config.env._.python.venv
         assert venv.path == '{{env.WORKON_HOME}}/Enterprise'
         assert config.tools.python == '3.12'
 
-        package.sub_run('mise', 'trust')
-        result = package.sub_run('mise', 'tasks')
+        package.mise('trust')
+        result = package.mise('tasks')
         stdout = result.stdout.decode('utf-8')
         assert stdout.startswith('hello  Example mise task')
 

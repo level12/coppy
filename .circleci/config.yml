@@ -7,16 +7,16 @@ jobs:
             - checkout
 
             - run:
-                name: folder listing for debugging
-                command: ls -al
+                name: debugging aids
+                command: |
+                    ls -al
+                    echo $PATH
 
             - run:
                 name: install testing helpers needed at OS level
-                command: >
+                command: |
                     python -m pip install nox
-
                     python --version
-
                     python -m nox --version
 
             - run:

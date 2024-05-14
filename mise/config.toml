@@ -1,5 +1,6 @@
 [tools]
 python = "3.12"
+# "pipx:level12/reqs" = "latest"
 
 
 [env]

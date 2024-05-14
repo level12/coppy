@@ -34,3 +34,8 @@ script_name:
   type: str
   help: CLI name if any (for use in the shell)
   default: ''
+
+python_version:
+  type: str
+  help: Python version (for mise)
+  default: '3.12'
