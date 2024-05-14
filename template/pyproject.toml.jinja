@@ -1,0 +1,15 @@
+[build-system]
+requires = ['hatchling', 'hatch-requirements-txt']
+build-backend = 'hatchling.build'
+
+
+[project]
+name = '{{ project_name }}'
+authors = [{name = "{{ author_name }}", email = "{{ author_email }}"}]
+version = '0.1'
+dynamic = ['dependencies', 'optional-dependencies']
+
+{% if script_name %}
+[project.scripts]
+"{{ script_name }}" = "{{ py_module }}.cli:main"
+{% endif %}

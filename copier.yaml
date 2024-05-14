@@ -1,0 +1,36 @@
+# CONFIGURATION -------------------------
+_min_copier_version: "9"
+_answers_file: .copier-answers-py.yaml
+_envops:
+  autoescape: false
+  keep_trailing_newline: true
+_subdirectory: template
+_jinja_extensions:
+- copier_templates_extensions.TemplateExtensionLoader
+- extensions.py:GitExtension
+- extensions.py:SlugifyExtension
+
+# PROMPT --------------------------------
+project_name:
+  type: str
+  help: Project name
+
+author_name:
+  type: str
+  help: Author name
+  default: "{{ git_user_name() }}"
+
+author_email:
+  type: str
+  help: Author email
+  default: "{{ git_user_email() }}"
+
+py_module:
+  type: str
+  help: Package import name (for `import NAME` in Python code)
+  default: "{{ project_name | slugify('_') }}"
+
+script_name:
+  type: str
+  help: CLI name if any (for use in the shell)
+  default: ''
