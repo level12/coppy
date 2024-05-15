@@ -1,18 +1,37 @@
+## Build
 [build]
 dev-mode-dirs = ['src']
 
-{% if hatch_installer_uv %}
-[envs.default]
-installer = "uv"
-{% endif %}
 
+## Dependencies
 [metadata.hooks.requirements_txt]
 files = ['requirements/base.txt']
-
 
 [metadata.hooks.requirements_txt.optional-dependencies]
 dev = ['requirements/dev.txt']
 
+
+## Env: default
+[envs.default]
+{% if hatch_installer_uv -%}
+installer = "uv"
+{%- endif %}
+
+
+## Env: copier
+[envs.copier]
+detached = true
+dependencies = [
+  'copier',
+  'https://github.com/level12/copier-py-package/archive/main.tar.gz',
+]
+
+[envs.copier.scripts]
+update = 'copier update --answers-file .copier-answers-py.yaml --trust --skip-answered'
+update-head = 'update --vcs-ref HEAD'
+
+
+## Version
 [version]
 source = 'regex_commit'
 path = 'src/{{ py_module }}/version.py'
