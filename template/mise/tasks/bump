@@ -1,0 +1,48 @@
+#!/usr/bin/env python
+# mise description="Bump version"
+import datetime as dt
+
+import click
+
+from tasks_lib import sub_run
+
+
+def current_version():
+    result = sub_run('hatch', 'version', capture=True)
+    return result.stdout.decode('utf-8').strip()
+
+
+def date_version(current: str):
+    major, _, patch, *_ = current.split('.')
+    version = f'{major}.' + dt.date.today().strftime(r'%Y%m%d')
+
+    patch = int(patch) + 1 if current.startswith(version) else 1
+
+    return f'{version}.{patch}'
+
+
+@click.command()
+@click.argument('kind', type=click.Choice(('micro', 'minor', 'major', 'date')))
+@click.option('--show', is_flag=True)
+@click.option('--current', help='simulate current version')
+@click.pass_context
+def main(ctx: click.Context, kind: str | None, show: bool, current: str | None):
+    if show and kind != 'date':
+        ctx.fail('--show is only valid with date versioning')
+
+    if kind == 'date':
+        current = current or current_version()
+        version = date_version(current)
+        if show:
+            print('Current:', current)
+            print('Next:', version)
+            return
+    else:
+        version = kind
+
+    sub_run('hatch', 'version', version)
+    sub_run('git', 'push', '--follow-tags')
+
+
+if __name__ == '__main__':
+    main()

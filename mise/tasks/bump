@@ -1,16 +1,1 @@
-#!/usr/bin/env python
-# mise description="Bump version"
-import click
-
-from tasks_lib import sub_run
-
-
-@click.command()
-@click.argument('segment', type=click.Choice(('micro', 'minor', 'major')))
-def main(segment: str):
-    sub_run('hatch', 'version', segment)
-    sub_run('git', 'push', '--follow-tags')
-
-
-if __name__ == '__main__':
-    main()
+../../template/mise/tasks/bump
