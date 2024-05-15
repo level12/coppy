@@ -1,13 +1,16 @@
 [build-system]
-requires = ['hatchling', 'hatch-requirements-txt']
+requires = [
+    'hatchling',
+    'hatch-requirements-txt',
+    'hatch-regex-commit',
+]
 build-backend = 'hatchling.build'
 
 
 [project]
 name = '{{ project_name }}'
 authors = [{name = '{{ author_name }}', email = '{{ author_email }}'}]
-version = '0.1'
-dynamic = ['dependencies', 'optional-dependencies']
+dynamic = ['dependencies', 'optional-dependencies', 'version']
 
 {% if script_name %}
 [project.scripts]

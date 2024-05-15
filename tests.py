@@ -35,10 +35,6 @@ def sub_run(*args, **kwargs):
         raise
 
 
-def hatch_run(*args, **kwargs):
-    return sub_run('hatch', 'run', 'ent')
-
-
 class Package:
     def __init__(self, dpath: Path):
         self.dpath = dpath
@@ -54,6 +50,7 @@ class Package:
             kwargs,
             unsafe=True,
             defaults=True,
+            vcs_ref='HEAD',
         )
 
     def sub_run(self, *args, **kwargs) -> subprocess.CompletedProcess:
@@ -129,3 +126,9 @@ class TestProject:
         package.generate()
         assert package.exists('ruff.toml')
         assert package.exists('.copier-answers-py.yaml')
+
+    def test_version(self, package: Package):
+        package.generate()
+
+        result = package.sub_run('hatch', 'version')
+        assert result.stdout.decode('utf-8').strip() == '0.1.0'
