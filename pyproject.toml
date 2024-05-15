@@ -4,12 +4,12 @@ build-backend = 'hatchling.build'
 
 [project]
 name = 'CopierPyPkg'
-authors = [{name = "Randy Syring", email = "randy.syring@level12.io"}]
+authors = [{name = 'Randy Syring', email = 'randy.syring@level12.io'}]
 version = '0.1'
 dynamic = ['dependencies', 'optional-dependencies']
 
 [tool.hatch.build]
-dev-mode-dirs = ["."]
+dev-mode-dirs = ['.']
 
 [tool.hatch.metadata.hooks.requirements_txt]
 files = ['requirements/base.txt']

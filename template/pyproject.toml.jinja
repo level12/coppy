@@ -5,11 +5,16 @@ build-backend = 'hatchling.build'
 
 [project]
 name = '{{ project_name }}'
-authors = [{name = "{{ author_name }}", email = "{{ author_email }}"}]
+authors = [{name = '{{ author_name }}', email = '{{ author_email }}'}]
 version = '0.1'
 dynamic = ['dependencies', 'optional-dependencies']
 
 {% if script_name %}
 [project.scripts]
-"{{ script_name }}" = "{{ py_module }}.cli:main"
+'{{ script_name }}' = '{{ py_module }}.cli:main'
+{% endif %}
+
+[tool.reqs]
+{% if use_pipx %}
+sync_pipx = true
 {% endif %}
