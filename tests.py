@@ -82,7 +82,7 @@ def package(tmp_path):
     return Package(tmp_path)
 
 
-class TestProject:
+class TestPyPackage:
     def test_pyproject(self, package: Package):
         package.generate()
         config = package.toml_config('pyproject.toml')
@@ -104,7 +104,7 @@ class TestProject:
         proj = package.toml_config('pyproject.toml')
         assert proj.project.scripts['ent'] == 'enterprise.cli:main'
 
-        # TODO: when reqs supports uv, make this this uses it so its faster
+        # TODO: when reqs supports uv, make this use it so its faster
         package.sub_run('reqs', 'compile', '--force')
         result = package.sub_run('hatch', 'run', 'ent')
         assert 'Hello from enterprise.cli' in result.stdout.decode('utf-8')
@@ -132,3 +132,6 @@ class TestProject:
 
         result = package.sub_run('hatch', 'version')
         assert result.stdout.decode('utf-8').strip() == '0.1.0'
+
+    def test_copier_update_script(self):
+        pass
