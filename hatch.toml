@@ -7,6 +7,7 @@ files = ['requirements/base.txt']
 [metadata.hooks.requirements_txt.optional-dependencies]
 dev = ['requirements/dev.txt']
 
+
 [version]
 source = 'regex_commit'
-path = 'version.py'
+path = 'copier_py_package.py'
