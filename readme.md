@@ -30,6 +30,7 @@ copier copy --trust gh:level12/copier-py-package .../projects/some-new-pkg
     - Static [environment variables](https://mise.jdx.dev/environments.html)
     - Other tools when needed (e.g. npm, Terraform)
     - Project [tasks](https://mise.jdx.dev/tasks/)
+- date based versioning
 
 Todo:
 
