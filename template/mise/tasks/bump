@@ -1,5 +1,10 @@
 #!/usr/bin/env python
 # mise description="Bump version"
+"""
+Originates from https://github.com/level12/copier-py-package
+
+Consider updating the source file in that repo with enhancements or bug fixes needed.
+"""
 import datetime as dt
 
 import click
@@ -22,13 +27,38 @@ def date_version(current: str):
 
 
 @click.command()
-@click.argument('kind', type=click.Choice(('micro', 'minor', 'major', 'date')))
-@click.option('--show', is_flag=True)
-@click.option('--current', help='simulate current version')
+@click.argument('kind', type=click.Choice(('micro', 'minor', 'major', 'date')), default='date')
+@click.option('--show', is_flag=True, help="Only show next version, don't bump (date only)")
+@click.option('--current', help='Simulate current version (date only)')
+@click.option('--push/--no-push', help='Push after bump', default=True)
 @click.pass_context
-def main(ctx: click.Context, kind: str | None, show: bool, current: str | None):
+def main(ctx: click.Context, kind: str | None, show: bool, current: str | None, push: bool):
+    """
+    Bump the version and (by default) git push including tags.
+
+    Date based versioning is the default.  Examples:
+
+        v0.20231231.1
+        v0.20231231.2
+        v0.20240101.1
+
+    A normal bump will increment the minor or micro slot.  Use a major bump when making breaking
+    changes in a library, e.g.:
+
+        mise run bump major
+        Old: 0.20240515.1
+        New: 1.0.0
+
+    Major, minor, and micro bumps are just passed through to `hatch version` and provided for
+    completeness.  If using date based versioning only `date` and `major` need to be used.
+
+    Assumes your project is using hatch-regex-commit or similar so that a commit & tag are created
+    automatically after every version bump.
+    """
     if show and kind != 'date':
         ctx.fail('--show is only valid with date versioning')
+    if current and kind != 'date':
+        ctx.fail('--current is only valid with date versioning')
 
     if kind == 'date':
         current = current or current_version()
@@ -41,7 +71,8 @@ def main(ctx: click.Context, kind: str | None, show: bool, current: str | None):
         version = kind
 
     sub_run('hatch', 'version', version)
-    sub_run('git', 'push', '--follow-tags')
+    if push:
+        sub_run('git', 'push', '--follow-tags')
 
 
 if __name__ == '__main__':
