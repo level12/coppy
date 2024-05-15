@@ -9,7 +9,11 @@ argcomplete==3.3.0 \
 blazeutils==0.7.0 \
     --hash=sha256:3ce3f95f44a171443f9fef69bbccc159954f7cdb83ed3aebfe97f7ea1a52eb88 \
     --hash=sha256:5075f2f277e0c5f11ad18cfc03493385811fc99a4cbceb23c9eeb3699b5d5979
-    # via -r /home/rsyring/projects/copier-py/requirements/dev.in
+    # via -r /home/rsyring/projects/copier-py-package/requirements/dev.in
+click==8.1.7 \
+    --hash=sha256:ae74fb96c20a0277a1d615f1e4d73c8414f5a98db8b799a7931d1582f3390c28 \
+    --hash=sha256:ca9853ad459e787e2192211578cc907e7594e294c7ccc834310722b41b9ca6de
+    # via -r /home/rsyring/projects/copier-py-package/requirements/dev.in
 colorama==0.4.6 \
     --hash=sha256:08695f5cb7ed6e0531a20572697297273c47b8cae5a63ffc6d6ed5c201be6e44 \
     --hash=sha256:4f1d9991f5acc0ca119f9d443620b77f9d6b33703e51011c16baf57afb285fc6
@@ -22,12 +26,12 @@ copier==9.2.0 \
     --hash=sha256:4ed9012579923955d3fc61d049568907fabe6d9a47e5f871236c6aae0b7472f1 \
     --hash=sha256:62682ce8cd78db1006feafe2c815d59d5069efa4c2009017f3c63780d977f6de
     # via
-    #   -r /home/rsyring/projects/copier-py/requirements/base.txt
+    #   -r /home/rsyring/projects/copier-py-package/requirements/base.txt
     #   copier-templates-extensions
 copier-templates-extensions==0.3.0 \
     --hash=sha256:48b3f5213ee913b931df40e4e9325b58b9c9a741f1052a7da1b247ed991f5150 \
     --hash=sha256:733e709536e03768b1201c79525534d7fd153932cf764492a0396692e513f244
-    # via -r /home/rsyring/projects/copier-py/requirements/base.txt
+    # via -r /home/rsyring/projects/copier-py-package/requirements/base.txt
 distlib==0.3.8 \
     --hash=sha256:034db59a0b96f8ca18035f36290806a9a6e6bd9d1ff91e45a7f172eb17e51784 \
     --hash=sha256:1530ea13e350031b6312d8580ddb6b27a104275a31106523b8f123787f494f64
@@ -123,7 +127,7 @@ markupsafe==2.1.5 \
 nox==2024.4.15 \
     --hash=sha256:6492236efa15a460ecb98e7b67562a28b70da006ab0be164e8821177577c0565 \
     --hash=sha256:ecf6700199cdfa9e5ea0a41ff5e6ef4641d09508eda6edb89d9987864115817f
-    # via -r /home/rsyring/projects/copier-py/requirements/dev.in
+    # via -r /home/rsyring/projects/copier-py-package/requirements/dev.in
 packaging==24.0 \
     --hash=sha256:2ddfb553fdf02fb784c234c7ba6ccc288296ceabec964ad2eae3777778130bc5 \
     --hash=sha256:eb82c5e3e56209074766e6885bb04b8c38a0c015d0a30036ebe7ece34c9989e9
@@ -244,7 +248,7 @@ pygments==2.18.0 \
 pytest==8.2.0 \
     --hash=sha256:1733f0620f6cda4095bbf0d9ff8022486e91892245bb9e7d5542c018f612f233 \
     --hash=sha256:d507d4482197eac0ba2bae2e9babf0672eb333017bcedaa5fb1a3d42c1174b3f
-    # via -r /home/rsyring/projects/copier-py/requirements/dev.in
+    # via -r /home/rsyring/projects/copier-py-package/requirements/dev.in
 pyyaml==6.0.1 \
     --hash=sha256:04ac92ad1925b2cff1db0cfebffb6ffc43457495c9b3c39d3fcae417d7125dc5 \
     --hash=sha256:062582fca9fabdd2c8b54a3ef1c978d786e0f6b3a1510e0ac93ef59e0ddae2bc \
@@ -310,6 +314,25 @@ typing-extensions==4.11.0 \
     # via
     #   pydantic
     #   pydantic-core
+uv==0.1.44 \
+    --hash=sha256:012fcfc3789f303ee3ff9f2a6e09bc589710fed7c2dcbad4379832072bad7a95 \
+    --hash=sha256:05774eb086b18aad488c3140daa62a235e3f270f62bd3cc4aaaa54eed927cc5b \
+    --hash=sha256:26d07edb37e7bfddc3b4e1faa13420e6048ddd974b34fbc1c19fcf9bacef9e5b \
+    --hash=sha256:2e5a60af214f42b621aa37ad320253c64f77dbfacafa710dc42d34965c2cd27f \
+    --hash=sha256:2f95acffcdac507de9c8f8ed037e529df3ccea274b4453df05df3f331543f5fc \
+    --hash=sha256:3eeac3d8be69831430743f3d00f84ddccfbd56b6835bb52d17f97914c9adfdff \
+    --hash=sha256:567486ce0ad2f9778782ba6ee19d2b65516c4f4bf2b7b4fc66fc2712cd46c6d0 \
+    --hash=sha256:768369a0bbdea8c3a670388ec1b4a11fe5871ef40d84a43844e9b8d97a1c2ca5 \
+    --hash=sha256:7983b00d95290dcdea8488fa8ecdfdef5c8e7d3c92c90b8dcf405cc26b707add \
+    --hash=sha256:8f90e80e11da409ce88424381f5c91e7f908d6a7eec53ed4ae60c5d76698d126 \
+    --hash=sha256:9ef3448111b47ab95874fbf2c5ca8efd52f54de14086079e52b588d037d243f1 \
+    --hash=sha256:b04eb0c8dedadfe434f9756bdc1c8a09a75df83884ba4cc7d97985ee819e4f32 \
+    --hash=sha256:b076828cef1f1ae1c3b54fa97b9e16b32816acc521ca6ff4a54fd8b16df67eef \
+    --hash=sha256:d60e5b77b958c559324882da13ffa642dcd511e6a7eb9b07e7308a6d71e248de \
+    --hash=sha256:d82c7338f8bcb0551672e759e4115c035246321059692416ee03ebe08629b913 \
+    --hash=sha256:e247dca0d8d42d71032ac99ef3d72a4fcbad4ae3114ef5979878a81a40fed274 \
+    --hash=sha256:e8cb1047b8f81ef09e15ec8d1b8dfc371594232e2e4f3ef3acf8991fcda20a57
+    # via -r /home/rsyring/projects/copier-py-package/requirements/dev.in
 virtualenv==20.26.2 \
     --hash=sha256:82bf0f4eebbb78d36ddaee0283d43fe5736b53880b8a8cdcd37390a07ac3741c \
     --hash=sha256:a624db5e94f01ad993d476b9ee5346fdf7b9de43ccaee0e0197012dc838a0e9b

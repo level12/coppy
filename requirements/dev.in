@@ -1,6 +1,7 @@
 -r base.txt
 
 blazeutils
+click
 pytest
 nox
 uv
