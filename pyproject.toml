@@ -8,7 +8,7 @@ build-backend = 'hatchling.build'
 
 
 [project]
-name = 'CopierPyPkg'
+name = 'copier-py-package'
 authors = [{name = 'Randy Syring', email = 'randy.syring@level12.io'}]
 dynamic = ['version', 'dependencies', 'optional-dependencies']
 
