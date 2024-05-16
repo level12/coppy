@@ -12,5 +12,8 @@ name = 'copier-py-package'
 authors = [{name = 'Randy Syring', email = 'randy.syring@level12.io'}]
 dynamic = ['version', 'dependencies', 'optional-dependencies']
 
+
 [tool.reqs.depends]
-'dev.in' = 'base.txt'
+'tests.in' = 'base.txt'
+'ci.in' = 'base.txt'
+'dev.in' = ['ci.txt', 'tests.txt']

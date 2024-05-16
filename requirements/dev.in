@@ -1,7 +1,6 @@
--r base.txt
+-r tests.txt
+-r ci.in
 
-blazeutils
 click
-pytest
-nox
-uv
+hatch
+

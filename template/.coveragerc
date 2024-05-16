@@ -1,0 +1,18 @@
+# .coveragerc to control coverage.py
+[run]
+branch = True
+
+[report]
+# Regexes for lines to exclude from consideration
+exclude_lines =
+    # Have to re-enable the standard pragma
+    pragma: no cover
+
+    # testing assertions usually used with exceptions
+    assert False
+
+    # patterns for running cli
+    cli_entry()
+
+[html]
+directory = .ci/coverage-html

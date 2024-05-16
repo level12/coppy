@@ -1,0 +1,51 @@
+argcomplete==3.3.0 \
+    --hash=sha256:c168c3723482c031df3c207d4ba8fa702717ccb9fc0bfe4117166c1f537b4a54 \
+    --hash=sha256:fd03ff4a5b9e6580569d34b273f741e85cd9e072f3feeeee3eba4891c70eda62
+    # via nox
+colorlog==6.8.2 \
+    --hash=sha256:3e3e079a41feb5a1b64f978b5ea4f46040a94f11f0e8bbb8261e3dbbeca64d44 \
+    --hash=sha256:4dcbb62368e2800cb3c5abd348da7e53f6c362dda502ec27c560b2e58a66bd33
+    # via nox
+distlib==0.3.8 \
+    --hash=sha256:034db59a0b96f8ca18035f36290806a9a6e6bd9d1ff91e45a7f172eb17e51784 \
+    --hash=sha256:1530ea13e350031b6312d8580ddb6b27a104275a31106523b8f123787f494f64
+    # via virtualenv
+filelock==3.14.0 \
+    --hash=sha256:43339835842f110ca7ae60f1e1c160714c5a6afd15a2873419ab185334975c0f \
+    --hash=sha256:6ea72da3be9b8c82afd3edcf99f2fffbb5076335a5ae4d03248bb5b6c3eae78a
+    # via virtualenv
+nox==2024.4.15 \
+    --hash=sha256:6492236efa15a460ecb98e7b67562a28b70da006ab0be164e8821177577c0565 \
+    --hash=sha256:ecf6700199cdfa9e5ea0a41ff5e6ef4641d09508eda6edb89d9987864115817f
+    # via -r /home/rsyring/projects/copier-py-package/requirements/ci.in
+packaging==24.0 \
+    --hash=sha256:2ddfb553fdf02fb784c234c7ba6ccc288296ceabec964ad2eae3777778130bc5 \
+    --hash=sha256:eb82c5e3e56209074766e6885bb04b8c38a0c015d0a30036ebe7ece34c9989e9
+    # via nox
+platformdirs==4.2.2 \
+    --hash=sha256:2d7a1657e36a80ea911db832a8a6ece5ee53d8de21edd5cc5879af6530b1bfee \
+    --hash=sha256:38b7b51f512eed9e84a22788b4bce1de17c0adb134d6becb09836e37d8654cd3
+    # via virtualenv
+uv==0.1.44 \
+    --hash=sha256:012fcfc3789f303ee3ff9f2a6e09bc589710fed7c2dcbad4379832072bad7a95 \
+    --hash=sha256:05774eb086b18aad488c3140daa62a235e3f270f62bd3cc4aaaa54eed927cc5b \
+    --hash=sha256:26d07edb37e7bfddc3b4e1faa13420e6048ddd974b34fbc1c19fcf9bacef9e5b \
+    --hash=sha256:2e5a60af214f42b621aa37ad320253c64f77dbfacafa710dc42d34965c2cd27f \
+    --hash=sha256:2f95acffcdac507de9c8f8ed037e529df3ccea274b4453df05df3f331543f5fc \
+    --hash=sha256:3eeac3d8be69831430743f3d00f84ddccfbd56b6835bb52d17f97914c9adfdff \
+    --hash=sha256:567486ce0ad2f9778782ba6ee19d2b65516c4f4bf2b7b4fc66fc2712cd46c6d0 \
+    --hash=sha256:768369a0bbdea8c3a670388ec1b4a11fe5871ef40d84a43844e9b8d97a1c2ca5 \
+    --hash=sha256:7983b00d95290dcdea8488fa8ecdfdef5c8e7d3c92c90b8dcf405cc26b707add \
+    --hash=sha256:8f90e80e11da409ce88424381f5c91e7f908d6a7eec53ed4ae60c5d76698d126 \
+    --hash=sha256:9ef3448111b47ab95874fbf2c5ca8efd52f54de14086079e52b588d037d243f1 \
+    --hash=sha256:b04eb0c8dedadfe434f9756bdc1c8a09a75df83884ba4cc7d97985ee819e4f32 \
+    --hash=sha256:b076828cef1f1ae1c3b54fa97b9e16b32816acc521ca6ff4a54fd8b16df67eef \
+    --hash=sha256:d60e5b77b958c559324882da13ffa642dcd511e6a7eb9b07e7308a6d71e248de \
+    --hash=sha256:d82c7338f8bcb0551672e759e4115c035246321059692416ee03ebe08629b913 \
+    --hash=sha256:e247dca0d8d42d71032ac99ef3d72a4fcbad4ae3114ef5979878a81a40fed274 \
+    --hash=sha256:e8cb1047b8f81ef09e15ec8d1b8dfc371594232e2e4f3ef3acf8991fcda20a57
+    # via -r /home/rsyring/projects/copier-py-package/requirements/ci.in
+virtualenv==20.26.2 \
+    --hash=sha256:82bf0f4eebbb78d36ddaee0283d43fe5736b53880b8a8cdcd37390a07ac3741c \
+    --hash=sha256:a624db5e94f01ad993d476b9ee5346fdf7b9de43ccaee0e0197012dc838a0e9b
+    # via nox

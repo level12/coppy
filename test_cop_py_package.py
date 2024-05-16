@@ -120,7 +120,7 @@ class TestPyPackage:
         package.mise('trust')
         result = package.mise('tasks')
         stdout = result.stdout.decode('utf-8')
-        assert stdout.startswith('hello  Example mise task')
+        assert stdout.startswith('bump  Bump version')
 
     def test_static_files(self, package: Package):
         package.generate()
