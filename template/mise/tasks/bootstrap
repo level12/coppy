@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 # mise description="Bootstrap project"
-"""
-Originates from https://github.com/level12/copier-py-package
+#
+# Originates from https://github.com/level12/copier-py-package
+#
+# Consider updating the source file in that repo with enhancements or bug fixes needed.
 
-Consider updating the source file in that repo with enhancements or bug fixes needed.
-"""
 git init
 reqs bootstrap
 reqs sync --force
 pre-commit install
-git commit -all -m 'initial commit after copyier-py-package generation'
+git commit --all -m 'initial commit after copyier-py-package generation'
