@@ -56,7 +56,7 @@ builtins-ignorelist = ['id', 'help', 'compile']
 [isort]
 lines-after-imports = 2
 force-sort-within-sections = true
-# known-first-party = []
+known-first-party = ['tasks_lib']
 
 
 [flake8-quotes]
