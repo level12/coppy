@@ -5,6 +5,7 @@ click
 hatch
 nox[uv]
 pre-commit
+ruff
 
 
 # App specific (ditto)
