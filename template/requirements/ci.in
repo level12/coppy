@@ -1,5 +1,9 @@
 # Deps needed in CI to get nox running
 
+# Ensure we are running the same version of tools that dev is using so
+# we don't end up with different test results due to tool versions.
+-c dev.txt
+
 # From copier-py-package (keep comment for easier copier upgrades)
 nox[uv]
 

@@ -27,3 +27,14 @@ def tests(session: nox.Session):
         f'--junit-xml={package_path}/ci/test-reports/{session.name}.pytests.xml',
         'src',
     )
+
+
+@nox.session
+def standards(session: nox.Session):
+    session.install('-c', 'requirements/dev.txt', 'pre-commit')
+    session.run(
+        'pre-commit',
+        'run',
+        '--show-diff-on-failure',
+        '--all-files',
+    )
