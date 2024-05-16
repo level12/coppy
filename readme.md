@@ -4,24 +4,21 @@ A [copier](https://copier.readthedocs.io/en/stable/) template to create a Python
 
 ## Usage
 
-See:
-
-- https://copier.readthedocs.io/en/stable/generating/.
-- https://copier.readthedocs.io/en/stable/updating/
-
-TL;DR:
-
 ```
 # From local repo
 copier copy --trust .../copier-py-package .../projects/some-new-pkg
 
 # From GH repo
 copier copy --trust gh:level12/copier-py-package .../projects/some-new-pkg
+
+# Then bootstrap...assuming mise activates when changing into pkg directory
+cd .../projects/some-new-pkg
+mise run bootstrap
+
 ```
 
 NOTE: the method you choose affects the `_src` value stored in the copier answers
 file and will be used by `copier update`.  Using a template stored on the local file system will save a `_src` that may not be accurate for other users of `copier update`.
-
 
 ## Features
 
