@@ -3,3 +3,4 @@
 click
 ruff
 pre-commit
+pip-tools

@@ -2,23 +2,31 @@ annotated-types==0.6.0 \
     --hash=sha256:0641064de18ba7a25dee8f96403ebc39113d0cb953a01429249d5c7564666a43 \
     --hash=sha256:563339e807e53ffd9c267e99fc6d9ea23eb8443c08f112651963e24e22f84a5d
     # via
-    #   -r /home/rsyring/projects/copier-py-package/requirements/tests.txt
+    #   -r requirements/tests.txt
     #   pydantic
 anyio==4.3.0 \
     --hash=sha256:048e05d0f6caeed70d731f3db756d35dcc1f35747c8c403364a8332c630441b8 \
     --hash=sha256:f75253795a87df48568485fd18cdd2a3fa5c4f7c5be8e5e36637733fce06fed6
     # via
-    #   -r /home/rsyring/projects/copier-py-package/requirements/tests.txt
+    #   -r requirements/tests.txt
     #   httpx
+backports-tarfile==1.1.1 \
+    --hash=sha256:73e0179647803d3726d82e76089d01d8549ceca9bace469953fcb4d97cf2d417 \
+    --hash=sha256:9c2ef9696cb73374f7164e17fc761389393ca76777036f5aad42e8b93fcd8009
+    # via -r requirements/tests.txt
 blazeutils==0.7.0 \
     --hash=sha256:3ce3f95f44a171443f9fef69bbccc159954f7cdb83ed3aebfe97f7ea1a52eb88 \
     --hash=sha256:5075f2f277e0c5f11ad18cfc03493385811fc99a4cbceb23c9eeb3699b5d5979
-    # via -r /home/rsyring/projects/copier-py-package/requirements/tests.txt
+    # via -r requirements/tests.txt
+build==1.2.1 \
+    --hash=sha256:526263f4870c26f26c433545579475377b2b7588b6f1eac76a001e873ae3e19d \
+    --hash=sha256:75e10f767a433d9a86e50d83f418e83efc18ede923ee5ff7df93b6cb0306c5d4
+    # via pip-tools
 certifi==2024.2.2 \
     --hash=sha256:0569859f95fc761b18b45ef421b1290a0f65f147e92a1e5eb3e635f9a5e4e66f \
     --hash=sha256:dc383c07b76109f368f6106eee2b593b04a011ea4d55f652c6ca24a754d1cdd1
     # via
-    #   -r /home/rsyring/projects/copier-py-package/requirements/tests.txt
+    #   -r requirements/tests.txt
     #   httpcore
     #   httpx
 cffi==1.16.0 \
@@ -75,32 +83,37 @@ cffi==1.16.0 \
     --hash=sha256:fa3a0128b152627161ce47201262d3140edb5a5c3da88d73a1b790a959126956 \
     --hash=sha256:fcc8eb6d5902bb1cf6dc4f187ee3ea80a1eba0a89aba40a5cb20a5087d961357
     # via
-    #   -r /home/rsyring/projects/copier-py-package/requirements/tests.txt
+    #   -r requirements/tests.txt
     #   cryptography
+cfgv==3.4.0 \
+    --hash=sha256:b7265b1f29fd3316bfcd2b330d63d024f2bfd8bcb8b0272f8e19a504856c48f9 \
+    --hash=sha256:e52591d4c5f5dead8e0f673fb16db7949d2cfb3f7da4582893288f0ded8fe560
+    # via pre-commit
 click==8.1.7 \
     --hash=sha256:ae74fb96c20a0277a1d615f1e4d73c8414f5a98db8b799a7931d1582f3390c28 \
     --hash=sha256:ca9853ad459e787e2192211578cc907e7594e294c7ccc834310722b41b9ca6de
     # via
-    #   -r /home/rsyring/projects/copier-py-package/requirements/dev.in
-    #   -r /home/rsyring/projects/copier-py-package/requirements/tests.txt
+    #   -r requirements/dev.in
+    #   -r requirements/tests.txt
     #   hatch
+    #   pip-tools
     #   userpath
 colorama==0.4.6 \
     --hash=sha256:08695f5cb7ed6e0531a20572697297273c47b8cae5a63ffc6d6ed5c201be6e44 \
     --hash=sha256:4f1d9991f5acc0ca119f9d443620b77f9d6b33703e51011c16baf57afb285fc6
     # via
-    #   -r /home/rsyring/projects/copier-py-package/requirements/tests.txt
+    #   -r requirements/tests.txt
     #   copier
 copier==9.2.0 \
     --hash=sha256:4ed9012579923955d3fc61d049568907fabe6d9a47e5f871236c6aae0b7472f1 \
     --hash=sha256:62682ce8cd78db1006feafe2c815d59d5069efa4c2009017f3c63780d977f6de
     # via
-    #   -r /home/rsyring/projects/copier-py-package/requirements/tests.txt
+    #   -r requirements/tests.txt
     #   copier-templates-extensions
 copier-templates-extensions==0.3.0 \
     --hash=sha256:48b3f5213ee913b931df40e4e9325b58b9c9a741f1052a7da1b247ed991f5150 \
     --hash=sha256:733e709536e03768b1201c79525534d7fd153932cf764492a0396692e513f244
-    # via -r /home/rsyring/projects/copier-py-package/requirements/tests.txt
+    # via -r requirements/tests.txt
 cryptography==42.0.7 \
     --hash=sha256:02c0eee2d7133bdbbc5e24441258d5d2244beb31da5ed19fbb80315f4bbbff55 \
     --hash=sha256:0d563795db98b4cd57742a78a288cdbdc9daedac29f2239793071fe114f13785 \
@@ -135,129 +148,137 @@ cryptography==42.0.7 \
     --hash=sha256:ecbfbc00bf55888edda9868a4cf927205de8499e7fabe6c050322298382953f2 \
     --hash=sha256:efd0bf5205240182e0f13bcaea41be4fdf5c22c5129fc7ced4a0282ac86998c9
     # via
-    #   -r /home/rsyring/projects/copier-py-package/requirements/tests.txt
+    #   -r requirements/tests.txt
     #   secretstorage
 distlib==0.3.8 \
     --hash=sha256:034db59a0b96f8ca18035f36290806a9a6e6bd9d1ff91e45a7f172eb17e51784 \
     --hash=sha256:1530ea13e350031b6312d8580ddb6b27a104275a31106523b8f123787f494f64
     # via
-    #   -r /home/rsyring/projects/copier-py-package/requirements/tests.txt
+    #   -r requirements/tests.txt
     #   virtualenv
 dunamai==1.21.1 \
     --hash=sha256:d7fea28ad2faf20a6ca5ec121e5c68e55eec6b8ada23d9c387e4e7a574cc559f \
     --hash=sha256:fe303541463648b8197c495decf62cd8f15234fb6d891a5f295015e452f656c8
     # via
-    #   -r /home/rsyring/projects/copier-py-package/requirements/tests.txt
+    #   -r requirements/tests.txt
     #   copier
 filelock==3.14.0 \
     --hash=sha256:43339835842f110ca7ae60f1e1c160714c5a6afd15a2873419ab185334975c0f \
     --hash=sha256:6ea72da3be9b8c82afd3edcf99f2fffbb5076335a5ae4d03248bb5b6c3eae78a
     # via
-    #   -r /home/rsyring/projects/copier-py-package/requirements/tests.txt
+    #   -r requirements/tests.txt
     #   virtualenv
 funcy==2.0 \
     --hash=sha256:3963315d59d41c6f30c04bc910e10ab50a3ac4a225868bfa96feed133df075cb \
     --hash=sha256:53df23c8bb1651b12f095df764bfb057935d49537a56de211b098f4c79614bb0
     # via
-    #   -r /home/rsyring/projects/copier-py-package/requirements/tests.txt
+    #   -r requirements/tests.txt
     #   copier
 h11==0.14.0 \
     --hash=sha256:8f19fbbe99e72420ff35c00b27a34cb9937e902a8b810e2c88300c6f0a3b699d \
     --hash=sha256:e3fe4ac4b851c468cc8363d500db52c2ead036020723024a109d37346efaa761
     # via
-    #   -r /home/rsyring/projects/copier-py-package/requirements/tests.txt
+    #   -r requirements/tests.txt
     #   httpcore
 hatch==1.11.0 \
     --hash=sha256:0511e48b06576995a51a39af14c062431cbbbf22df8a4faccce41418ebccab30 \
     --hash=sha256:3949517cee5fdd520829b31a81c6bcd63e18750c0db0171d541bd17cdfea15c0
-    # via -r /home/rsyring/projects/copier-py-package/requirements/tests.txt
+    # via -r requirements/tests.txt
 hatchling==1.24.2 \
     --hash=sha256:41ddc27cdb25db9ef7b68bef075f829c84cb349aa1bff8240797d012510547b0 \
     --hash=sha256:5576ad05227cf96bb4bfd3a5dce31aa53eff05e95da57b40769bd5a3096b31b1
     # via
-    #   -r /home/rsyring/projects/copier-py-package/requirements/tests.txt
+    #   -r requirements/tests.txt
     #   hatch
 httpcore==1.0.5 \
     --hash=sha256:34a38e2f9291467ee3b44e89dd52615370e152954ba21721378a87b2960f7a61 \
     --hash=sha256:421f18bac248b25d310f3cacd198d55b8e6125c107797b609ff9b7a6ba7991b5
     # via
-    #   -r /home/rsyring/projects/copier-py-package/requirements/tests.txt
+    #   -r requirements/tests.txt
     #   httpx
 httpx==0.27.0 \
     --hash=sha256:71d5465162c13681bff01ad59b2cc68dd838ea1f10e51574bac27103f00c91a5 \
     --hash=sha256:a0cb88a46f32dc874e04ee956e4c2764aba2aa228f650b06788ba6bda2962ab5
     # via
-    #   -r /home/rsyring/projects/copier-py-package/requirements/tests.txt
+    #   -r requirements/tests.txt
     #   hatch
 hyperlink==21.0.0 \
     --hash=sha256:427af957daa58bc909471c6c40f74c5450fa123dd093fc53efd2e91d2705a56b \
     --hash=sha256:e6b14c37ecb73e89c77d78cdb4c2cc8f3fb59a885c5b3f819ff4ed80f25af1b4
     # via
-    #   -r /home/rsyring/projects/copier-py-package/requirements/tests.txt
+    #   -r requirements/tests.txt
     #   hatch
+identify==2.5.36 \
+    --hash=sha256:37d93f380f4de590500d9dba7db359d0d3da95ffe7f9de1753faa159e71e7dfa \
+    --hash=sha256:e5e00f54165f9047fbebeb4a560f9acfb8af4c88232be60a488e9b68d122745d
+    # via pre-commit
 idna==3.7 \
     --hash=sha256:028ff3aadf0609c1fd278d8ea3089299412a7a8b9bd005dd08b9f8285bcb5cfc \
     --hash=sha256:82fee1fc78add43492d3a1898bfa6d8a904cc97d8427f683ed8e798d07761aa0
     # via
-    #   -r /home/rsyring/projects/copier-py-package/requirements/tests.txt
+    #   -r requirements/tests.txt
     #   anyio
     #   httpx
     #   hyperlink
+importlib-metadata==7.1.0 \
+    --hash=sha256:30962b96c0c223483ed6cc7280e7f0199feb01a0e40cfae4d4450fc6fab1f570 \
+    --hash=sha256:b78938b926ee8d5f020fc4772d487045805a55ddbad2ecf21c6d60938dc7fcd2
+    # via -r requirements/tests.txt
 iniconfig==2.0.0 \
     --hash=sha256:2d91e135bf72d31a410b17c16da610a82cb55f6b0477d1a902134b24a455b8b3 \
     --hash=sha256:b6a85871a79d2e3b22d2d1b94ac2824226a63c6b741c88f7ae975f18b6778374
     # via
-    #   -r /home/rsyring/projects/copier-py-package/requirements/tests.txt
+    #   -r requirements/tests.txt
     #   pytest
 jaraco-classes==3.4.0 \
     --hash=sha256:47a024b51d0239c0dd8c8540c6c7f484be3b8fcf0b2d85c13825780d3b3f3acd \
     --hash=sha256:f662826b6bed8cace05e7ff873ce0f9283b5c924470fe664fff1c2f00f581790
     # via
-    #   -r /home/rsyring/projects/copier-py-package/requirements/tests.txt
+    #   -r requirements/tests.txt
     #   keyring
 jaraco-context==5.3.0 \
     --hash=sha256:3e16388f7da43d384a1a7cd3452e72e14732ac9fe459678773a3608a812bf266 \
     --hash=sha256:c2f67165ce1f9be20f32f650f25d8edfc1646a8aeee48ae06fb35f90763576d2
     # via
-    #   -r /home/rsyring/projects/copier-py-package/requirements/tests.txt
+    #   -r requirements/tests.txt
     #   keyring
 jaraco-functools==4.0.1 \
     --hash=sha256:3b24ccb921d6b593bdceb56ce14799204f473976e2a9d4b15b04d0f2c2326664 \
     --hash=sha256:d33fa765374c0611b52f8b3a795f8900869aa88c84769d4d1746cd68fb28c3e8
     # via
-    #   -r /home/rsyring/projects/copier-py-package/requirements/tests.txt
+    #   -r requirements/tests.txt
     #   keyring
 jeepney==0.8.0 \
     --hash=sha256:5efe48d255973902f6badc3ce55e2aa6c5c3b3bc642059ef3a91247bcfcc5806 \
     --hash=sha256:c0a454ad016ca575060802ee4d590dd912e35c122fa04e70306de3d076cce755
     # via
-    #   -r /home/rsyring/projects/copier-py-package/requirements/tests.txt
+    #   -r requirements/tests.txt
     #   keyring
     #   secretstorage
 jinja2==3.1.4 \
     --hash=sha256:4a3aee7acbbe7303aede8e9648d13b8bf88a429282aa6122a993f0ac800cb369 \
     --hash=sha256:bc5dd2abb727a5319567b7a813e6a2e7318c39f4f487cfe6c89c6f9c7d25197d
     # via
-    #   -r /home/rsyring/projects/copier-py-package/requirements/tests.txt
+    #   -r requirements/tests.txt
     #   copier
     #   jinja2-ansible-filters
 jinja2-ansible-filters==1.3.2 \
     --hash=sha256:07c10cf44d7073f4f01102ca12d9a2dc31b41d47e4c61ed92ef6a6d2669b356b \
     --hash=sha256:e1082f5564917649c76fed239117820610516ec10f87735d0338688800a55b34
     # via
-    #   -r /home/rsyring/projects/copier-py-package/requirements/tests.txt
+    #   -r requirements/tests.txt
     #   copier
 keyring==25.2.1 \
     --hash=sha256:2458681cdefc0dbc0b7eb6cf75d0b98e59f9ad9b2d4edd319d18f68bdca95e50 \
     --hash=sha256:daaffd42dbda25ddafb1ad5fec4024e5bbcfe424597ca1ca452b299861e49f1b
     # via
-    #   -r /home/rsyring/projects/copier-py-package/requirements/tests.txt
+    #   -r requirements/tests.txt
     #   hatch
 markdown-it-py==3.0.0 \
     --hash=sha256:355216845c60bd96232cd8d8c40e8f9765cc86f46880e43a8fd22dc1a1a8cab1 \
     --hash=sha256:e3f60a94fa066dc52ec76661e37c851cb232d92f9886b15cb560aaada2df8feb
     # via
-    #   -r /home/rsyring/projects/copier-py-package/requirements/tests.txt
+    #   -r requirements/tests.txt
     #   rich
 markupsafe==2.1.5 \
     --hash=sha256:00e046b6dd71aa03a41079792f8473dc494d564611a8f89bbbd7cb93295ebdcf \
@@ -321,26 +342,31 @@ markupsafe==2.1.5 \
     --hash=sha256:fce659a462a1be54d2ffcacea5e3ba2d74daa74f30f5f143fe0c58636e355fdd \
     --hash=sha256:ffee1f21e5ef0d712f9033568f8344d5da8cc2869dbd08d87c84656e6a2d2f68
     # via
-    #   -r /home/rsyring/projects/copier-py-package/requirements/tests.txt
+    #   -r requirements/tests.txt
     #   jinja2
 mdurl==0.1.2 \
     --hash=sha256:84008a41e51615a49fc9966191ff91509e3c40b939176e643fd50a5c2196b8f8 \
     --hash=sha256:bb413d29f5eea38f31dd4754dd7377d4465116fb207585f97bf925588687c1ba
     # via
-    #   -r /home/rsyring/projects/copier-py-package/requirements/tests.txt
+    #   -r requirements/tests.txt
     #   markdown-it-py
 more-itertools==10.2.0 \
     --hash=sha256:686b06abe565edfab151cb8fd385a05651e1fdf8f0a14191e4439283421f8684 \
     --hash=sha256:8fccb480c43d3e99a00087634c06dd02b0d50fbf088b380de5a41a015ec239e1
     # via
-    #   -r /home/rsyring/projects/copier-py-package/requirements/tests.txt
+    #   -r requirements/tests.txt
     #   jaraco-classes
     #   jaraco-functools
+nodeenv==1.8.0 \
+    --hash=sha256:d51e0c37e64fbf47d017feac3145cdbb58836d7eee8c6f6d3b6880c5456227d2 \
+    --hash=sha256:df865724bb3c3adc86b3876fa209771517b0cfe596beff01a92700e0e8be4cec
+    # via pre-commit
 packaging==24.0 \
     --hash=sha256:2ddfb553fdf02fb784c234c7ba6ccc288296ceabec964ad2eae3777778130bc5 \
     --hash=sha256:eb82c5e3e56209074766e6885bb04b8c38a0c015d0a30036ebe7ece34c9989e9
     # via
-    #   -r /home/rsyring/projects/copier-py-package/requirements/tests.txt
+    #   -r requirements/tests.txt
+    #   build
     #   copier
     #   dunamai
     #   hatch
@@ -350,58 +376,70 @@ pathspec==0.12.1 \
     --hash=sha256:a0d503e138a4c123b27490a4f7beda6a01c6f288df0e4a8b79c7eb0dc7b4cc08 \
     --hash=sha256:a482d51503a1ab33b1c67a6c3813a26953dbdc71c31dacaef9a838c4e29f5712
     # via
-    #   -r /home/rsyring/projects/copier-py-package/requirements/tests.txt
+    #   -r requirements/tests.txt
     #   copier
     #   hatchling
 pexpect==4.9.0 \
     --hash=sha256:7236d1e080e4936be2dc3e326cec0af72acf9212a7e1d060210e70a47e253523 \
     --hash=sha256:ee7d41123f3c9911050ea2c2dac107568dc43b2d3b0c7557a33212c398ead30f
     # via
-    #   -r /home/rsyring/projects/copier-py-package/requirements/tests.txt
+    #   -r requirements/tests.txt
     #   hatch
+pip==24.0 \
+    --hash=sha256:ba0d021a166865d2265246961bec0152ff124de910c5cc39f1156ce3fa7c69dc \
+    --hash=sha256:ea9bd1a847e8c5774a5777bb398c19e80bcd4e2aa16a4b301b718fe6f593aba2
+    # via pip-tools
+pip-tools==7.4.1 \
+    --hash=sha256:4c690e5fbae2f21e87843e89c26191f0d9454f362d8acdbd695716493ec8b3a9 \
+    --hash=sha256:864826f5073864450e24dbeeb85ce3920cdfb09848a3d69ebf537b521f14bcc9
+    # via -r requirements/dev.in
 platformdirs==4.2.2 \
     --hash=sha256:2d7a1657e36a80ea911db832a8a6ece5ee53d8de21edd5cc5879af6530b1bfee \
     --hash=sha256:38b7b51f512eed9e84a22788b4bce1de17c0adb134d6becb09836e37d8654cd3
     # via
-    #   -r /home/rsyring/projects/copier-py-package/requirements/tests.txt
+    #   -r requirements/tests.txt
     #   hatch
     #   virtualenv
 pluggy==1.5.0 \
     --hash=sha256:2cffa88e94fdc978c4c574f15f9e59b7f4201d439195c3715ca9e2486f1d0cf1 \
     --hash=sha256:44e1ad92c8ca002de6377e165f3e0f1be63266ab4d554740532335b9d75ea669
     # via
-    #   -r /home/rsyring/projects/copier-py-package/requirements/tests.txt
+    #   -r requirements/tests.txt
     #   hatchling
     #   pytest
 plumbum==1.8.3 \
     --hash=sha256:6092c85ab970b7a7a9d5d85c75200bc93be82b33c9bdf640ffa87d2d7c8709f0 \
     --hash=sha256:8595d36dae2472587d6f59789c8d7b26250f45f6f6ed75ccb378de59ee7b9cf9
     # via
-    #   -r /home/rsyring/projects/copier-py-package/requirements/tests.txt
+    #   -r requirements/tests.txt
     #   copier
+pre-commit==3.7.1 \
+    --hash=sha256:8ca3ad567bc78a4972a3f1a477e94a79d4597e8140a6e0b651c5e33899c3654a \
+    --hash=sha256:fae36fd1d7ad7d6a5a1c0b0d5adb2ed1a3bda5a21bf6c3e5372073d7a11cd4c5
+    # via -r requirements/dev.in
 prompt-toolkit==3.0.36 \
     --hash=sha256:3e163f254bef5a03b146397d7c1963bd3e2812f0964bb9a24e6ec761fd28db63 \
     --hash=sha256:aa64ad242a462c5ff0363a7b9cfe696c20d55d9fc60c11fd8e632d064804d305
     # via
-    #   -r /home/rsyring/projects/copier-py-package/requirements/tests.txt
+    #   -r requirements/tests.txt
     #   questionary
 ptyprocess==0.7.0 \
     --hash=sha256:4b41f3967fce3af57cc7e94b888626c18bf37a083e3651ca8feeb66d492fef35 \
     --hash=sha256:5c5d0a3b48ceee0b48485e0c26037c0acd7d29765ca3fbb5cb3831d347423220
     # via
-    #   -r /home/rsyring/projects/copier-py-package/requirements/tests.txt
+    #   -r requirements/tests.txt
     #   pexpect
 pycparser==2.22 \
     --hash=sha256:491c8be9c040f5390f5bf44a5b07752bd07f56edf992381b05c701439eec10f6 \
     --hash=sha256:c3702b6d3dd8c7abc1afa565d7e63d53a1d0bd86cdc24edd75470f4de499cfcc
     # via
-    #   -r /home/rsyring/projects/copier-py-package/requirements/tests.txt
+    #   -r requirements/tests.txt
     #   cffi
 pydantic==2.7.1 \
     --hash=sha256:e029badca45266732a9a79898a15ae2e8b14840b1eabbb25844be28f0b33f3d5 \
     --hash=sha256:e9dbb5eada8abe4d9ae5f46b9939aead650cd2b68f249bb3a8139dbe125803cc
     # via
-    #   -r /home/rsyring/projects/copier-py-package/requirements/tests.txt
+    #   -r requirements/tests.txt
     #   copier
 pydantic-core==2.18.2 \
     --hash=sha256:0098300eebb1c837271d3d1a2cd2911e7c11b396eac9661655ee524a7f10587b \
@@ -484,19 +522,25 @@ pydantic-core==2.18.2 \
     --hash=sha256:f93a8a2e3938ff656a7c1bc57193b1319960ac015b6e87d76c76bf14fe0244b4 \
     --hash=sha256:fb2bd7be70c0fe4dfd32c951bc813d9fe6ebcbfdd15a07527796c8204bd36242
     # via
-    #   -r /home/rsyring/projects/copier-py-package/requirements/tests.txt
+    #   -r requirements/tests.txt
     #   pydantic
 pygments==2.18.0 \
     --hash=sha256:786ff802f32e91311bff3889f6e9a86e81505fe99f2735bb6d60ae0c5004f199 \
     --hash=sha256:b8e6aca0523f3ab76fee51799c488e38782ac06eafcf95e7ba832985c8e7b13a
     # via
-    #   -r /home/rsyring/projects/copier-py-package/requirements/tests.txt
+    #   -r requirements/tests.txt
     #   copier
     #   rich
+pyproject-hooks==1.1.0 \
+    --hash=sha256:4b37730834edbd6bd37f26ece6b44802fb1c1ee2ece0e54ddff8bfc06db86965 \
+    --hash=sha256:7ceeefe9aec63a1064c18d939bdc3adf2d8aa1988a510afec15151578b232aa2
+    # via
+    #   build
+    #   pip-tools
 pytest==8.2.0 \
     --hash=sha256:1733f0620f6cda4095bbf0d9ff8022486e91892245bb9e7d5542c018f612f233 \
     --hash=sha256:d507d4482197eac0ba2bae2e9babf0672eb333017bcedaa5fb1a3d42c1174b3f
-    # via -r /home/rsyring/projects/copier-py-package/requirements/tests.txt
+    # via -r requirements/tests.txt
 pyyaml==6.0.1 \
     --hash=sha256:04ac92ad1925b2cff1db0cfebffb6ffc43457495c9b3c39d3fcae417d7125dc5 \
     --hash=sha256:062582fca9fabdd2c8b54a3ef1c978d786e0f6b3a1510e0ac93ef59e0ddae2bc \
@@ -550,70 +594,96 @@ pyyaml==6.0.1 \
     --hash=sha256:fd1592b3fdf65fff2ad0004b5e363300ef59ced41c2e6b3a99d4089fa8c5435d \
     --hash=sha256:fd66fc5d0da6d9815ba2cebeb4205f95818ff4b79c3ebe268e75d961704af52f
     # via
-    #   -r /home/rsyring/projects/copier-py-package/requirements/tests.txt
+    #   -r requirements/tests.txt
     #   copier
     #   jinja2-ansible-filters
+    #   pre-commit
 questionary==2.0.1 \
     --hash=sha256:8ab9a01d0b91b68444dff7f6652c1e754105533f083cbe27597c8110ecc230a2 \
     --hash=sha256:bcce898bf3dbb446ff62830c86c5c6fb9a22a54146f0f5597d3da43b10d8fc8b
     # via
-    #   -r /home/rsyring/projects/copier-py-package/requirements/tests.txt
+    #   -r requirements/tests.txt
     #   copier
 rich==13.7.1 \
     --hash=sha256:4edbae314f59eb482f54e9e30bf00d33350aaa94f4bfcd4e9e3110e64d0d7222 \
     --hash=sha256:9be308cb1fe2f1f57d67ce99e95af38a1e2bc71ad9813b0e247cf7ffbcc3a432
     # via
-    #   -r /home/rsyring/projects/copier-py-package/requirements/tests.txt
+    #   -r requirements/tests.txt
     #   hatch
+ruff==0.4.4 \
+    --hash=sha256:1aecced1269481ef2894cc495647392a34b0bf3e28ff53ed95a385b13aa45768 \
+    --hash=sha256:29d44ef5bb6a08e235c8249294fa8d431adc1426bfda99ed493119e6f9ea1bf6 \
+    --hash=sha256:39df0537b47d3b597293edbb95baf54ff5b49589eb7ff41926d8243caa995ea6 \
+    --hash=sha256:424e5b72597482543b684c11def82669cc6b395aa8cc69acc1858b5ef3e5daae \
+    --hash=sha256:4c8e2f1e8fc12d07ab521a9005d68a969e167b589cbcaee354cb61e9d9de9c15 \
+    --hash=sha256:60ed88b636a463214905c002fa3eaab19795679ed55529f91e488db3fe8976ab \
+    --hash=sha256:8e7e6ebc10ef16dcdc77fd5557ee60647512b400e4a60bdc4849468f076f6eef \
+    --hash=sha256:958b4ea5589706a81065e2a776237de2ecc3e763342e5cc8e02a4a4d8a5e6f95 \
+    --hash=sha256:9da73eb616b3241a307b837f32756dc20a0b07e2bcb694fec73699c93d04a69e \
+    --hash=sha256:b1867ee9bf3acc21778dcb293db504692eda5f7a11a6e6cc40890182a9f9e595 \
+    --hash=sha256:b5eb0a4bfd6400b7d07c09a7725e1a98c3b838be557fee229ac0f84d9aa49c36 \
+    --hash=sha256:b90fc5e170fc71c712cc4d9ab0e24ea505c6a9e4ebf346787a67e691dfb72e85 \
+    --hash=sha256:b9ddb2c494fb79fc208cd15ffe08f32b7682519e067413dbaf5f4b01a6087bcd \
+    --hash=sha256:c4efe62b5bbb24178c950732ddd40712b878a9b96b1d02b0ff0b08a090cbd891 \
+    --hash=sha256:c51c928a14f9f0a871082603e25a1588059b7e08a920f2f9fa7157b5bf08cfe9 \
+    --hash=sha256:cb53473849f011bca6e754f2cdf47cafc9c4f4ff4570003a0dad0b9b6890e876 \
+    --hash=sha256:f87ea42d5cdebdc6a69761a9d0bc83ae9b3b30d0ad78952005ba6568d6c022af
+    # via -r requirements/dev.in
 secretstorage==3.3.3 \
     --hash=sha256:2403533ef369eca6d2ba81718576c5e0f564d5cca1b58f73a8b23e7d4eeebd77 \
     --hash=sha256:f356e6628222568e3af06f2eba8df495efa13b3b63081dafd4f7d9a7b7bc9f99
     # via
-    #   -r /home/rsyring/projects/copier-py-package/requirements/tests.txt
+    #   -r requirements/tests.txt
     #   keyring
+setuptools==69.5.1 \
+    --hash=sha256:6c1fccdac05a97e598fb0ae3bbed5904ccb317337a51139dcd51453611bbb987 \
+    --hash=sha256:c636ac361bc47580504644275c9ad802c50415c7522212252c033bd15f301f32
+    # via
+    #   nodeenv
+    #   pip-tools
 shellingham==1.5.4 \
     --hash=sha256:7ecfff8f2fd72616f7481040475a65b2bf8af90a56c89140852d1120324e8686 \
     --hash=sha256:8dbca0739d487e5bd35ab3ca4b36e11c4078f3a234bfce294b0a0291363404de
     # via
-    #   -r /home/rsyring/projects/copier-py-package/requirements/tests.txt
+    #   -r requirements/tests.txt
     #   hatch
 sniffio==1.3.1 \
     --hash=sha256:2f6da418d1f1e0fddd844478f41680e794e6051915791a034ff65e5f100525a2 \
     --hash=sha256:f4324edc670a0f49750a81b895f35c3adb843cca46f0530f79fc1babb23789dc
     # via
-    #   -r /home/rsyring/projects/copier-py-package/requirements/tests.txt
+    #   -r requirements/tests.txt
     #   anyio
     #   httpx
 tomli-w==1.0.0 \
     --hash=sha256:9f2a07e8be30a0729e533ec968016807069991ae2fd921a78d42f429ae5f4463 \
     --hash=sha256:f463434305e0336248cac9c2dc8076b707d8a12d019dd349f5c1e382dd1ae1b9
     # via
-    #   -r /home/rsyring/projects/copier-py-package/requirements/tests.txt
+    #   -r requirements/tests.txt
     #   hatch
 tomlkit==0.12.5 \
     --hash=sha256:af914f5a9c59ed9d0762c7b64d3b5d5df007448eb9cd2edc8a46b1eafead172f \
     --hash=sha256:eef34fba39834d4d6b73c9ba7f3e4d1c417a4e56f89a7e96e090dd0d24b8fb3c
     # via
-    #   -r /home/rsyring/projects/copier-py-package/requirements/tests.txt
+    #   -r requirements/tests.txt
     #   hatch
 trove-classifiers==2024.4.10 \
     --hash=sha256:49f40bb6a746b72a1cba4f8d55ee8252169cda0f70802e3fd24f04b7fb25a492 \
     --hash=sha256:678bd6fcc5218d72e3304e27a608acc9b91e17bd00c3f3d8c968497c843ad98b
     # via
-    #   -r /home/rsyring/projects/copier-py-package/requirements/tests.txt
+    #   -r requirements/tests.txt
     #   hatchling
 typing-extensions==4.11.0 \
     --hash=sha256:83f085bd5ca59c80295fc2a82ab5dac679cbe02b9f33f7d83af68e241bea51b0 \
     --hash=sha256:c1f94d72897edaf4ce775bb7558d5b79d8126906a14ea5ed1635921406c0387a
     # via
-    #   -r /home/rsyring/projects/copier-py-package/requirements/tests.txt
+    #   -r requirements/tests.txt
     #   pydantic
     #   pydantic-core
 userpath==1.9.2 \
     --hash=sha256:2cbf01a23d655a1ff8fc166dfb78da1b641d1ceabf0fe5f970767d380b14e89d \
     --hash=sha256:6c52288dab069257cc831846d15d48133522455d4677ee69a9781f11dbefd815
     # via
-    #   -r /home/rsyring/projects/copier-py-package/requirements/tests.txt
+    #   -r requirements/tests.txt
     #   hatch
 uv==0.1.44 \
     --hash=sha256:012fcfc3789f303ee3ff9f2a6e09bc589710fed7c2dcbad4379832072bad7a95 \
@@ -634,20 +704,25 @@ uv==0.1.44 \
     --hash=sha256:e247dca0d8d42d71032ac99ef3d72a4fcbad4ae3114ef5979878a81a40fed274 \
     --hash=sha256:e8cb1047b8f81ef09e15ec8d1b8dfc371594232e2e4f3ef3acf8991fcda20a57
     # via
-    #   -r /home/rsyring/projects/copier-py-package/requirements/tests.txt
+    #   -r requirements/tests.txt
     #   hatch
 virtualenv==20.26.2 \
     --hash=sha256:82bf0f4eebbb78d36ddaee0283d43fe5736b53880b8a8cdcd37390a07ac3741c \
     --hash=sha256:a624db5e94f01ad993d476b9ee5346fdf7b9de43ccaee0e0197012dc838a0e9b
     # via
-    #   -r /home/rsyring/projects/copier-py-package/requirements/tests.txt
+    #   -r requirements/tests.txt
     #   hatch
+    #   pre-commit
 wcwidth==0.2.13 \
     --hash=sha256:3da69048e4540d84af32131829ff948f1e022c1c6bdb8d6102117aac784f6859 \
     --hash=sha256:72ea0c06399eb286d978fdedb6923a9eb47e1c486ce63e9b4e64fc18303972b5
     # via
-    #   -r /home/rsyring/projects/copier-py-package/requirements/tests.txt
+    #   -r requirements/tests.txt
     #   prompt-toolkit
+wheel==0.43.0 \
+    --hash=sha256:465ef92c69fa5c5da2d1cf8ac40559a8c940886afcef87dcf14b9470862f1d85 \
+    --hash=sha256:55c570405f142630c6b9f72fe09d9b67cf1477fcf543ae5b8dcb1f5b7377da81
+    # via pip-tools
 wrapt==1.16.0 \
     --hash=sha256:0d2691979e93d06a95a26257adb7bfd0c93818e89b1406f5a28f36e0d8c1e1fc \
     --hash=sha256:14d7dc606219cdd7405133c713f2c218d4252f2a469003f8c46bb92d5d095d81 \
@@ -720,8 +795,14 @@ wrapt==1.16.0 \
     --hash=sha256:f8212564d49c50eb4565e502814f694e240c55551a5f1bc841d4fcaabb0a9b8a \
     --hash=sha256:ffa565331890b90056c01db69c0fe634a776f8019c143a5ae265f9c6bc4bd6d4
     # via
-    #   -r /home/rsyring/projects/copier-py-package/requirements/tests.txt
+    #   -r requirements/tests.txt
     #   blazeutils
+zipp==3.18.2 \
+    --hash=sha256:6278d9ddbcfb1f1089a88fde84481528b07b0e10474e09dcfe53dad4069fa059 \
+    --hash=sha256:dce197b859eb796242b0622af1b8beb0a722d52aa2f57133ead08edd5bf5374e
+    # via
+    #   -r requirements/tests.txt
+    #   importlib-metadata
 zstandard==0.22.0 \
     --hash=sha256:11f0d1aab9516a497137b41e3d3ed4bbf7b2ee2abc79e5c8b010ad286d7464bd \
     --hash=sha256:1958100b8a1cc3f27fa21071a55cb2ed32e9e5df4c3c6e661c193437f171cba2 \
@@ -770,5 +851,5 @@ zstandard==0.22.0 \
     --hash=sha256:f9b2cde1cd1b2a10246dbc143ba49d942d14fb3d2b4bccf4618d475c65464912 \
     --hash=sha256:fe3390c538f12437b859d815040763abc728955a52ca6ff9c5d4ac707c4ad98e
     # via
-    #   -r /home/rsyring/projects/copier-py-package/requirements/tests.txt
+    #   -r requirements/tests.txt
     #   hatch

@@ -1,4 +1,12 @@
 line-length = 100
+target-version = 'py312'
+
+[format]
+line-ending = 'lf'
+quote-style = 'single'
+
+
+[lint]
 fixable = [
     'I',
     'Q',
@@ -43,28 +51,22 @@ ignore = [
     'A003',    # Class attribute is shadowing a Python builtin
     'E731',    # Do not assign a `lambda` expression, use a `def`
 ]
-target-version = 'py312'
 
 # [per-file-ignores]
 # 'mu/cli/__init__.py' = ['F401', 'I001']
 
 
-[flake8-builtins]
+[lint.flake8-builtins]
 builtins-ignorelist = ['id', 'help', 'compile']
 
 
-[isort]
-lines-after-imports = 2
-force-sort-within-sections = true
-known-first-party = ['tasks_lib']
-
-
-[flake8-quotes]
+[lint.flake8-quotes]
 # Prefer using different quote to escaping strings
 avoid-escape = true
 inline-quotes = 'single'
 
 
-[format]
-line-ending = 'lf'
-quote-style = 'single'
+[lint.isort]
+lines-after-imports = 2
+force-sort-within-sections = true
+known-first-party = ['tasks_lib']
