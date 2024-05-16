@@ -2,12 +2,12 @@ version: 2
 jobs:
   build:
     docker:
-      - image: cimg/python:3.12
+      - image: cimg/python:{{ python_version }}
     steps:
       - checkout
 
       - run:
-          name: debugging aids
+          name: debugging info
           command: |
               ls -al
               echo $PATH
