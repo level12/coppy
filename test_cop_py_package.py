@@ -117,7 +117,6 @@ class TestPyPackage:
         assert venv.path == '{{env.WORKON_HOME}}/Enterprise'
         assert config.tools.python == '3.12'
 
-        package.mise('trust')
         result = package.mise('tasks')
         stdout = result.stdout.decode('utf-8')
         assert stdout.startswith('bump  Bump version')

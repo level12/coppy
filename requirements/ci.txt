@@ -90,7 +90,7 @@ uv==0.1.44 \
     --hash=sha256:d82c7338f8bcb0551672e759e4115c035246321059692416ee03ebe08629b913 \
     --hash=sha256:e247dca0d8d42d71032ac99ef3d72a4fcbad4ae3114ef5979878a81a40fed274 \
     --hash=sha256:e8cb1047b8f81ef09e15ec8d1b8dfc371594232e2e4f3ef3acf8991fcda20a57
-    # via -r /home/rsyring/projects/copier-py-package/requirements/ci.in
+    # via nox
 virtualenv==20.26.2 \
     --hash=sha256:82bf0f4eebbb78d36ddaee0283d43fe5736b53880b8a8cdcd37390a07ac3741c \
     --hash=sha256:a624db5e94f01ad993d476b9ee5346fdf7b9de43ccaee0e0197012dc838a0e9b
