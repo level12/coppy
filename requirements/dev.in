@@ -1,6 +1,4 @@
 -r tests.txt
--r ci.in
 
 click
-hatch
 

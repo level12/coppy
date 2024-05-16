@@ -1,4 +1,6 @@
 -r base.txt
 
+# Specify test dependencies separate from base since this is a library
 blazeutils
+hatch
 pytest

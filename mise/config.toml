@@ -1,7 +1,5 @@
 [tools]
 python = "3.12"
-# "pipx:level12/reqs" = "latest"
-
 
 [env]
 _.python.venv.path = "{{env.WORKON_HOME}}/copier-py"
