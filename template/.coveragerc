@@ -15,4 +15,4 @@ exclude_lines =
     cli_entry()
 
 [html]
-directory = .ci/coverage-html
+directory = ci/coverage-html

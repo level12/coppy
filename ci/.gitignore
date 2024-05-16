@@ -1,1 +1,2 @@
-../template/ci/.gitignore
+artifacts
+test-reports
