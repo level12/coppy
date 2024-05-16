@@ -1,9 +1,8 @@
--r base.txt
--r ci.txt
+-c base.txt
 
 # From copier-py-package (keep comment for easier copier upgrades)
-click
-hatch
+nox
+uv
 
 
 # App specific (ditto)
