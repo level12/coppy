@@ -1,5 +1,4 @@
 -r base.txt
--r ci.txt
 
 # From copier-py-package (keep comment for easier copier upgrades)
 click

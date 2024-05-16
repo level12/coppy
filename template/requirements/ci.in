@@ -1,8 +1,7 @@
--c base.txt
+# Deps needed in CI to get nox running
 
 # From copier-py-package (keep comment for easier copier upgrades)
-nox
-uv
+nox[uv]
 
 
 # App specific (ditto)

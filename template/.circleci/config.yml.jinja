@@ -7,13 +7,13 @@ jobs:
       - checkout
 
       - run:
-          name: debugging info
+          name: Debugging info
           command: |
               ls -al
               echo $PATH
 
       - run:
-          name: install testing helpers needed at OS level
+          name: Install OS tools
           command: |
               python -m pip install -r requirements/ci.txt
               python --version
@@ -23,8 +23,8 @@ jobs:
           name: run nox
           command: python -m nox
 
-      # - store_test_results:
-      #     path: ci/test-reports/
+      - store_test_results:
+          path: ci/test-reports/
 
       # - run:
       #     name: push code coverage
