@@ -12,9 +12,15 @@ See:
 TL;DR:
 
 ```
+# From local repo
 copier copy --trust .../copier-py-package .../projects/some-new-pkg
+
+# From GH repo
 copier copy --trust gh:level12/copier-py-package .../projects/some-new-pkg
 ```
+
+NOTE: the method you choose affects the `_src` value stored in the copier answers
+file and will be used by `copier update`.  Using a template stored on the local file system will save a `_src` that may not be accurate for other users of `copier update`.
 
 
 ## Features
@@ -52,7 +58,7 @@ available on the path:
 - mise
 - reqs
 - nox
-- 
+-
 - env-config[^1]
 
 [^1]: pipx install recommended
