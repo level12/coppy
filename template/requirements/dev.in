@@ -3,6 +3,7 @@
 # From copier-py-package (keep comment for easier copier upgrades)
 click
 hatch
+pre-commit
 
 
 # App specific (ditto)
