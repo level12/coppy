@@ -14,6 +14,6 @@ dynamic = ['version', 'dependencies', 'optional-dependencies']
 
 
 [tool.reqs.depends]
-'ci.in' = ''
 'tests.in' = 'base.txt'
-'dev.in' = ['tests.txt']
+'dev.in' = 'tests.txt'
+'ci.in' = 'dev.txt'

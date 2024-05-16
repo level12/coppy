@@ -119,7 +119,7 @@ class TestPyPackage:
 
         result = package.mise('tasks')
         stdout = result.stdout.decode('utf-8')
-        assert stdout.startswith('bump  Bump version')
+        assert stdout.startswith('bootstrap  Bootstrap project')
 
     def test_static_files(self, package: Package):
         package.generate()
@@ -128,9 +128,8 @@ class TestPyPackage:
 
     def test_version(self, package: Package):
         package.generate()
+        import shutil
 
+        print(shutil.which('hatch'), shutil.which('python'))
         result = package.sub_run('hatch', 'version')
         assert result.stdout.decode('utf-8').strip() == '0.1.0'
-
-    def test_copier_update_script(self):
-        pass

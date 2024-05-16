@@ -1,6 +1,7 @@
 -r tests.txt
 
 click
-ruff
+nox[uv]
 pre-commit
 pip-tools
+ruff
