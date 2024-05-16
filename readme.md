@@ -14,7 +14,6 @@ copier copy --trust gh:level12/copier-py-package .../projects/some-new-pkg
 # Then bootstrap...assuming mise activates when changing into pkg directory
 cd .../projects/some-new-pkg
 mise run bootstrap
-
 ```
 
 NOTE: the method you choose affects the `_src` value stored in the copier answers

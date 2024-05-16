@@ -9,4 +9,5 @@ git init
 reqs bootstrap
 reqs sync --force
 pre-commit install
-git commit --all -m 'initial commit after copyier-py-package generation'
+git add .
+git commit -m 'initial commit after copyier-py-package generation'
