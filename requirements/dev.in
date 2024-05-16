@@ -1,4 +1,5 @@
 -r tests.txt
 
 click
-
+ruff
+pre-commit
