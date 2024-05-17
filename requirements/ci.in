@@ -6,4 +6,4 @@
 nox[uv]
 
 # Utilities expected to be installed at OS level
-reqs @ https://github.com/level12/reqs/archive/main.tar.gz
+reqs-cli
