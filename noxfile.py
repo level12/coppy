@@ -21,6 +21,7 @@ def tests(session: nox.Session):
         '--tb=native',
         '--strict-markers',
         f'--junit-xml={package_path}/ci/test-reports/{session.name}.pytests.xml',
+        *session.posargs,
     )
 
 

@@ -27,6 +27,7 @@ def tests(session: nox.Session):
         '--no-cov-on-fail',
         f'--junit-xml={package_path}/ci/test-reports/{session.name}.pytests.xml',
         'src',
+        *session.posargs,
     )
 
 
