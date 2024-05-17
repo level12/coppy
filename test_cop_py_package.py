@@ -30,8 +30,9 @@ def sub_run(*args, capture=True, **kwargs):
     try:
         return subprocess.run(args, **kwargs)
     except subprocess.CalledProcessError as e:
-        print('sub stdout', e.stdout.decode('utf-8'))
-        print('sub stderr', e.stderr.decode('utf-8'))
+        if kwargs['capture_output']:
+            print('sub stdout', e.stdout.decode('utf-8'))
+            print('sub stderr', e.stderr.decode('utf-8'))
         raise
 
 

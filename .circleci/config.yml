@@ -20,7 +20,6 @@ jobs:
               mise settings set experimental true
               mise settings set python_venv_auto_create true
 
-              # Because one of the tests calls `mise run demo` the mise venv needs all dev deps.
               mise install
 
       - run:
@@ -34,6 +33,8 @@ jobs:
       - run:
           name: run tests
           command: |
+            # The tests use `mise run demo` so the mise env needs to be
+            # fully setup.
             mise exec -- python -m pip install -r requirements/ci.txt
             mise exec -- reqs sync
             mise exec -- python -m nox

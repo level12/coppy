@@ -13,6 +13,7 @@ nox.options.default_venv_backend = 'uv'
 @nox.session
 def tests(session: nox.Session):
     session.install('-r', 'requirements/tests.txt')
+    session.install('reqs @ https://github.com/level12/reqs/archive/main.tar.gz')
     session.install('-e', '.')
     session.run(
         'pytest',
