@@ -6,8 +6,10 @@
 # Consider updating the source file in that repo with enhancements or bug fixes needed.
 
 git init
+reqs config
 reqs bootstrap
 reqs sync --force
 pre-commit install
+pre-commit autoupdate
 git add .
 git commit -m 'initial commit after copyier-py-package generation'

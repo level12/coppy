@@ -24,9 +24,9 @@ def toml_load(fpath: Path):
         return LazyDict(tomllib.load(f))
 
 
-def sub_run(*args, **kwargs):
+def sub_run(*args, capture=True, **kwargs):
     kwargs.setdefault('check', True)
-    kwargs.setdefault('capture_output', True)
+    kwargs.setdefault('capture_output', capture)
     try:
         return subprocess.run(args, **kwargs)
     except subprocess.CalledProcessError as e:
@@ -128,8 +128,27 @@ class TestPyPackage:
 
     def test_version(self, package: Package):
         package.generate()
-        import shutil
-
-        print(shutil.which('hatch'), shutil.which('python'))
         result = package.sub_run('hatch', 'version')
         assert result.stdout.decode('utf-8').strip() == '0.1.0'
+
+    def test_demo_bootstrap(self, tmp_path: Path):
+        sub_run('mise', 'run', 'demo', tmp_path, cwd=proj_root, capture=False)
+        package = Package(tmp_path)
+        assert package.exists('.git')
+        assert package.exists('.git/hooks/pre-commit')
+        assert package.exists('requirements/dev.txt')
+
+        venvs_dpath = Path(environ.get('WORKON_HOME', '/tmp')).expanduser().absolute()
+        demo_venv = venvs_dpath / 'CopierPyPackageDemo'
+        venv_bin = demo_venv / 'bin'
+        print('demo venv_bin', venv_bin)
+
+        result = sub_run(f'{venv_bin}/uv', 'pip', 'freeze', env={'VIRTUAL_ENV': demo_venv})
+        reqs = result.stdout.decode('utf-8')
+        assert 'ruff==' in reqs
+
+        # git should return non-zero if everything hasn't been committed
+        sub_run('git', 'diff-index', '--quiet', 'HEAD', cwd=tmp_path)
+
+        # Make sure bootstrap is idempotent
+        sub_run('mise', 'run', 'bootstrap', cwd=tmp_path, capture=False)

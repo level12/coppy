@@ -1,0 +1,57 @@
+#!/usr/bin/env python
+# mise description="Generate demo project"
+"""
+Originates from https://github.com/level12/copier-py-package
+
+Consider updating the source file in that repo with enhancements or bug fixes needed.
+"""
+
+from os import environ
+from pathlib import Path
+import shutil
+
+import click
+import copier
+
+from tasks_lib import sub_run
+
+
+proj_root = Path(environ.get('MISE_PROJECT_ROOT')).parent
+
+
+@click.command()
+@click.argument('dest', type=click.Path(path_type=Path), default='/tmp/copier-py-package-demo')
+def main(dest: Path):
+    """
+    Generate demo project
+    """
+    pname = 'CopierPyPackageDemo'
+    venvs_dpath = Path(environ.get('WORKON_HOME', '/tmp')).expanduser().absolute()
+    demo_venv = venvs_dpath / pname
+
+    args = {
+        'project_name': pname,
+        'author_name': 'Picard',
+        'author_email': 'jpicard@starfleet.space',
+    }
+
+    if dest.exists():
+        shutil.rmtree(dest)
+    if demo_venv.exists():
+        shutil.rmtree(demo_venv)
+
+    copier.run_copy(
+        proj_root.as_posix(),
+        dest.as_posix(),
+        args,
+        unsafe=True,
+        defaults=True,
+        vcs_ref='HEAD',
+    )
+
+    sub_run('mise', 'trust', cwd=dest, check=False)
+    sub_run('mise', 'run', 'bootstrap', cwd=dest)
+
+
+if __name__ == '__main__':
+    main()
