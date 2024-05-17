@@ -120,6 +120,7 @@ pip==24.0 \
     # via
     #   -c requirements/dev.txt
     #   pip-tools
+    #   reqs
 pip-tools==7.4.1 \
     --hash=sha256:4c690e5fbae2f21e87843e89c26191f0d9454f362d8acdbd695716493ec8b3a9 \
     --hash=sha256:864826f5073864450e24dbeeb85ce3920cdfb09848a3d69ebf537b521f14bcc9
@@ -159,7 +160,7 @@ pytest-cov==5.0.0 \
     --hash=sha256:5837b58e9f6ebd335b0f8060eecce69b662415b16dc503883a02f45dfeb14857
     # via reqs
 reqs @ https://github.com/level12/reqs/archive/main.tar.gz \
-    --hash=sha256:da00d76123d346c3c1b5b8deed75f747291f133fd8ec636a83edff8a3fa1fce8
+    --hash=sha256:b53fbf923c0d7ee447a1bb27a0e76c8181f56d66b2094c5cd142307fb4368756
     # via -r requirements/ci.in
 setuptools==69.5.1 \
     --hash=sha256:6c1fccdac05a97e598fb0ae3bbed5904ccb317337a51139dcd51453611bbb987 \
@@ -167,6 +168,7 @@ setuptools==69.5.1 \
     # via
     #   -c requirements/dev.txt
     #   pip-tools
+    #   reqs
 uv==0.1.44 \
     --hash=sha256:012fcfc3789f303ee3ff9f2a6e09bc589710fed7c2dcbad4379832072bad7a95 \
     --hash=sha256:05774eb086b18aad488c3140daa62a235e3f270f62bd3cc4aaaa54eed927cc5b \
