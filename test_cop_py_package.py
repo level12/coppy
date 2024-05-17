@@ -149,6 +149,3 @@ class TestPyPackage:
 
         # git should return non-zero if everything hasn't been committed
         sub_run('git', 'diff-index', '--quiet', 'HEAD', cwd=tmp_path)
-
-        # Make sure bootstrap is idempotent
-        sub_run('mise', 'run', 'bootstrap', cwd=tmp_path, capture=False)

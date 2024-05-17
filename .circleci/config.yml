@@ -3,27 +3,40 @@ jobs:
   build:
     docker:
       - image: cimg/python:3.12
+    environment:
+      WORKON_HOME: '/tmp'
     steps:
       - checkout
+      - run:
+          name: Prep OS tools and config
+          command: |
+              # bootstrap script commits, so configure git
+              git config --global user.email "foo@bar.com"
+              git config --global user.name "foo"
+              git config --global init.defaultBranch main
+
+              # Experimental for tasks
+              curl https://mise.run | sh
+              mise settings set experimental true
+              mise settings set python_venv_auto_create true
+
+              # Because one of the tests calls `mise run demo` the mise venv needs all dev deps.
+              mise install
 
       - run:
           name: Debugging aids
           command: |
               ls -al
               echo $PATH
+              mise exec -- which python
+              mise exec -- python --version
 
       - run:
-          name: Install OS tools
+          name: run tests
           command: |
-              curl https://mise.run | sh
-              mise settings set experimental true
-              python -m pip install -r requirements/ci.txt
-              python --version
-              python -m nox --version
-
-      - run:
-          name: run nox
-          command: python -m nox
+            mise exec -- python -m pip install -r requirements/ci.txt
+            mise exec -- reqs sync
+            mise exec -- python -m nox
 
       - store_test_results:
           path: ci/test-reports/

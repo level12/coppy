@@ -5,6 +5,8 @@
 #
 # Consider updating the source file in that repo with enhancements or bug fixes needed.
 
+echo 'VIRTUAL_ENV:' $VIRTUAL_ENV
+echo 'PATH:' $PATH
 git init
 reqs config
 reqs bootstrap
