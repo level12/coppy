@@ -2,7 +2,7 @@
 *.egg-info
 *.coverage
 /.tox
-/.nonx
+/.nox
 /coverage.xml
 /.pytests.xml
 /htmlcov
@@ -16,3 +16,6 @@
 
 # Pycharm / JetBrains clutter
 .idea
+
+# Project builds
+dist

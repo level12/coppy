@@ -11,6 +11,7 @@ build-backend = 'hatchling.build'
 name = '{{ project_name }}'
 authors = [{name = '{{ author_name }}', email = '{{ author_email }}'}]
 dynamic = ['dependencies', 'optional-dependencies', 'version']
+readme = 'readme.md'
 
 {% if script_name %}
 [project.scripts]
