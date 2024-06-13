@@ -50,6 +50,9 @@ select = [
 ignore = [
     'A003',    # Class attribute is shadowing a Python builtin
     'E731',    # Do not assign a `lambda` expression, use a `def`
+    # https://docs.astral.sh/ruff/formatter/#conflicting-lint-rules
+    'COM812',
+    'ISC001',
 ]
 
 # [per-file-ignores]

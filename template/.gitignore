@@ -4,7 +4,7 @@
 /.tox
 /.nox
 /coverage.xml
-/.pytests.xml
+*.pytests.xml
 /htmlcov
 .pytest_cache
 
@@ -19,3 +19,6 @@
 
 # Project builds
 dist
+
+# Nox
+build
