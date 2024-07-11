@@ -13,7 +13,7 @@ repos:
       - id: check-added-large-files
       - id: check-yaml
   - repo: https://github.com/charliermarsh/ruff-pre-commit
-    rev: v0.4.4
+    rev: v0.5.1
     hooks:
       # i.e. `ruff check`
       - id: ruff
@@ -25,6 +25,6 @@ repos:
         # the linting check above would always catch a problem created by the formatter.
         args: [ --check ]
   - repo: https://github.com/level12/pre-commit-hooks
-    rev: v0.20240516.2
+    rev: v0.20240606.1
     hooks:
       - id: check-ruff-versions
