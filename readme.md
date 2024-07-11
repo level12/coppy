@@ -84,3 +84,16 @@ Todo:
 - pre-commit
 - badges
 - review keg-app-cookiecutter
+
+## Development
+
+### Versions & releases
+
+Versions are date based.  Tools:
+
+- Current version: `hatch version`
+- Bump version based on date, tag, push: `mise run bump`
+   - Options: `mise run bump -- --help`
+
+There is no actual "release" for this project since it only lives on GitHub and no artifacts need
+to be built.
