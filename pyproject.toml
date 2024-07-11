@@ -11,9 +11,3 @@ build-backend = 'hatchling.build'
 name = 'copier-py-package'
 authors = [{name = 'Randy Syring', email = 'randy.syring@level12.io'}]
 dynamic = ['version', 'dependencies', 'optional-dependencies']
-
-
-[tool.reqs.depends]
-'tests.in' = 'base.txt'
-'dev.in' = 'tests.txt'
-'ci.in' = 'dev.txt'
