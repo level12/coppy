@@ -14,4 +14,4 @@ reqs sync --force
 pre-commit install
 pre-commit autoupdate
 git add .
-git commit -m 'initial commit after copyier-py-package generation'
+git commit -m 'initial commit after copier-py-package generation'

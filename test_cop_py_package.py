@@ -79,7 +79,7 @@ class Package:
 
 
 @pytest.fixture
-def package(tmp_path):
+def package(tmp_path: Path):
     return Package(tmp_path)
 
 
