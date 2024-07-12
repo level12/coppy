@@ -11,7 +11,7 @@ available on the path:
 - copier with template extensions
   - `pipx install copier`
   - `pipx inject copier copier-templates-extensions`
-- [mise][https://mise.jdx.dev/]
+- [mise](https://mise.jdx.dev/)
   - Set `WORKON_HOME` environment variable to location virtualenvs should be created
 - [reqs](https://github.com/level12/reqs)
 
@@ -50,8 +50,8 @@ mise run bootstrap
 
 To update a project derived from this repo:
 
-    * `hatch run copier:update`: latest tagged version in GitHub, OR
-    * `hatch run copier:update-head`: head of master in GitHub
+* `hatch run copier:update`: latest tagged version in GitHub, OR
+* `hatch run copier:update-head`: head of master in GitHub
 
 The update should be pretty safe and only apply changes from the upstream repo that have happened
 since this project was last updated.  Any conflicts with local changes to the project will show up
