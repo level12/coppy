@@ -87,6 +87,9 @@ Todo:
 
 ## Development
 
+* Project tasks: `mise tasks`
+* CI uses a custom image built just for this project.  See `compose.yaml` and related mise task.
+
 ### Versions & releases
 
 Versions are date based.  Tools:

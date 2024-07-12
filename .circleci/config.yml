@@ -2,29 +2,14 @@ version: 2
 jobs:
   build:
     docker:
-      - image: cimg/python:3.12
-    environment:
-      WORKON_HOME: '/tmp'
+      - image: level12/copier-py-ci:22.04
     steps:
       - checkout
-      - run:
-          name: Prep OS tools and config
-          command: |
-              # bootstrap script commits, so configure git
-              git config --global user.email "foo@bar.com"
-              git config --global user.name "foo"
-              git config --global init.defaultBranch main
-
-              # Experimental for tasks
-              curl https://mise.run | sh
-              mise settings set experimental true
-              mise settings set python_venv_auto_create true
-
-              mise install
 
       - run:
           name: Debugging aids
           command: |
+              pwd
               ls -al
               echo $PATH
               mise exec -- which python

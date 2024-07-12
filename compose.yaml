@@ -1,0 +1,11 @@
+services:
+  cimg-22.04:
+    # The build key is important is it keeps our local docker building new images when changes
+    # are made to the project.  Without it, once its built, it will keep using the image
+    # currently in docker.
+    build:
+      context: .
+      dockerfile: ci/Dockerfile
+      args:
+        UBUNTU_VERSION: 22.04
+    image: level12/copier-py-ci:22.04
