@@ -1,4 +1,9 @@
 version: 2
+
+orbs:
+  # https://circleci.com/developer/orbs/orb/codecov/codecov
+  codecov: codecov/codecov@4.1.0
+
 jobs:
   build:
     docker:
@@ -26,6 +31,6 @@ jobs:
       - store_test_results:
           path: ci/test-reports/
 
-      # - run:
-      #     name: push code coverage
-      #     command: bash scripts/codecov-verify && bash codecov -X coveragepy -t 197f7fad-3f49-49fc-a2ec-2dbee41989f0
+      - codecov/upload
+          # NOTE: you may need the file arg to locate the coverage data file
+          # file: my-pkg/.coverage
