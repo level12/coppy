@@ -33,6 +33,5 @@ def standards(session: nox.Session):
     session.run(
         'pre-commit',
         'run',
-        '--show-diff-on-failure',
         '--all-files',
     )

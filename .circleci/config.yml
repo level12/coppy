@@ -1,47 +1,24 @@
-version: 2
+version: 2.1
+
 jobs:
-  build:
+
+  nox:
+
     docker:
-      - image: cimg/python:3.12
-    environment:
-      WORKON_HOME: '/tmp'
+      - image: level12/copier-py-ci:22.04
+
     steps:
       - checkout
-      - run:
-          name: Prep OS tools and config
-          command: |
-              # bootstrap script commits, so configure git
-              git config --global user.email "foo@bar.com"
-              git config --global user.name "foo"
-              git config --global init.defaultBranch main
-
-              # Experimental for tasks
-              curl https://mise.run | sh
-              mise settings set experimental true
-              mise settings set python_venv_auto_create true
-
-              mise install
 
       - run:
-          name: Debugging aids
+          name: run nox
           command: |
-              ls -al
-              echo $PATH
-              mise exec -- which python
-              mise exec -- python --version
-
-      - run:
-          name: run tests
-          command: |
-            # The tests use `mise run demo` so the mise env needs to be
-            # fully setup.
-            mise exec -- python -m pip install -r requirements/ci.txt
-            mise exec -- reqs sync
-            mise exec -- python -m nox
+            mise run ci-nox
 
       - store_test_results:
           path: ci/test-reports/
 
-      # - run:
-      #     name: push code coverage
-      #     command: bash scripts/codecov-verify && bash codecov -X coveragepy -t 197f7fad-3f49-49fc-a2ec-2dbee41989f0
+workflows:
+  build-all:
+    jobs:
+      - nox

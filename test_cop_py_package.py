@@ -80,8 +80,9 @@ class Package:
 
 class TestPyPackage:
     @pytest.fixture(scope='class')
-    def package(tmp_path: Path):
-        package = Package(tmp_path)
+    def package(self, tmp_path_factory):
+        temp_path: Path = tmp_path_factory.mktemp('test-py-pkg')
+        package = Package(temp_path)
         package.generate()
         return package
 
@@ -112,7 +113,7 @@ class TestPyPackage:
         assert 'Hello from enterprise.cli' in result.stdout.decode('utf-8')
 
     def test_mise(self, package: Package):
-        config = package.toml_config('mise/config.toml')
+        config = package.toml_config('mise.toml')
         venv = config.env._.python.venv
         assert venv.path == '{{env.WORKON_HOME}}/Enterprise'
         assert config.tools.python == '3.12'

@@ -4,3 +4,8 @@ python = "3.12"
 [env]
 _.python.venv.path = "{{env.WORKON_HOME}}/copier-py"
 _.python.venv.create = true
+
+# Apparently git ignores directories with CACHEDIR.TAG, but docker's copy doesn't.  In order to
+# simplify copying the source files into the nox docker image, keep the ruff cache out of the
+# source directory.
+RUFF_CACHE_DIR = '~/.cache/ruff'
