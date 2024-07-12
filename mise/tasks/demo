@@ -16,7 +16,7 @@ import copier
 from tasks_lib import sub_run
 
 
-proj_root = Path(environ.get('MISE_PROJECT_ROOT')).parent
+proj_root = Path(environ.get('MISE_PROJECT_ROOT'))
 
 
 @click.command()

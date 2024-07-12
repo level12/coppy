@@ -1,11 +1,42 @@
 services:
-  cimg-22.04:
+  cimg:
     # The build key is important is it keeps our local docker building new images when changes
     # are made to the project.  Without it, once its built, it will keep using the image
     # currently in docker.
-    build:
+    build: &build
       context: .
       dockerfile: ci/Dockerfile
       args:
         UBUNTU_VERSION: 22.04
     image: level12/copier-py-ci:22.04
+
+
+  # Run nox very close to how it will be ran in CI:
+  #
+  # Full tox run:
+  #   ❯ docker compose run --build --rm nox
+  #
+  # Only the standards session:
+  #   ❯ docker compose run --build --rm nox -s standards
+  #
+  # Only tests session and send "-k version" to pytest
+  #   ❯ docker compose run --build --rm nox -s tests -- -k version
+  #
+  # No session limit, still send "-k version" to pytest
+  #   ❯ docker compose run --build --rm nox -- -- -k version
+  nox:
+    extends: cimg
+    build:
+      # Even though we extend, use a reference so target can be specified.
+      <<: *build
+      target: nox
+    container_name: copier-py-nox
+
+
+  # Explore/troubleshoot the nox image
+  # ❯ docker compose run --build --rm bash
+  bash:
+    extends: nox
+    container_name: copier-py-bash
+    entrypoint: /bin/bash
+    command: ''

@@ -88,7 +88,10 @@ Todo:
 ## Development
 
 * Project tasks: `mise tasks`
-* CI uses a custom image built just for this project.  See `compose.yaml` and related mise task.
+* CI uses a custom image built just for this project
+  - See `compose.yaml` and related
+  - Publish image changes to docker hub manually using: `mise run publish-ci-img`
+* Simulate CI run locally: `mise run docker-nox`
 
 ### Versions & releases
 

@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 # mise description="Build and push ci/Dockerfile"
 
-docker compose build --pull && docker compose push
+docker compose build --pull cimg && docker compose push cimg
