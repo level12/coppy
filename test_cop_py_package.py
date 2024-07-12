@@ -78,14 +78,14 @@ class Package:
         return self.path(path).exists()
 
 
-@pytest.fixture
-def package(tmp_path: Path):
-    return Package(tmp_path)
-
-
 class TestPyPackage:
-    def test_pyproject(self, package: Package):
+    @pytest.fixture(scope='class')
+    def package(tmp_path: Path):
+        package = Package(tmp_path)
         package.generate()
+        return package
+
+    def test_pyproject(self, package: Package):
         config = package.toml_config('pyproject.toml')
 
         assert config.project.name == 'Enterprise'
@@ -95,7 +95,8 @@ class TestPyPackage:
         assert author.name == 'Picard'
         assert author.email == 'jpicard@starfleet.space'
 
-    def test_pyproject_with_script(self, package: Package):
+    def test_pyproject_with_script(self, tmp_path: Path):
+        package = Package(tmp_path)
         package.generate(script_name='ent', hatch_installer_uv=True)
 
         # Use uv to create the venv to speed up the test
@@ -111,8 +112,6 @@ class TestPyPackage:
         assert 'Hello from enterprise.cli' in result.stdout.decode('utf-8')
 
     def test_mise(self, package: Package):
-        package.generate()
-
         config = package.toml_config('mise/config.toml')
         venv = config.env._.python.venv
         assert venv.path == '{{env.WORKON_HOME}}/Enterprise'
@@ -128,7 +127,6 @@ class TestPyPackage:
         assert package.exists('.copier-answers-py.yaml')
 
     def test_version(self, package: Package):
-        package.generate()
         result = package.sub_run('hatch', 'version')
         assert result.stdout.decode('utf-8').strip() == '0.1.0'
 
