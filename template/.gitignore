@@ -1,8 +1,6 @@
 *.pyc
 *.egg-info
 *.coverage
-/.tox
-/.nox
 /coverage.xml
 *.pytests.xml
 /htmlcov
@@ -20,5 +18,12 @@
 # Project builds
 dist
 
-# Nox
+# Tox/Nox
 build
+/.nox
+/.tox
+
+# Mise local config file
+/mise.local.toml
+
+# Project specific
