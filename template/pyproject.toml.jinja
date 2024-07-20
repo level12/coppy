@@ -9,7 +9,9 @@ build-backend = 'hatchling.build'
 
 [project]
 name = '{{ project_name }}'
-authors = [{name = '{{ author_name }}', email = '{{ author_email }}'}]
+authors = [
+    {name = '{{ author_name }}', email = '{{ author_email }}'},
+]
 dynamic = ['dependencies', 'optional-dependencies', 'version']
 readme = 'readme.md'
 
@@ -18,7 +20,7 @@ readme = 'readme.md'
 '{{ script_name }}' = '{{ py_module }}.cli:main'
 {% endif %}
 
-[tool.reqs]
 {% if use_pipx %}
+[tool.reqs]
 sync_pipx = true
 {% endif -%}

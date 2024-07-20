@@ -1,36 +1,31 @@
-version: 2
+version: 2.1
 
 orbs:
   # https://circleci.com/developer/orbs/orb/codecov/codecov
   codecov: codecov/codecov@4.1.0
 
 jobs:
-  build:
+
+  nox:
+
     docker:
       - image: cimg/python:{{ python_version }}
+
     steps:
       - checkout
 
       - run:
-          name: Debugging info
-          command: |
-              ls -al
-              echo $PATH
-
-      - run:
-          name: Install OS tools
-          command: |
-              python -m pip install -r requirements/ci.txt
-              python --version
-              python -m nox --version
-
-      - run:
           name: run nox
-          command: python -m nox
+          command: |
+            mise run ci-nox
 
       - store_test_results:
           path: ci/test-reports/
 
       - codecov/upload
-          # NOTE: you may need the file arg to locate the coverage data file
-          # file: my-pkg/.coverage
+
+
+workflows:
+  main:
+    jobs:
+      - nox

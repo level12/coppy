@@ -8,21 +8,22 @@ quote-style = 'single'
 
 [lint]
 fixable = [
-    'I',
-    'Q',
     'C4',
     'COM',
+    'I',
+    'ISC',
+    'PIE',
+    'Q',
     'UP',
-    'PIE790',  # Unnecessary pass statement
-    'W291',    # Trailing whitespace
-    'W293',    # Blank line contains whitespace
-    'RUF100',  # Unused blanket noqa directive
+
     'E711',    # Comparison to `None` should be `cond is None`
     'E712',    # Comparison to `True` should be `cond is True` or `if cond:`
     'E713',    # Test for membership should be `not in`
     'E714',    # Test for object identity should be `is not`
     'F901',    # `raise NotImplemented` should be `raise NotImplementedError`
-    'ISC',     # Implicit str concat
+    'RUF100',  # Unused blanket noqa directive
+    'W291',    # Trailing whitespace
+    'W293',    # Blank line contains whitespace
 ]
 select = [
     'E',   # ruff default: pycodestyle errors

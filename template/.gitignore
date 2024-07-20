@@ -1,29 +1,40 @@
+# Python
 *.pyc
 *.egg-info
+
+
+# Tox/Nox/Tests/Coverage
+/.nox
+/.tox
+/ci/coverage-html
 *.coverage
 /coverage.xml
 *.pytests.xml
-/htmlcov
 .pytest_cache
 
-# .env file for Flask development server
-.flaskenv
 
-# Visual Studio Code clutter
+# Editor Clutter
 .vscode
-
-# Pycharm / JetBrains clutter
 .idea
 
-# Project builds
+
+# Build related
 dist
+/build
+npm-debug.log
+.*-cache
+node_modules
 
-# Tox/Nox
-build
-/.nox
-/.tox
 
-# Mise local config file
+# Local dev files
 /mise.local.toml
+/notes.md
+/tmp
+
+# Terraform
+*.tfstate*
+tf.plan
+.terraform*
+
 
 # Project specific
