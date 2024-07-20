@@ -33,8 +33,7 @@ from this-base as nox
 # root to the host file system.  Could have used a .dockerignore that matches the .gitignore and
 # likely ended up with similar results.  But I (RLS) think explicit test failures from not copying
 # something into the image are easier to troubleshoot than letting the .dockerignore get outdated
-# and then have the image be larger.  Although, since the image is always local, that may not matter
-# much in the end.
+# and then have the image be larger.
 
 # Prep for the reqs install just below
 copy --chown=circleci:circleci mise.toml .

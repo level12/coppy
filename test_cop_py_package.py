@@ -44,6 +44,7 @@ class Package:
         kwargs.setdefault('project_name', 'Enterprise')
         kwargs.setdefault('author_name', 'Picard')
         kwargs.setdefault('author_email', 'jpicard@starfleet.space')
+        kwargs.setdefault('script_name', '')
 
         copier.run_copy(
             proj_root.as_posix(),
@@ -115,7 +116,7 @@ class TestPyPackage:
     def test_mise(self, package: Package):
         config = package.toml_config('mise.toml')
         venv = config.env._.python.venv
-        assert venv.path == '{{env.WORKON_HOME}}/Enterprise'
+        assert venv.path == "{{ get_env(name='WORKON_HOME', default='/tmp') }}/enterprise"
         assert config.tools.python == '3.12'
 
         result = package.mise('tasks')
@@ -139,7 +140,7 @@ class TestPyPackage:
         assert package.exists('requirements/dev.txt')
 
         venvs_dpath = Path(environ.get('WORKON_HOME', '/tmp')).expanduser().absolute()
-        demo_venv = venvs_dpath / 'CopierPyPackageDemo'
+        demo_venv = venvs_dpath / 'copierpypackagedemo'
         venv_bin = demo_venv / 'bin'
         print('demo venv_bin', venv_bin)
 
