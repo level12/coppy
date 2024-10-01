@@ -15,7 +15,7 @@ from tasks_lib import sub_run
 
 def current_version():
     result = sub_run('hatch', 'version', capture=True)
-    return result.stdout.decode('utf-8').strip()
+    return result.stdout.strip()
 
 
 def date_version(current: str):
