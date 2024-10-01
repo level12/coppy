@@ -19,8 +19,6 @@ def tests(session: nox.Session):
     session.install('-e', '.')
     session.run(
         'pytest',
-        # use our pytest.ini for warning management
-        '-c=ci/pytest.ini',
         '-ra',
         '--tb=native',
         '--strict-markers',

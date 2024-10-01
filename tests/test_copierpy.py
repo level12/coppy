@@ -8,7 +8,7 @@ import copier
 import pytest
 
 
-proj_root = Path(__file__).parent
+proj_root = Path(__file__).parent.parent
 
 
 class LazyDict(containers.LazyDict):

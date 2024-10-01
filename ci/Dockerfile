@@ -61,11 +61,10 @@ copy --chown=circleci:circleci \
     pyproject.toml \
     ruff.toml \
     tasks_lib.py \
-    test_*.py \
     .
-copy --chown=circleci:circleci ci/pytest.ini ci/pytest.ini
 copy --chown=circleci:circleci mise-tasks mise-tasks
 copy --chown=circleci:circleci template template
+copy --chown=circleci:circleci tests tests
 
 entrypoint ["/home/circleci/.local/bin/mise", "run", "ci-nox"]
 cmd []
