@@ -64,7 +64,7 @@ copy --chown=circleci:circleci \
     test_*.py \
     .
 copy --chown=circleci:circleci ci/pytest.ini ci/pytest.ini
-copy --chown=circleci:circleci mise/tasks mise/tasks
+copy --chown=circleci:circleci mise-tasks mise-tasks
 copy --chown=circleci:circleci template template
 
 entrypoint ["/home/circleci/.local/bin/mise", "run", "ci-nox"]

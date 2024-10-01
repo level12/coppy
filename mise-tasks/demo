@@ -21,7 +21,8 @@ proj_root = Path(environ.get('MISE_PROJECT_ROOT'))
 
 @click.command()
 @click.argument('dest', type=click.Path(path_type=Path), default='/tmp/copier-py-package-demo')
-def main(dest: Path):
+@click.option('--bootstrap/--no-bootstrap', default=True)
+def main(dest: Path, bootstrap: bool):
     """
     Generate demo project
     """
@@ -50,7 +51,8 @@ def main(dest: Path):
     )
 
     sub_run('mise', 'trust', cwd=dest, check=False)
-    sub_run('mise', 'run', 'bootstrap', cwd=dest)
+    if bootstrap:
+        sub_run('mise', 'run', 'bootstrap', cwd=dest)
 
 
 if __name__ == '__main__':
