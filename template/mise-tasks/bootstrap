@@ -17,4 +17,3 @@ ruff check --fix
 ruff format
 git add .
 git commit -m 'initial commit after copier-py-package generation'
-nox
