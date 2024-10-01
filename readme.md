@@ -88,6 +88,7 @@ Todo:
 ## Development
 
 * Project tasks: `mise tasks`
+* Build a demo project to test functionality: `mise run demo [--help]`
 * CI uses a custom image built just for this project
   - See `compose.yaml` and related
   - Publish image changes to docker hub manually using: `mise run publish-ci-img`
