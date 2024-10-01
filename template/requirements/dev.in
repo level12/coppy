@@ -4,8 +4,8 @@
 click
 hatch
 nox[uv]
+pip-audit
 pre-commit
 ruff
-
 
 # App specific (ditto)
