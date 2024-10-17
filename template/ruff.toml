@@ -1,5 +1,6 @@
 line-length = 100
 target-version = 'py312'
+output-format = 'concise'
 
 [format]
 line-ending = 'lf'
