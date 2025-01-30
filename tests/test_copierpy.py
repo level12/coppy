@@ -64,7 +64,7 @@ class Package:
             self.sub_run('uv', 'venv')
 
         env = environ.copy()
-        env['WORKON_HOME'] = venv_dpath.as_posix()
+        env['VIRTUALENVS_DIR'] = venv_dpath.as_posix()
 
         return self.sub_run('mise', *args, env=env, **kwargs)
 
@@ -116,7 +116,10 @@ class TestPyPackage:
     def test_mise(self, package: Package):
         config = package.toml_config('mise.toml')
         venv = config.env._.python.venv
-        assert venv.path == "{{ get_env(name='WORKON_HOME', default='/tmp') }}/enterprise"
+        assert venv.path == (
+            "{% if env.VIRTUALENVS_DIR %}{{ env.VIRTUALENVS_DIR }}/{{ virtualenv_name }}"
+            "{% else %}.venv{% endif %}"
+        )
         assert config.tools.python == '3.12'
 
         result = package.mise('tasks')
@@ -139,7 +142,7 @@ class TestPyPackage:
         assert package.exists('.git/hooks/pre-commit')
         assert package.exists('requirements/dev.txt')
 
-        venvs_dpath = Path(environ.get('WORKON_HOME', '/tmp')).expanduser().absolute()
+        venvs_dpath = Path(environ.get('VIRTUALENVS_DIR', '/tmp')).expanduser().absolute()
         demo_venv = venvs_dpath / 'copierpypackagedemo'
         venv_bin = demo_venv / 'bin'
         print('demo venv_bin', venv_bin)

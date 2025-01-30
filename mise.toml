@@ -2,7 +2,7 @@
 python = "3.12"
 
 [env]
-_.python.venv.path = "{{env.WORKON_HOME}}/copier-py"
+_.python.venv.path = "{% if env.VIRTUALENVS_DIR %}{{ env.VIRTUALENVS_DIR }}/copier-py{% else %}.venv{% endif %}"
 _.python.venv.create = true
 
 # Apparently git ignores directories with CACHEDIR.TAG, but docker's copy doesn't.  In order to

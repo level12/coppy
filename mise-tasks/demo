@@ -28,7 +28,7 @@ def main(dest: Path, bootstrap: bool, nox: bool):
     Generate demo project
     """
     pname = 'CopierPyPackageDemo'
-    venvs_dpath = Path(environ.get('WORKON_HOME', '/tmp')).expanduser().absolute()
+    venvs_dpath = Path(environ.get('VIRTUALENVS_DIR', '/tmp')).expanduser().absolute()
     demo_venv = venvs_dpath / pname
 
     args = {

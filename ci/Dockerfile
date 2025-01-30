@@ -7,7 +7,7 @@ from cimg/base:current-${UBUNTU_VERSION} as this-base
 workdir /home/circleci/project
 # Virtual env should not be on /tmp so that the pre-install of reqs done in the nox target
 # (below) will persist into the image.
-env WORKON_HOME '/home/circleci/.cache'
+env VIRTUALENVS_DIR '/home/circleci/.cache'
 copy mise.toml .
 
 # The bootstrap script commits, so git needs to be configured or it will error out

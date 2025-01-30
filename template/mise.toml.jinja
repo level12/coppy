@@ -3,5 +3,5 @@ python = "{{ python_version }}"
 
 
 [env]
-_.python.venv.path = "{{ '{{ get_env(name=\'WORKON_HOME\', default=\'/tmp\') }}' }}/{{ virtualenv_name }}"
+_.python.venv.path = "{{ '{% if env.VIRTUALENVS_DIR %}{{ env.VIRTUALENVS_DIR }}/{{ virtualenv_name }}{% else %}.venv{% endif %}' }}"
 _.python.venv.create = true

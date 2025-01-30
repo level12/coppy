@@ -12,7 +12,7 @@ available on the path:
   - `pipx install copier`
   - `pipx inject copier copier-templates-extensions`
 - [mise](https://mise.jdx.dev/)
-  - Set `WORKON_HOME` environment variable to location virtualenvs should be created
+  - Set `VIRTUALENVS_DIR` environment variable to location virtualenvs should be created
 - [reqs](https://github.com/level12/reqs)
 
 All other project dependencies should be managed by these tools:
