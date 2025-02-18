@@ -1,3 +1,4 @@
+from collections.abc import Iterable
 from os import environ
 from pathlib import Path
 import subprocess
@@ -24,15 +25,29 @@ def toml_load(fpath: Path):
         return LazyDict(tomllib.load(f))
 
 
-def sub_run(*args, capture=True, **kwargs):
-    kwargs.setdefault('check', True)
-    kwargs.setdefault('capture_output', capture)
+def sub_run(
+    *args,
+    capture=False,
+    returns: None | Iterable[int] = None,
+    **kwargs,
+) -> subprocess.CompletedProcess:
+    kwargs.setdefault('check', not bool(returns))
+    capture = kwargs.setdefault('capture_output', capture)
+    args = args + kwargs.pop('args', ())
+    env = kwargs.pop('env', None)
+    if env:
+        kwargs['env'] = environ | env
+    if capture:
+        kwargs.setdefault('text', True)
+
     try:
-        return subprocess.run(args, **kwargs)
+        result = subprocess.run(args, **kwargs)
+        if returns and result.returncode not in returns:
+            raise subprocess.CalledProcessError(result.returncode, args[0])
+        return result
     except subprocess.CalledProcessError as e:
-        if kwargs['capture_output']:
-            print('sub stdout', e.stdout.decode('utf-8'))
-            print('sub stderr', e.stderr.decode('utf-8'))
+        if capture:
+            print(e.stderr)
         raise
 
 
@@ -99,7 +114,7 @@ class TestPyPackage:
 
     def test_pyproject_with_script(self, tmp_path: Path):
         package = Package(tmp_path)
-        package.generate(script_name='ent', hatch_installer_uv=True)
+        package.generate(script_name='ent')
 
         # Use uv to create the venv to speed up the test
         hatch = package.toml_config('hatch.toml')
@@ -116,7 +131,11 @@ class TestPyPackage:
     def test_mise(self, package: Package):
         config = package.toml_config('mise.toml')
         venv = config.env._.python.venv
-        assert venv.path == "{{ get_env(name='WORKON_HOME', default='/tmp') }}/enterprise"
+        assert (
+            venv.path
+            == '{% if env.UV_PROJECT_ENVIRONMENT %}{{ env.UV_PROJECT_ENVIRONMENT }}{% else %}.venv{% endif %}'  # noqa
+        )
+        assert package.mise('exec', '--', 'printenv', 'VIRTUAL_ENV').stdout.strip() == 'foo'
         assert config.tools.python == '3.12'
 
         result = package.mise('tasks')
@@ -137,7 +156,7 @@ class TestPyPackage:
         package = Package(tmp_path)
         assert package.exists('.git')
         assert package.exists('.git/hooks/pre-commit')
-        assert package.exists('requirements/dev.txt')
+        assert package.exists('uv.lock')
 
         venvs_dpath = Path(environ.get('WORKON_HOME', '/tmp')).expanduser().absolute()
         demo_venv = venvs_dpath / 'copierpypackagedemo'
