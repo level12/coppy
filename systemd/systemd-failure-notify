@@ -1,0 +1,16 @@
+#!/usr/bin/bash
+
+
+# Check if running as root
+if [ "$EUID" -eq 0 ]; then
+    user=$(who | grep '(:[0-9])' | awk '{print $1}' | head -n 1)
+    sess_pid=$(sudo pgrep -u $user -f cinnamon-session | head -n 1)
+    bus_address=$(grep -z DBUS_SESSION_BUS_ADDRESS /proc/$sess_pid/environ | tr -d '\0' | cut -d= -f2-)
+
+    # Run notify-send as the logged-in user with sudo
+    sudo -u $user DISPLAY=:0 DBUS_SESSION_BUS_ADDRESS=$bus_address notify-send --icon dialog-error --urgency=critical "Systemd Unit Failure" "$1"
+
+else
+    # Run notify-send directly if not running as root
+    notify-send --icon=dialog-error --urgency=critical "Systemd Unit Failure" "$1"
+fi

@@ -1,0 +1,10 @@
+[Unit]
+Description=Notify systemd unit failure: %i
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/systemd-failure-notify %i
+{% if for_user %}
+User={{ for_user }}
+Group=systemd-journal
+{% endif %}
