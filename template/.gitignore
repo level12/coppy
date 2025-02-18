@@ -28,13 +28,12 @@ node_modules
 
 # Local dev files
 /mise.local.toml
-/notes.md
 /tmp
 
 # Terraform
 *.tfstate*
 tf.plan
-.terraform*
+.terraform
 
 
 # Project specific
