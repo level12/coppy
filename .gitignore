@@ -1,4 +1,4 @@
 *.pyc
 .nox
 dist
-notes.md
+tmp

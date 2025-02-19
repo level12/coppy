@@ -1,7 +1,0 @@
-[tools]
-python = "{{ python_version }}"
-
-
-[env]
-_.python.venv.path = "{{ '{{ get_env(name=\'WORKON_HOME\', default=\'/tmp\') }}' }}/{{ virtualenv_name }}"
-_.python.venv.create = true

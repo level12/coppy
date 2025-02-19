@@ -4,15 +4,12 @@ import nox
 
 
 package_path = Path.cwd()
-
-# NOTE: uv is much faster at creating venvs and generally compatible with pip.
-# Pip compat: https://github.com/astral-sh/uv/blob/main/PIP_COMPATIBILITY.md
 nox.options.default_venv_backend = 'uv'
 
 
 @nox.session
 def tests(session: nox.Session):
-    session.install('-r', 'requirements/tests.txt')
+    session.run('uv', 'sync', '--active', '--only-group', 'tests')
     session.install('reqs-cli')
     session.install('-e', '.')
     session.run(
@@ -27,7 +24,7 @@ def tests(session: nox.Session):
 
 @nox.session
 def standards(session: nox.Session):
-    session.install('-c', 'requirements/dev.txt', 'pre-commit')
+    session.run('uv', 'sync', '--active', '--only-group', 'pre-commit')
     session.run(
         'pre-commit',
         'run',

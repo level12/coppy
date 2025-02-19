@@ -1,7 +1,0 @@
--r base.txt
-
-# Specify test dependencies separate from base since this is a library and
-# the app is configured to use our txt files to specify dependencies.
-blazeutils
-hatch
-pytest

@@ -1,7 +1,6 @@
 [build-system]
 requires = [
     'hatchling',
-    'hatch-requirements-txt',
     'hatch-regex-commit',
 ]
 build-backend = 'hatchling.build'
@@ -12,7 +11,8 @@ name = '{{ project_name }}'
 authors = [
     {name = '{{ author_name }}', email = '{{ author_email }}'},
 ]
-dynamic = ['dependencies', 'optional-dependencies', 'version']
+requires-python = '>={{ python_version }}'
+dynamic = ['version']
 readme = 'readme.md'
 
 {% if script_name -%}
@@ -20,7 +20,34 @@ readme = 'readme.md'
 '{{ script_name }}' = '{{ py_module }}.cli:main'
 {% endif -%}
 
-{% if use_pipx -%}
-[tool.reqs]
-sync_pipx = true
-{% endif -%}
+[dependency-groups]
+# Note: keeping copier-py-package deps grouped separate from app deps should help avoid unnecessary
+# conflicts when upgrading to copier-py-package latest.
+dev = [
+    # From copier-py-package:
+    'click>=8.1.8',
+    'hatch>=1.14.0',
+    'pip-audit',
+    'ruff>=0.9.6',
+
+    # App specific:
+    # TODO: fill in app deps here
+]
+pre-commit = [
+    # From copier-py-package:
+    'pre-commit>=4.1.0',
+]
+tests = [
+    # From copier-py-package:
+    'nox>=2025.2.9',
+    'pytest>=8.3.4',
+    'pytest-cov>=6.0',
+
+    # App specific:
+    # TODO: fill in app deps here
+]
+
+[tool.uv]
+# These default dependency groups are installed (along w/ base dependencies) when using `uv sync`.
+# They are split out like this so nox can install them independently.
+default-groups = ['dev', 'pre-commit', 'tests']

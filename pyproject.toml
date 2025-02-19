@@ -1,7 +1,6 @@
 [build-system]
 requires = [
     'hatchling',
-    'hatch-requirements-txt',
     'hatch-regex-commit',
 ]
 build-backend = 'hatchling.build'
@@ -10,4 +9,32 @@ build-backend = 'hatchling.build'
 [project]
 name = 'copier-py-package'
 authors = [{name = 'Randy Syring', email = 'randy.syring@level12.io'}]
-dynamic = ['version', 'dependencies', 'optional-dependencies']
+dynamic = ['version']
+requires-python = '>=3.12'
+dependencies = [
+    "copier>=9.5.0",
+    "copier-templates-extensions>=0.3.0",
+]
+
+
+[dependency-groups]
+dev = [
+    "click>=8.1.8",
+    "hatch>=1.14.0",
+    "nox>=2025.2.9",
+    "pytest>=8.3.4",
+    "ruff>=0.9.6",
+]
+pre-commit = [
+    'pre-commit>=4.1.0',
+]
+tests = [
+    "blazeutils>=0.7.0",
+    'nox>=2025.2.9',
+    'pytest>=8.3.4',
+]
+
+[tool.uv]
+# These default dependency groups are installed (along w/ base dependencies) when using `uv sync`.
+# They are split out like this so nox can install them independently.
+default-groups = ['dev', 'tests', 'pre-commit']

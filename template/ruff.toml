@@ -71,8 +71,9 @@ ignore = [
     'Q003',    # avoidable-escaped-quote
 ]
 
-# [per-file-ignores]
-# 'mu/cli/__init__.py' = ['F401', 'I001']
+
+[lint.per-file-ignores]
+'mise-tasks/*.py' = ['EXE003']
 
 
 [lint.flake8-builtins]

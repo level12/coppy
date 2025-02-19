@@ -1,9 +1,0 @@
-# Ensure we are running the same version of tools that dev is using so
-# we don't end up with different test results due to tool versions.
--c dev.txt
-
-# Deps needed in CI to get nox running
-nox[uv]
-
-# Utilities expected to be installed at OS level
-reqs-cli

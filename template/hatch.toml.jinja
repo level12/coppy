@@ -3,19 +3,9 @@
 dev-mode-dirs = ['src']
 
 
-## Dependencies
-[metadata.hooks.requirements_txt]
-files = ['requirements/base.txt']
-
-[metadata.hooks.requirements_txt.optional-dependencies]
-dev = ['requirements/dev.txt']
-
-
 ## Env: default
 [envs.default]
-{% if hatch_installer_uv -%}
 installer = "uv"
-{%- endif %}
 
 
 ## Env: copier
@@ -35,3 +25,7 @@ update-head = 'update --vcs-ref HEAD'
 [version]
 source = 'regex_commit'
 path = 'src/{{ py_module }}/version.py'
+{% if not hatch_version_tag_sign %}
+# https://github.com/frankie567/hatch-regex-commit?#version-source-options
+tag_sign = false
+{% endif -%}

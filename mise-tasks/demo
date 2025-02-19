@@ -13,7 +13,7 @@ import shutil
 import click
 import copier
 
-from tasks_lib import sub_run
+from coppy.utils import sub_run
 
 
 proj_root = Path(environ.get('MISE_PROJECT_ROOT'))
@@ -23,13 +23,17 @@ proj_root = Path(environ.get('MISE_PROJECT_ROOT'))
 @click.argument('dest', type=click.Path(path_type=Path), default='/tmp/copier-py-package-demo')
 @click.option('--bootstrap/--no-bootstrap', default=True)
 @click.option('--nox/--no-nox', default=True)
-def main(dest: Path, bootstrap: bool, nox: bool):
+@click.option('--update', 'is_update', is_flag=True, default=False)
+def main(dest: Path, bootstrap: bool, nox: bool, is_update: bool):
     """
     Generate demo project
     """
+    if is_update:
+        bootstrap = False
+        nox = False
+
     pname = 'CopierPyPackageDemo'
-    venvs_dpath = Path(environ.get('WORKON_HOME', '/tmp')).expanduser().absolute()
-    demo_venv = venvs_dpath / pname
+    dest = dest.expanduser().resolve()
 
     args = {
         'project_name': pname,
@@ -38,9 +42,17 @@ def main(dest: Path, bootstrap: bool, nox: bool):
     }
 
     if dest.exists():
-        shutil.rmtree(dest)
-    if demo_venv.exists():
-        shutil.rmtree(demo_venv)
+        # Remove all the contents but not the actual directory.  It makes troubleshooting the
+        # demo easier b/c you don't have to keep changing out of and then back into the demo
+        # directory in the shell.
+        for path in dest.iterdir():
+            if path.name == '.git' and is_update:
+                continue
+
+            if path.is_dir():
+                shutil.rmtree(path)
+            else:
+                path.unlink()
 
     copier.run_copy(
         proj_root.as_posix(),

@@ -1,4 +1,0 @@
-# No versions in this .txt b/c this package is more like a library than an app.
-# See the template's hatch env.copier for example of using this package to specify dependencies.
-copier
-copier-templates-extensions

@@ -4,13 +4,13 @@
 # Originates from https://github.com/level12/copier-py-package
 #
 # Consider updating the source file in that repo with enhancements or bug fixes needed.
+set -e
 
+echo 'UV_PROJECT_ENVIRONMENT:' $UV_PROJECT_ENVIRONMENT
 echo 'VIRTUAL_ENV:' $VIRTUAL_ENV
 echo 'PATH:' $PATH
 git init
-reqs config
-reqs bootstrap
-reqs sync --force
+uv sync
 pre-commit install
 pre-commit autoupdate
 ruff check --fix

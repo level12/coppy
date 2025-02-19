@@ -1,7 +1,0 @@
--r tests.txt
-
-click
-nox[uv]
-pre-commit
-pip-tools
-ruff

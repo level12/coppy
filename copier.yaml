@@ -43,12 +43,9 @@ virtualenv_name:
 python_version:
   type: str
   help: Python version (for mise)
-  default: '3.12'
+  default: '3.13'
 
-use_pipx:
+hatch_version_tag_sign:
   type: bool
-  help: Should `reqs sync` use pipx?
-  default: false
-  choices:
-    - true
-    - false
+  help: Sign git commits that add version tags?
+  default: True

@@ -63,7 +63,7 @@ By default, the project's venv will be located in the project directory at `.ven
 To set a different location, define `UV_PROJECT_ENVIRONMENT` as a mise env var:
 
 ```toml
-# Example for ~/mise.toml
+# Put this in a config that is used by all your projects, e.g. ~/.config/mise/config.toml or ~/mise.toml
 [env]
 UV_PROJECT_ENVIRONMENT = { value='{% if env.PROJECT_SLUG %}~/.cache/uv-venvs/{{ env.PROJECT_SLUG }}{% endif %}', tools = true }
 ```

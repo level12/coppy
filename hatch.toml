@@ -1,13 +1,6 @@
 [build]
-dev-mode-dirs = ['.']
-
-[metadata.hooks.requirements_txt]
-files = ['requirements/base.txt']
-
-[metadata.hooks.requirements_txt.optional-dependencies]
-dev = ['requirements/dev.txt']
-
+dev-mode-dirs = ['src']
 
 [version]
 source = 'regex_commit'
-path = 'copier_py_package.py'
+path = 'src/version.py'
