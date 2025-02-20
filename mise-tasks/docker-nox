@@ -1,3 +1,0 @@
-#!/usr/bin/env bash
-# mise description="Simulate CircleCI nox run"
-docker compose run --build --rm nox

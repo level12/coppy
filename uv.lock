@@ -177,18 +177,22 @@ dependencies = [
 
 [package.dev-dependencies]
 dev = [
+    { name = "blazeutils" },
     { name = "click" },
     { name = "hatch" },
     { name = "nox" },
+    { name = "pre-commit" },
     { name = "pytest" },
     { name = "ruff" },
+]
+nox = [
+    { name = "nox" },
 ]
 pre-commit = [
     { name = "pre-commit" },
 ]
 tests = [
     { name = "blazeutils" },
-    { name = "nox" },
     { name = "pytest" },
 ]
 
@@ -200,16 +204,18 @@ requires-dist = [
 
 [package.metadata.requires-dev]
 dev = [
+    { name = "blazeutils", specifier = ">=0.7.0" },
     { name = "click", specifier = ">=8.1.8" },
     { name = "hatch", specifier = ">=1.14.0" },
     { name = "nox", specifier = ">=2025.2.9" },
+    { name = "pre-commit", specifier = ">=4.1.0" },
     { name = "pytest", specifier = ">=8.3.4" },
     { name = "ruff", specifier = ">=0.9.6" },
 ]
+nox = [{ name = "nox", specifier = ">=2025.2.9" }]
 pre-commit = [{ name = "pre-commit", specifier = ">=4.1.0" }]
 tests = [
     { name = "blazeutils", specifier = ">=0.7.0" },
-    { name = "nox", specifier = ">=2025.2.9" },
     { name = "pytest", specifier = ">=8.3.4" },
 ]
 

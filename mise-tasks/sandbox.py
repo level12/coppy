@@ -24,6 +24,8 @@ def main(project_path: Path, bash: bool, doctor: bool):
         print('mise python vars:', sb.mise_env('USER', 'VIRTUAL_ENV'))
         if doctor:
             sb.run('mise', 'doctor', returns=(0, 1))
+            sb.run('mise', 'ls')
+            sb.run('mise', 'exec', '--', 'python', '--version')
         if bash:
             sb.run('bash')
 

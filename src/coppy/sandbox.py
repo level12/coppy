@@ -33,9 +33,16 @@ class Sandbox:
 
     def __init__(self, project_path: Path, mise_verbose=False):
         self.project_path = project_path
-        # Get the full path to the newest bwrap version, presumably installed by mise.
+
+        # Ensure we have paths to the bins we use
         bwrap_bin = shutil.which('bwrap')
-        assert bwrap_bin
+        self.mise_bin = shutil.which('mise')
+        self.uv_bin = shutil.which('uv')
+
+        assert bwrap_bin, f'bwrap bin not found: {environ["PATH"]}'
+        assert self.mise_bin, f'mise bin not found: {environ["PATH"]}'
+        assert self.uv_bin, f'uv bin not found: {environ["PATH"]}'
+
         self.base_args = [
             bwrap_bin,
             '--unshare-all',
@@ -140,6 +147,10 @@ class Sandbox:
         args = []
         for rel_path in rel_paths:
             path_slug = slug(rel_path)
+
+            src_dpath: Path = Path.home() / rel_path
+            src_dpath.mkdir(exist_ok=True)
+
             rw_dpath = self.sess_dpath / f'home-overlay-{path_slug}-rw'
             rw_dpath.mkdir()
             work_dpath = self.sess_dpath / f'home-overlay-{path_slug}-workdir'
@@ -148,7 +159,7 @@ class Sandbox:
             args.extend(
                 (
                     '--overlay-src',
-                    Path.home() / rel_path,
+                    src_dpath,
                     '--overlay',
                     rw_dpath,
                     work_dpath,
@@ -226,6 +237,7 @@ class Sandbox:
         }
 
         self.mise('trust')
+        self.uv('python', 'install')
         self.mise('sync', 'python', '--uv')
         return self
 

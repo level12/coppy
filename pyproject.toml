@@ -19,22 +19,23 @@ dependencies = [
 
 [dependency-groups]
 dev = [
+    {include-group = "tests"},
+    {include-group = "pre-commit"},
+    {include-group = "nox"},
     "click>=8.1.8",
     "hatch>=1.14.0",
-    "nox>=2025.2.9",
-    "pytest>=8.3.4",
     "ruff>=0.9.6",
 ]
+# Used by nox
 pre-commit = [
     'pre-commit>=4.1.0',
 ]
+# Used by nox
 tests = [
     "blazeutils>=0.7.0",
-    'nox>=2025.2.9',
     'pytest>=8.3.4',
 ]
-
-[tool.uv]
-# These default dependency groups are installed (along w/ base dependencies) when using `uv sync`.
-# They are split out like this so nox can install them independently.
-default-groups = ['dev', 'tests', 'pre-commit']
+# Used by CI
+nox = [
+    'nox>=2025.2.9',
+]

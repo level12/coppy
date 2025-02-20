@@ -141,5 +141,5 @@ class TestTemplate:
             # Run bump
             sb.mise('run', 'bump', '--no-push')
             result = sb.uv('run', 'hatch', 'version', capture=True)
-            date_str = dt.date.today().strftime(r'%Y%m%d')
+            date_str = dt.datetime.utcnow().date().strftime(r'%Y%m%d')
             assert result.stdout.strip() == f'0.{date_str}.1'
