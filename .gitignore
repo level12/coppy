@@ -2,3 +2,4 @@
 .nox
 dist
 tmp
+.venv
