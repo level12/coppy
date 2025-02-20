@@ -35,6 +35,7 @@ class Sandbox:
         self.project_path = project_path
         # Get the full path to the newest bwrap version, presumably installed by mise.
         bwrap_bin = shutil.which('bwrap')
+        assert bwrap_bin
         self.base_args = [
             bwrap_bin,
             '--unshare-all',
