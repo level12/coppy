@@ -31,7 +31,7 @@ class TestSandbox:
                 'path': '/home/picard/project/.python-version',
             }
             result = sb.mise_exec('python', '--version', capture=True)
-            assert result.stdout.strip() == f'Python {py_ver}'
+            assert result.stdout.strip() == f'Python {py_ver}', sb.mise_env('PATH')
             assert 'mise creating venv with uv at: ~/project/.venv' in result.stderr.strip()
 
             result = sb.run('uv', 'pip', 'freeze', capture=True)

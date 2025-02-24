@@ -1,3 +1,0 @@
-#!/usr/bin/env bash
-# mise description="Use/troubleshoot nox image"
-docker compose run --build --rm bash

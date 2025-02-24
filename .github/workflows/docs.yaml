@@ -12,14 +12,16 @@ on:
       - main
     paths:
       - "docs/**"
-      - ".github/workflows/**"
+      - ".github/workflows/docs.yaml"
   # gollum is the wiki add/update event and this only triggers for the default branch.  I.e. if
   # an update is made to the wiki, only the master branch will be updated.
   gollum:
 
+
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
+
 
 jobs:
   sync-docs:

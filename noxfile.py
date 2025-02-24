@@ -9,9 +9,7 @@ nox.options.default_venv_backend = 'uv'
 
 @nox.session
 def tests(session: nox.Session):
-    session.run('uv', 'sync', '--active', '--only-group', 'tests')
-    session.install('reqs-cli')
-    session.install('-e', '.')
+    session.run('uv', 'sync', '--active', '--no-dev', '--group', 'tests')
     session.run(
         'pytest',
         '-ra',

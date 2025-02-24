@@ -1,0 +1,62 @@
+name: Nox
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+  workflow_dispatch:
+
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+
+jobs:
+  nox:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Add ~/bin to PATH
+        run: echo "PATH=/home/runner/bin:$PATH" >> $GITHUB_ENV
+
+      - name: Prep
+        run: |
+          # Needed for bubblewrap to work correctly.  ONLY use in CI, unsafe otherwise.
+          sudo sysctl -w kernel.apparmor_restrict_unprivileged_unconfined=0
+          sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0
+
+          # Mise
+          mkdir ~/bin
+          curl https://mise.jdx.dev/mise-latest-linux-x64 > ~/bin/mise
+          chmod +x ~/bin/mise
+
+          # uv
+          mise use -g ubi:astral-sh/uv
+          mkdir -p /home/runner/.local/share/uv/python/
+
+          # Prep mise
+          mise trust
+          mise install
+
+      # Uncomment to help troubleshooting
+      # - name: Debug info
+      #   run: |
+      #     # Python versions
+      #     echo "Python versions:"
+      #     mise exec -- python --version
+      #     mise exec -- uv run python --version
+
+      #     # Path
+      #     echo "Path:"
+      #     echo $PATH
+
+      #     mise demo --no-bootstrap --no-nox
+      #     mise sandbox --doctor
+
+      - name: nox
+        run: mise exec -- uv run --only-group nox nox

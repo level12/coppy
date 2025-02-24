@@ -1,7 +1,7 @@
 # Python
 *.pyc
 *.egg-info
-
+.venv
 
 # Tox/Nox/Tests/Coverage
 /.nox

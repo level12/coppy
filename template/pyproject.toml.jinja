@@ -25,29 +25,36 @@ readme = 'readme.md'
 # conflicts when upgrading to copier-py-package latest.
 dev = [
     # From copier-py-package:
-    'click>=8.1.8',
+    {include-group = "tests"},
+    {include-group = "pre-commit"},
+    {include-group = "audit"},
+    {include-group = "nox"},
     'hatch>=1.14.0',
-    'pip-audit',
     'ruff>=0.9.6',
 
     # App specific:
     # TODO: fill in app deps here
 ]
-pre-commit = [
-    # From copier-py-package:
-    'pre-commit>=4.1.0',
-]
+# Used by nox
 tests = [
     # From copier-py-package:
-    'nox>=2025.2.9',
     'pytest>=8.3.4',
     'pytest-cov>=6.0',
 
     # App specific:
     # TODO: fill in app deps here
 ]
-
-[tool.uv]
-# These default dependency groups are installed (along w/ base dependencies) when using `uv sync`.
-# They are split out like this so nox can install them independently.
-default-groups = ['dev', 'pre-commit', 'tests']
+# Used by nox
+pre-commit = [
+    # From copier-py-package:
+    'pre-commit>=4.1.0',
+]
+# Used by nox
+audit = [
+    # From copier-py-package:
+    'pip-audit>=2.8.0',
+]
+# Used by CI
+nox = [
+    'nox>=2025.2.9',
+]
