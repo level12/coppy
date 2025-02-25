@@ -34,7 +34,9 @@ def sub_run(
         kwargs.setdefault('text', True)
 
     try:
+        # print('subprocess.run', args, kwargs)
         result = subprocess.run(args, **kwargs)
+
         if returns and result.returncode not in returns:
             raise subprocess.CalledProcessError(result.returncode, args[0])
 

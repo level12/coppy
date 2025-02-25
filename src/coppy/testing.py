@@ -5,7 +5,7 @@ import tomllib
 import copier
 
 from coppy import utils
-from coppy.sandbox import Sandbox
+from coppy.sandbox import Container
 
 
 tests_dpath = utils.src_dpath / 'tests'
@@ -52,5 +52,5 @@ class Package:
 
     @contextmanager
     def sandbox(self):
-        with Sandbox(self.dpath) as sb:
+        with Container(self.dpath) as sb:
             yield sb

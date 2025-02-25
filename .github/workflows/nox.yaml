@@ -26,14 +26,13 @@ jobs:
 
       - name: Prep
         run: |
-          # Needed for bubblewrap to work correctly.  ONLY use in CI, unsafe otherwise.
-          sudo sysctl -w kernel.apparmor_restrict_unprivileged_unconfined=0
-          sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0
-
           # Mise
           mkdir ~/bin
-          curl https://mise.jdx.dev/mise-latest-linux-x64 > ~/bin/mise
+          curl -LsS https://mise.jdx.dev/mise-latest-linux-x64 > ~/bin/mise
           chmod +x ~/bin/mise
+
+          # build the image used to test
+          mise docker-build
 
           # uv
           mise use -g ubi:astral-sh/uv

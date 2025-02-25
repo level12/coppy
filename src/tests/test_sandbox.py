@@ -5,7 +5,7 @@ import pytest
 from coppy.testing import Package
 
 
-class TestSandbox:
+class TestContainer:
     @pytest.fixture(scope='class')
     def package(self, tmp_path_factory):
         temp_path: Path = tmp_path_factory.mktemp('test-py-pkg')
@@ -24,20 +24,20 @@ class TestSandbox:
             assert py_meta['requested_version'] == '3.13'
             assert (
                 py_meta['install_path']
-                == f'/home/picard/.local/share/mise/installs/python/{py_ver}'
+                == f'/home/ubuntu/.local/share/mise/installs/python/{py_ver}'
             )
             assert py_meta['source'] == {
                 'type': 'idiomatic-version-file',
-                'path': '/home/picard/project/.python-version',
+                'path': '/home/ubuntu/project/.python-version',
             }
             result = sb.mise_exec('python', '--version', capture=True)
             assert result.stdout.strip() == f'Python {py_ver}', sb.mise_env('PATH')
             assert 'mise creating venv with uv at: ~/project/.venv' in result.stderr.strip()
 
-            result = sb.run('uv', 'pip', 'freeze', capture=True)
+            result = sb.uv('pip', 'freeze', capture=True)
             assert len(result.stdout.strip().splitlines()) == 0
 
-            result = sb.run('uv', 'run', 'python', '--version', capture=True)
+            result = sb.uv('run', 'python', '--version', capture=True)
             assert result.stdout.strip() == f'Python {py_ver}'
             # uv should be using the same virtualenv that mise created above.  If it's not,
             # something is probably wrong with the way the overlays are getting setup in the
@@ -45,10 +45,17 @@ class TestSandbox:
             assert 'Creating virtual environment at: .venv' not in result.stderr.strip()
 
             # `uv run` should have triggered a `uv sync`
-            result = sb.run('uv', 'pip', 'freeze', capture=True)
+            result = sb.uv('pip', 'freeze', capture=True)
             assert len(result.stdout.strip().splitlines()) > 0
 
-            nested_venv_dpath = '/home/picard/project/.venv'
+            nested_venv_dpath = '/home/ubuntu/project/.venv'
             assert sb.mise_env('VIRTUAL_ENV') == [nested_venv_dpath]
-            result = sb.run('uv', 'run', 'printenv', 'VIRTUAL_ENV', capture=True)
+            result = sb.uv('run', 'printenv', 'VIRTUAL_ENV', capture=True)
             assert result.stdout.strip() == nested_venv_dpath
+
+    def test_path_exists(self, package: Package):
+        with package.sandbox() as sb:
+            assert sb.path_exists('/home/ubuntu/project')
+            assert sb.path_exists('/home/ubuntu/project/mise.toml')
+            assert sb.path_exists('mise.toml')
+            assert not sb.path_exists('.git')

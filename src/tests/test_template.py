@@ -3,7 +3,7 @@ from pathlib import Path
 
 import pytest
 
-from coppy.sandbox import Sandbox
+from coppy.sandbox import Container
 from coppy.testing import Package, data_fpath
 from coppy.utils import LazyDict
 
@@ -60,7 +60,7 @@ class TestTemplate:
         toml_src = package.path('hatch.toml').read_text()
         assert toml_src.endswith('false\n')
 
-    def test_python_and_venv(self, sb: Sandbox):
+    def test_python_and_venv(self, sb: Container):
         # There is some overlap with the sandbox tests above  These are focused on ensuring the
         # template is setup as expected for mise, not that the sandbox got configured correctly.
 
@@ -74,17 +74,13 @@ class TestTemplate:
         # Ensure slug is set and mise is activating the virtualenv
         assert sb.mise_env('PROJECT_SLUG', 'VIRTUAL_ENV', 'UV_PROJECT_ENVIRONMENT') == [
             'project',
-            '/home/picard/project/.venv',
+            '/home/ubuntu/project/.venv',
         ]
 
-    def test_venv_not_nested(self, package: Package):
+    def test_venv_not_nested(self, sb: Container):
         """Ensure using a non-nested venv defined by UV_PROJECT_ENVIRONMENT works"""
 
-        # NOTE: we are NOT using the `sb` fixture b/c sb.mise_config() affects the entire session
-        # and we only want to place this file for this particular test.
-        with package.sandbox() as sb:
-            sb.mise_config(data_fpath('mise-config.toml'))
-
+        with sb.place(data_fpath('mise-config.toml'), '~/.config/mise/config.toml'):
             result = sb.mise_exec('python', '--version', capture=True)
             py_ver = result.stdout.strip()
             assert (
@@ -92,21 +88,21 @@ class TestTemplate:
             )
 
             assert sb.mise_env('VIRTUAL_ENV', 'UV_PROJECT_ENVIRONMENT') == [
-                '/home/picard/.cache/uv-venvs/project',
-                '/home/picard/.cache/uv-venvs/project',
+                '/home/ubuntu/.cache/uv-venvs/project',
+                '/home/ubuntu/.cache/uv-venvs/project',
             ]
 
             result = sb.mise_exec('uv', 'pip', 'freeze', capture=True)
             assert (
                 result.stderr.strip()
-                == f'Using {py_ver} environment at: /home/picard/.cache/uv-venvs/project'
+                == f'Using {py_ver} environment at: /home/ubuntu/.cache/uv-venvs/project'
             )
 
     def test_static_files(self, package: Package):
         assert package.exists('ruff.toml')
         assert package.exists('.copier-answers-py.yaml')
 
-    def test_version(self, sb: Sandbox):
+    def test_version(self, sb: Container):
         result = sb.uv('run', 'hatch', 'version', capture=True)
         assert result.stdout.strip() == '0.1.0'
 
@@ -127,16 +123,17 @@ class TestTemplate:
             assert bump.description == 'Bump version'
 
             # Run bootstrap
-            assert not sb.proj_rw_path('.git').exists()
-            assert not sb.proj_rw_path('.git/hooks/pre-commit').exists()
-            assert not sb.proj_rw_path('uv.lock').exists()
+            assert not sb.path_exists('.git')
+            assert not sb.path_exists('.git/hooks/pre-commit')
+            assert not sb.path_exists('uv.lock')
 
-            sb.run('git', 'config', '--global', 'user.name', 'Jean-Luc Picard')
-            sb.run('git', 'config', '--global', 'user.email', 'j.l.picard@starfleet.uni')
+            sb.exec('git', 'config', '--global', 'user.name', 'Jean-Luc Picard')
+            sb.exec('git', 'config', '--global', 'user.email', 'j.l.Picard@starfleet.uni')
             sb.mise('run', 'bootstrap')
-            assert sb.proj_rw_path('.git').exists()
-            assert sb.proj_rw_path('.git/hooks/pre-commit').exists()
-            assert sb.proj_rw_path('uv.lock').exists()
+
+            assert sb.path_exists('.git')
+            assert sb.path_exists('.git/hooks/pre-commit')
+            assert sb.path_exists('uv.lock')
 
             # Run bump
             sb.mise('run', 'bump', '--no-push')

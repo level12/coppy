@@ -1,0 +1,9 @@
+services:
+  cppy-tests:
+    image: copierpy-tests
+    container_name: cppy-tests-bash
+    build:
+      args:
+        UBUNTU_UID: ${UBUNTU_UID:-1000}
+    entrypoint: /bin/bash
+    command: ''

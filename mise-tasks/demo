@@ -6,21 +6,17 @@ Originates from https://github.com/level12/copier-py-package
 Consider updating the source file in that repo with enhancements or bug fixes needed.
 """
 
-from os import environ
 from pathlib import Path
 import shutil
 
 import click
 import copier
 
-from coppy.utils import sub_run
-
-
-proj_root = Path(environ.get('MISE_PROJECT_ROOT'))
+from tasks_lib import demo_dest_default, proj_root, sub_run
 
 
 @click.command()
-@click.argument('dest', type=click.Path(path_type=Path), default='/tmp/copier-py-package-demo')
+@click.argument('dest', type=click.Path(path_type=Path), default=demo_dest_default())
 @click.option('--bootstrap/--no-bootstrap', default=True)
 @click.option('--nox/--no-nox', default=True)
 @click.option('--update', 'is_update', is_flag=True, default=False)
@@ -62,6 +58,8 @@ def main(dest: Path, bootstrap: bool, nox: bool, is_update: bool):
         defaults=True,
         vcs_ref='HEAD',
     )
+
+    print('Demo created at:', dest)
 
     sub_run('mise', 'trust', cwd=dest, check=False)
     if bootstrap:
