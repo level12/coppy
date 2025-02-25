@@ -1,7 +1,7 @@
 from contextlib import contextmanager
 from pathlib import Path
 
-from coppy.utils import sub_run
+from coppy.utils import pkg_dpath, sub_run
 
 
 class Container:
@@ -10,10 +10,21 @@ class Container:
     c_home_dpath = Path('/home/ubuntu')
     c_home_bin_dpath = c_home_dpath / 'bin'
     c_proj_dpath = c_home_dpath / 'project'
+    c_cppy_dpath = c_home_dpath / 'cppy-pkg'
 
-    def __init__(self, proj_dpath: Path, bash_on_enter: bool = False, mise_verbose=False):
+    def __init__(
+        self,
+        proj_dpath: Path | None = None,
+        bash_on_enter: bool = False,
+        workdir: str | Path | None = None,
+        mount_cppy: bool = False,
+        copy_cppy: bool = False,
+    ):
         self.host_proj_dpath = proj_dpath
         self.break_on_enter = bash_on_enter
+        self.workdir: str | Path = workdir or self.c_proj_dpath
+        self.mount_cppy: bool = mount_cppy
+        self.copy_cppy: bool = copy_cppy
 
     def docker(self, *args, **kwargs):
         return sub_run('docker', *args, **kwargs)
@@ -78,23 +89,46 @@ class Container:
         result = self.exec('ls', path, returns=(0, 2), capture=True)
         return result.returncode == 0
 
+    def git_commit(self, repo_dpath: Path | str, *, init=False, tag=None):
+        if init:
+            self.exec('git', '-C', repo_dpath, 'init')
+
+        result = self.exec('git', '-C', repo_dpath, 'status', '--porcelain', capture=True)
+        if result.stdout.strip():
+            self.exec('git', '-C', repo_dpath, 'add', '.')
+            self.exec('git', '-C', repo_dpath, 'commit', '--no-verify', '-m', 'from cppy tests')
+
+        if tag:
+            self.exec('git', '-C', repo_dpath, 'tag', tag)
+
     def __enter__(self):
         self.docker_rm()
+
+        mount_cppy_args = (
+            ('--volume', f'{pkg_dpath}:{self.c_cppy_dpath}:ro') if self.mount_cppy else ()
+        )
+        mount_proj_args = (
+            ('--volume', f'{self.host_proj_dpath}:{self.c_proj_dpath}')
+            if self.host_proj_dpath
+            else ()
+        )
 
         self.docker(
             'run',
             '--detach',
             '--name',
             self.c_name,
-            # *self.proj_vol_args(),
-            '--volume',
-            f'{self.host_proj_dpath}:{self.c_proj_dpath}',
+            *mount_proj_args,
+            *mount_cppy_args,
             '--workdir',
-            self.c_proj_dpath,
+            self.workdir,
             self.c_image,
             'infinity',
             capture=True,
         )
+
+        if self.copy_cppy:
+            self.docker('cp', pkg_dpath, f'{self.c_name}:{self.c_cppy_dpath}')
 
         if self.break_on_enter:
             self.exec('bash')

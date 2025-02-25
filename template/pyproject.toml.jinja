@@ -29,6 +29,7 @@ dev = [
     {include-group = "pre-commit"},
     {include-group = "audit"},
     {include-group = "nox"},
+    {include-group = "tasks"},
     'hatch>=1.14.0',
     'ruff>=0.9.6',
 
@@ -57,4 +58,7 @@ audit = [
 # Used by CI
 nox = [
     'nox>=2025.2.9',
+]
+tasks = [
+    'click>=8.1.8',
 ]

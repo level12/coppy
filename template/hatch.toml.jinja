@@ -8,19 +8,6 @@ dev-mode-dirs = ['src']
 installer = "uv"
 
 
-## Env: copier
-[envs.copier]
-detached = true
-dependencies = [
-  'copier',
-  'copier-py-package @ https://github.com/level12/copier-py-package/archive/main.tar.gz',
-]
-
-[envs.copier.scripts]
-update = 'copier update --answers-file .copier-answers-py.yaml --trust --skip-answered'
-update-head = 'update --vcs-ref HEAD'
-
-
 ## Version
 [version]
 source = 'regex_commit'

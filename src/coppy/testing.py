@@ -1,3 +1,4 @@
+from collections.abc import Iterator
 from contextlib import contextmanager
 from pathlib import Path
 import tomllib
@@ -51,6 +52,6 @@ class Package:
         return self.path(path).exists()
 
     @contextmanager
-    def sandbox(self):
-        with Container(self.dpath) as sb:
+    def sandbox(self, *args, **kwargs) -> Iterator[Container]:
+        with Container(self.dpath, *args, **kwargs) as sb:
             yield sb

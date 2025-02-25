@@ -1,0 +1,34 @@
+#!/usr/bin/env python
+# mise description="Update project from copier-py-package template"
+"""
+Originates from https://github.com/level12/copier-py-package
+
+Consider updating the source file in that repo with enhancements or bug fixes needed.
+"""
+
+import click
+
+from tasks_lib import sub_run
+
+
+@click.command()
+@click.option('--head', 'use_head', is_flag=True, help='Use HEAD instead of latest version tag')
+def main(use_head: bool):
+    """
+    Update project from copier-py-package template
+    """
+    vcs_ref = ('--vcs-ref', 'HEAD') if use_head else ()
+
+    sub_run(
+        'copier',
+        'update',
+        '--answers-file',
+        '.copier-answers-py.yaml',
+        '--trust',
+        '--skip-answered',
+        *vcs_ref,
+    )
+
+
+if __name__ == '__main__':
+    main()

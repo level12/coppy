@@ -34,15 +34,17 @@ Then run the bootstrap task:
 
 ```
 cd .../projects/some-new-pkg
-mise run bootstrap
+mise bootstrap
 ```
 
 ### Updates
 
-To update a project derived from this repo:
+To update a project from the `_src` repo in the copier answers file:
 
-* `hatch run copier:update`: latest tagged version in GitHub, OR
-* `hatch run copier:update-head`: head of master in GitHub
+* `mise copier-update`: latest tagged version in `_src` repo, OR
+* `mise copier-update --head`: head of master in `_src` repo
+
+then review changes in git, modify changes if needed, and commit.
 
 The update should be pretty safe and only apply changes from the upstream repo that have happened
 since this project was last updated.  Any conflicts with local changes to the project will show up
@@ -88,4 +90,4 @@ Versions are date based.  Tools:
    - Options: `mise run bump -- --help`
 
 There is no actual "release" for this project since it only lives on GitHub and no artifacts need
-to be built.  But, the most recent tag is used by copier when doing an update.
+to be built.  But, the most recent tag is, by default, used by `copier update`.

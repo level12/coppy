@@ -113,7 +113,10 @@ class TestTemplate:
         with package.sandbox() as sb:
             # Task listing
             task_meta = sb.mise('tasks', '--json', json=True)
-            assert len(task_meta) == 2
+
+            assert len(task_meta) == 3
+            task_meta = sorted(task_meta, key=lambda rec: rec['name'])
+
             bootstrap = LazyDict(task_meta[0])
             assert bootstrap.name == 'bootstrap'
             assert bootstrap.description == 'Bootstrap project'
@@ -122,13 +125,15 @@ class TestTemplate:
             assert bump.name == 'bump'
             assert bump.description == 'Bump version'
 
+            bump = LazyDict(task_meta[2])
+            assert bump.name == 'copier-update'
+            assert bump.description == 'Update project from copier-py-package template'
+
             # Run bootstrap
             assert not sb.path_exists('.git')
             assert not sb.path_exists('.git/hooks/pre-commit')
             assert not sb.path_exists('uv.lock')
 
-            sb.exec('git', 'config', '--global', 'user.name', 'Jean-Luc Picard')
-            sb.exec('git', 'config', '--global', 'user.email', 'j.l.Picard@starfleet.uni')
             sb.mise('run', 'bootstrap')
 
             assert sb.path_exists('.git')

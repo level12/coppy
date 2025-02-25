@@ -7,8 +7,8 @@ _envops:
 _subdirectory: template
 _jinja_extensions:
 - copier_templates_extensions.TemplateExtensionLoader
-- extensions.py:GitExtension
-- extensions.py:SlugifyExtension
+- src/cppy_extensions.py:GitExtension
+- src/cppy_extensions.py:SlugifyExtension
 
 # PROMPT --------------------------------
 project_name:
