@@ -7,14 +7,20 @@ build-backend = 'hatchling.build'
 
 
 [project]
-name = 'copier-py-package'
+name = 'coppy'
 authors = [{name = 'Randy Syring', email = 'randy.syring@level12.io'}]
 dynamic = ['version']
 requires-python = '>=3.12'
 dependencies = [
+    "blazeutils>=0.7.0",
+    "click>=8.1.8",
     "copier>=9.5.0",
     "copier-templates-extensions>=0.3.0",
 ]
+
+
+[project.scripts]
+coppy = 'coppy.cli:cli'
 
 
 [dependency-groups]
@@ -22,7 +28,6 @@ dev = [
     {include-group = "tests"},
     {include-group = "pre-commit"},
     {include-group = "nox"},
-    "click>=8.1.8",
     "hatch>=1.14.0",
     "ruff>=0.9.6",
 ]
@@ -32,7 +37,6 @@ pre-commit = [
 ]
 # Used by nox
 tests = [
-    "blazeutils>=0.7.0",
     'pytest>=8.3.4',
 ]
 # Used by CI

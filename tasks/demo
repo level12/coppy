@@ -28,7 +28,7 @@ def main(dest: Path, bootstrap: bool, nox: bool, is_update: bool):
         bootstrap = False
         nox = False
 
-    pname = 'CopierPyPackageDemo'
+    pname = 'CoppyDemo'
     dest = dest.expanduser().resolve()
 
     args = {

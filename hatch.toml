@@ -3,4 +3,4 @@ dev-mode-dirs = ['src']
 
 [version]
 source = 'regex_commit'
-path = 'src/version.py'
+path = 'src/coppy/version.py'

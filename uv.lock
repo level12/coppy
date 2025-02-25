@@ -168,9 +168,22 @@ wheels = [
 ]
 
 [[package]]
-name = "copier-py-package"
+name = "copier-templates-extensions"
+version = "0.3.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "copier" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/ac/0d/3e047d28ffe6712e6936a72d8ae288a0e24e7995c645b011db82edb7fb3b/copier-templates-extensions-0.3.0.tar.gz", hash = "sha256:48b3f5213ee913b931df40e4e9325b58b9c9a741f1052a7da1b247ed991f5150", size = 12113 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/03/93/7ebfcbe54410f2d43c8bb8bda1910f7d921b2d5efc52289718969ab0a63d/copier_templates_extensions-0.3.0-py3-none-any.whl", hash = "sha256:733e709536e03768b1201c79525534d7fd153932cf764492a0396692e513f244", size = 7417 },
+]
+
+[[package]]
+name = "coppy"
 source = { editable = "." }
 dependencies = [
+    { name = "click" },
     { name = "copier" },
     { name = "copier-templates-extensions" },
 ]
@@ -198,6 +211,7 @@ tests = [
 
 [package.metadata]
 requires-dist = [
+    { name = "click", specifier = ">=8.1.8" },
     { name = "copier", specifier = ">=9.5.0" },
     { name = "copier-templates-extensions", specifier = ">=0.3.0" },
 ]
@@ -217,18 +231,6 @@ pre-commit = [{ name = "pre-commit", specifier = ">=4.1.0" }]
 tests = [
     { name = "blazeutils", specifier = ">=0.7.0" },
     { name = "pytest", specifier = ">=8.3.4" },
-]
-
-[[package]]
-name = "copier-templates-extensions"
-version = "0.3.0"
-source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "copier" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/ac/0d/3e047d28ffe6712e6936a72d8ae288a0e24e7995c645b011db82edb7fb3b/copier-templates-extensions-0.3.0.tar.gz", hash = "sha256:48b3f5213ee913b931df40e4e9325b58b9c9a741f1052a7da1b247ed991f5150", size = 12113 }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/03/93/7ebfcbe54410f2d43c8bb8bda1910f7d921b2d5efc52289718969ab0a63d/copier_templates_extensions-0.3.0-py3-none-any.whl", hash = "sha256:733e709536e03768b1201c79525534d7fd153932cf764492a0396692e513f244", size = 7417 },
 ]
 
 [[package]]

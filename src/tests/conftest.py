@@ -23,6 +23,11 @@
 # # )
 
 
+import pytest
+
+from coppy.utils import sub_run
+
+
 def pytest_configure(config):
     """
     At some point during testing, pytest does something to the warnings module which clears out
@@ -38,3 +43,11 @@ def pytest_configure(config):
         'filterwarnings',
         'ignore:.*',
     )
+
+
+@pytest.fixture(autouse=True, scope='session')
+def build_docker():
+    # Normally, no files change and the build should take less than a second to run due to docker
+    # layer caching.  If it starts taking longer than that, something has probably changed in the
+    # Dockerfile.  There is a comment there with further details.
+    sub_run('mise', 'docker-build')

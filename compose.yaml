@@ -1,7 +1,7 @@
 services:
-  cppy-tests:
-    image: copierpy-tests
-    container_name: cppy-tests-bash
+  coppy-tests:
+    image: coppy-tests
+    container_name: coppy-tests-bash
     build:
       args:
         UBUNTU_UID: ${UBUNTU_UID:-1000}

@@ -114,7 +114,7 @@ class TestTemplate:
             # Task listing
             task_meta = sb.mise('tasks', '--json', json=True)
 
-            assert len(task_meta) == 3
+            assert len(task_meta) == 2
             task_meta = sorted(task_meta, key=lambda rec: rec['name'])
 
             bootstrap = LazyDict(task_meta[0])
@@ -124,10 +124,6 @@ class TestTemplate:
             bump = LazyDict(task_meta[1])
             assert bump.name == 'bump'
             assert bump.description == 'Bump version'
-
-            bump = LazyDict(task_meta[2])
-            assert bump.name == 'copier-update'
-            assert bump.description == 'Update project from copier-py-package template'
 
             # Run bootstrap
             assert not sb.path_exists('.git')

@@ -5,26 +5,33 @@ from coppy.utils import pkg_dpath, sub_run
 
 
 class Container:
-    c_image = 'copierpy-tests'
-    c_name = 'copierpy-tests'
+    c_image = 'coppy-tests'
+    c_name = 'coppy-tests'
     c_home_dpath = Path('/home/ubuntu')
     c_home_bin_dpath = c_home_dpath / 'bin'
     c_proj_dpath = c_home_dpath / 'project'
-    c_cppy_dpath = c_home_dpath / 'cppy-pkg'
+    c_coppy_dpath = c_home_dpath / 'coppy-pkg'
+    coppy_pkg_paths = (
+        pkg_dpath / 'src',
+        pkg_dpath / 'template',
+        pkg_dpath / 'copier.yaml',
+        pkg_dpath / 'hatch.toml',
+        pkg_dpath / 'pyproject.toml',
+    )
 
     def __init__(
         self,
         proj_dpath: Path | None = None,
         bash_on_enter: bool = False,
         workdir: str | Path | None = None,
-        mount_cppy: bool = False,
-        copy_cppy: bool = False,
+        mount_coppy: bool = False,
+        copy_coppy: bool = False,
     ):
         self.host_proj_dpath = proj_dpath
         self.break_on_enter = bash_on_enter
         self.workdir: str | Path = workdir or self.c_proj_dpath
-        self.mount_cppy: bool = mount_cppy
-        self.copy_cppy: bool = copy_cppy
+        self.mount_coppy: bool = mount_coppy
+        self.copy_coppy: bool = copy_coppy
 
     def docker(self, *args, **kwargs):
         return sub_run('docker', *args, **kwargs)
@@ -96,7 +103,7 @@ class Container:
         result = self.exec('git', '-C', repo_dpath, 'status', '--porcelain', capture=True)
         if result.stdout.strip():
             self.exec('git', '-C', repo_dpath, 'add', '.')
-            self.exec('git', '-C', repo_dpath, 'commit', '--no-verify', '-m', 'from cppy tests')
+            self.exec('git', '-C', repo_dpath, 'commit', '--no-verify', '-m', 'from coppy tests')
 
         if tag:
             self.exec('git', '-C', repo_dpath, 'tag', tag)
@@ -104,8 +111,8 @@ class Container:
     def __enter__(self):
         self.docker_rm()
 
-        mount_cppy_args = (
-            ('--volume', f'{pkg_dpath}:{self.c_cppy_dpath}:ro') if self.mount_cppy else ()
+        mount_coppy_args = (
+            ('--volume', f'{pkg_dpath}:{self.c_coppy_dpath}:ro') if self.mount_coppy else ()
         )
         mount_proj_args = (
             ('--volume', f'{self.host_proj_dpath}:{self.c_proj_dpath}')
@@ -119,7 +126,7 @@ class Container:
             '--name',
             self.c_name,
             *mount_proj_args,
-            *mount_cppy_args,
+            *mount_coppy_args,
             '--workdir',
             self.workdir,
             self.c_image,
@@ -127,8 +134,11 @@ class Container:
             capture=True,
         )
 
-        if self.copy_cppy:
-            self.docker('cp', pkg_dpath, f'{self.c_name}:{self.c_cppy_dpath}')
+        if self.copy_coppy:
+            self.exec('mv', self.c_coppy_dpath, '/home/ubuntu/coppy-pkg.bak')
+            self.exec('mkdir', self.c_coppy_dpath)
+            for host_path in self.coppy_pkg_paths:
+                self.docker('cp', host_path, f'{self.c_name}:{self.c_coppy_dpath / host_path.name}')
 
         if self.break_on_enter:
             self.exec('bash')
