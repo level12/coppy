@@ -73,7 +73,7 @@ ignore = [
 
 
 [lint.per-file-ignores]
-'mise-tasks/*.py' = ['EXE003']
+'tasks/*.py' = ['EXE003']
 
 
 [lint.flake8-builtins]

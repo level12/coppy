@@ -3,3 +3,9 @@ PROJECT_SLUG = '{{ config_root | basename | slugify }}'
 
 _.python.venv.path = '{% if env.UV_PROJECT_ENVIRONMENT %}{{ env.UV_PROJECT_ENVIRONMENT }}{% else %}.venv{% endif %}'
 _.python.venv.create = true
+
+
+[task_config]
+includes = [
+    'tasks',
+]
