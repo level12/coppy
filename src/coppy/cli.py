@@ -1,5 +1,4 @@
 from pathlib import Path
-from shutil import which
 
 import click
 
@@ -29,7 +28,6 @@ def update(project_dpath: Path, use_head: bool):
     Update project from coppy template
     """
     vcs_ref = ('--vcs-ref', 'HEAD') if use_head else ()
-    print('using', which('copier'))
     sub_run(
         'copier',
         'update',
