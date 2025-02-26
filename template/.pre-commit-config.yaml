@@ -24,8 +24,7 @@ repos:
         # the formatter before pre-commit runs (presumably on save through their editor) and then
         # the linting check above would always catch a problem created by the formatter.
         args: [ --check ]
-  # Waiting on: https://github.com/level12/coppy/issues/32
-  # - repo: https://github.com/level12/pre-commit-hooks
-  #   rev: v0.20240606.1
-  #   hooks:
-  #     - id: check-ruff-versions
+  - repo: https://github.com/level12/pre-commit-hooks
+    rev: v0.20250226.1
+    hooks:
+      - id: check-ruff-versions
