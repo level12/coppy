@@ -1,53 +1,71 @@
-# Copier Python Package Template
+# Coppy
 
 A [copier](https://copier.readthedocs.io/en/stable/) template to create a Python package.
 
 
 ## Host Prep
 
-To use this copier template, you will need copier & template extensions installed:
-
-`uv tool install copier --with copier-templates-extensions`
-
 To run a project created by this template, you will also need [mise & uv installed](wiki/Mise).
 
+To use Coppy, you will need:
 
-## Usage
+```shell
+# To generate a project: copier and the template extension library
+uv tool install copier --with copier-templates-extensions
 
-From GH repo (preferred):
+# To update a project to the latest Coppy version: the coppy cli utility
+uv tool install --from https://github.com/level12/coppy coppy`
+
+# Or, if wantin got use a local development version of Coppy
+uv tool install --editable --from ~/projects/coppy-pkg coppy`
 ```
+
+You can opt to use other methods to install `copier` and `coppy`.  Just make sure they are on the
+`PATH` and up-to-date:
+
+```shell
+uv tool upgrade copier coppy
+```
+
+
+## Creating a Project
+
+```shell
+# Using the GH repo (recommended)
 copier copy --trust gh:level12/copier-py-package .../projects/some-new-pkg
-```
 
-Or, from local repo (mainly for local dev):
-```
-copier copy --trust .../copier-py-package .../projects/some-new-pkg
+# Or, from a local repo
+copier copy --trust .../coppy-pkg .../projects/some-new-pkg
+
+# If doing local development on coppy itself, the demo is the easiest way to generate a project
+mise demo -- --help
 ```
 
 The method you choose (local vs. GH) affects the `_src` value stored in the copier answers file and
-will be used by `copier update`.  Using a template stored on the local file system will save a
-`_src` that may not be accurate for other users of `copier update`.  You can safely edit the local
-reference to be the gh reference even though that answers file warns against editing it. Just make
-sure the gh reference is accurate.
+will be used when updating the project.  Using a template stored on the local file system will save
+a `_src` that probably won't be accurate for other users of `copier update`.
 
-Then run the bootstrap task:
+You can safely edit the `_src` value in a generated project's answers file to be the gh reference.
+Just make sure the gh reference is accurate.
 
-```
+Once a project is generated, run the bootstrap task:
+
+```shell
 cd .../projects/some-new-pkg
 mise bootstrap
 ```
 
-### Updates
+## Upating a project
 
-To update a project from the `_src` repo in the copier answers file:
+To update a previously generated Coppy project to the latest version of Coppy, run:
 
-* `mise copier-update`: latest tagged version in `_src` repo, OR
-* `mise copier-update --head`: head of master in `_src` repo
+* `coppy update`: for the latest tagged version in `_src` repo, OR
+* `coppy upudate --head`: head of primary branch in `_src` repo
 
 then review changes in git, modify changes if needed, and commit.
 
-The update should be pretty safe and only apply changes from the upstream repo that have happened
-since this project was last updated.  Any conflicts with local changes to the project will show up
+The update should be pretty safe and only apply changes from Coppy since the target repo was last
+generated or updated from Coppy.  Any conflicts with local changes to the project will show up
 as git conflicts to be resolved.
 
 ## Features
@@ -78,16 +96,17 @@ as git conflicts to be resolved.
 * Build a demo project to test functionality: `mise run demo [--help]`
 * CI uses a custom image built just for this project
   - See `compose.yaml` and related
-  - Publish image changes to docker hub manually using: `mise run publish-ci-img`
-* Simulate CI run locally: `mise run docker-nox`
+  - Use `mise docker-build` to rebuild manually if needed
+* CI ran in GH actions, not CircleCI
 
 ### Versions & releases
 
 Versions are date based.  Tools:
 
 - Current version: `hatch version`
-- Bump version based on date, tag, push: `mise run bump`
-   - Options: `mise run bump -- --help`
+- Bump version based on date, tag, push: `mise bump`
+   - Options: `mise bump -- --help`
 
-There is no actual "release" for this project since it only lives on GitHub and no artifacts need
-to be built.  But, the most recent tag is, by default, used by `copier update`.
+There is no actual "release" for this project since it only lives on GitHub and no artifacts need to
+be built.  But, the most recent tag is, by default, what is used by `copier update` and `uv tool
+install`.
