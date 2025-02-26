@@ -2,14 +2,14 @@ version: 2.1
 
 orbs:
   # https://circleci.com/developer/orbs/orb/codecov/codecov
-  codecov: codecov/codecov@4.1.0
+  codecov: codecov/codecov@5.2
 
 jobs:
 
   nox:
 
     docker:
-      - image: cimg/python:{{ python_version }}
+      - image: ghcr.io/level12/ubuntu-mive:24-{{ python_version }}
 
     steps:
       - checkout
@@ -21,16 +21,15 @@ jobs:
               echo $PATH
 
       - run:
-          name: Install OS tools
+          name: OS Prep
           command: |
-              python -m pip install -r requirements/ci.txt
-              python --version
-              python -m nox --version
+              mise trust
+              mise install
 
       - run:
           name: run nox
           command: |
-            python -m nox
+            mise exec -- uv run --only-group nox nox
 
       - store_test_results:
           path: ci/test-reports/
