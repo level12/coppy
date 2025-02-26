@@ -28,3 +28,7 @@ repos:
     rev: v0.20250226.1
     hooks:
       - id: check-ruff-versions
+  - repo: https://github.com/astral-sh/uv-pre-commit
+    rev: 0.6.3
+    hooks:
+      - id: uv-lock
