@@ -183,6 +183,7 @@ wheels = [
 name = "coppy"
 source = { editable = "." }
 dependencies = [
+    { name = "blazeutils" },
     { name = "click" },
     { name = "copier" },
     { name = "copier-templates-extensions" },
@@ -190,8 +191,6 @@ dependencies = [
 
 [package.dev-dependencies]
 dev = [
-    { name = "blazeutils" },
-    { name = "click" },
     { name = "hatch" },
     { name = "nox" },
     { name = "pre-commit" },
@@ -205,12 +204,12 @@ pre-commit = [
     { name = "pre-commit" },
 ]
 tests = [
-    { name = "blazeutils" },
     { name = "pytest" },
 ]
 
 [package.metadata]
 requires-dist = [
+    { name = "blazeutils", specifier = ">=0.7.0" },
     { name = "click", specifier = ">=8.1.8" },
     { name = "copier", specifier = ">=9.5.0" },
     { name = "copier-templates-extensions", specifier = ">=0.3.0" },
@@ -218,8 +217,6 @@ requires-dist = [
 
 [package.metadata.requires-dev]
 dev = [
-    { name = "blazeutils", specifier = ">=0.7.0" },
-    { name = "click", specifier = ">=8.1.8" },
     { name = "hatch", specifier = ">=1.14.0" },
     { name = "nox", specifier = ">=2025.2.9" },
     { name = "pre-commit", specifier = ">=4.1.0" },
@@ -228,10 +225,7 @@ dev = [
 ]
 nox = [{ name = "nox", specifier = ">=2025.2.9" }]
 pre-commit = [{ name = "pre-commit", specifier = ">=4.1.0" }]
-tests = [
-    { name = "blazeutils", specifier = ">=0.7.0" },
-    { name = "pytest", specifier = ">=8.3.4" },
-]
+tests = [{ name = "pytest", specifier = ">=8.3.4" }]
 
 [[package]]
 name = "cryptography"
