@@ -32,7 +32,7 @@ uv tool upgrade copier coppy
 
 ```shell
 # Using the GH repo (recommended)
-copier copy --trust gh:level12/copier-py-package .../projects/some-new-pkg
+copier copy --trust gh:level12/coppy .../projects/some-new-pkg
 
 # Or, from a local repo
 copier copy --trust .../coppy-pkg .../projects/some-new-pkg
@@ -55,7 +55,7 @@ cd .../projects/some-new-pkg
 mise bootstrap
 ```
 
-## Upating a project
+## Upating a Project
 
 To update a previously generated Coppy project to the latest version of Coppy, run:
 

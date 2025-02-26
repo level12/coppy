@@ -53,7 +53,7 @@ Keep mise & uv Python's in-sync with:
 
 ### Nightly Updates
 
-See [systemd](https://github.com/level12/copier-py-package/tree/main/systemd) for units to run nightly updates.
+See [systemd](https://github.com/level12/coppy/tree/main/systemd) for units to run nightly updates.
 
 
 ## Virtualenv Location
@@ -70,7 +70,7 @@ UV_PROJECT_ENVIRONMENT = { value='{% if env.PROJECT_SLUG %}~/.cache/uv-venvs/{{ 
 
 ### `uv_venv_auto`
 
-We can use `uv_venv_auto` when mise respects `UV_PROJECT_ENVIRONMENT`.  Tracking in [#26](https://github.com/level12/copier-py-package/issues/26).
+We can use `uv_venv_auto` when mise respects `UV_PROJECT_ENVIRONMENT`.  Tracking in [#26](https://github.com/level12/coppy/issues/26).
 
 
 ## Design Notes
@@ -78,5 +78,5 @@ We can use `uv_venv_auto` when mise respects `UV_PROJECT_ENVIRONMENT`.  Tracking
 1. Smooth integration between mise & uv is a high priority
 1. Our repos will operate as [uv projects](https://docs.astral.sh/uv/concepts/projects/) including defining requirements in `pyproject.toml` and using `uv.lock`
 1. Use `.python-version` so [mise](https://mise.jdx.dev/configuration.html#idiomatic-version-files) & [uv](https://docs.astral.sh/uv/concepts/python-versions/#python-version-files) share the version spec file
-1. Developers will manually run `uv sync` to update the active virtualenv (but see [#27](https://github.com/level12/copier-py-package/issues/27))
+1. Developers will manually run `uv sync` to update the active virtualenv (but see [#27](https://github.com/level12/coppy/issues/27))
 1. Python tasks should use a [uv shebang](https://mise.jdx.dev/mise-cookbook/python.html#uv-scripts) so they can function without mise being active.

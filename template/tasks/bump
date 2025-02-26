@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # mise description="Bump version"
 """
-Originates from https://github.com/level12/copier-py-package
+Originates from https://github.com/level12/coppy
 
 Consider updating the source file in that repo with enhancements or bug fixes needed.
 """

@@ -21,10 +21,10 @@ readme = 'readme.md'
 {% endif -%}
 
 [dependency-groups]
-# Note: keeping copier-py-package deps grouped separate from app deps should help avoid unnecessary
-# conflicts when upgrading to copier-py-package latest.
+# Note: keeping Coppy deps grouped separate from app deps should help avoid unnecessary
+# conflicts when upgrading to the latest Coppy template.
 dev = [
-    # From copier-py-package:
+    # From Coppy:
     {include-group = "tests"},
     {include-group = "pre-commit"},
     {include-group = "audit"},
@@ -38,7 +38,7 @@ dev = [
 ]
 # Used by nox
 tests = [
-    # From copier-py-package:
+    # From Coppy:
     'pytest>=8.3.4',
     'pytest-cov>=6.0',
 
@@ -47,12 +47,12 @@ tests = [
 ]
 # Used by nox
 pre-commit = [
-    # From copier-py-package:
+    # From Coppy:
     'pre-commit>=4.1.0',
 ]
 # Used by nox
 audit = [
-    # From copier-py-package:
+    # From Coppy:
     'pip-audit>=2.8.0',
 ]
 # Used by CI

@@ -56,7 +56,7 @@ ignore = [
     # Rules that conflict with the formatter.  See:
     #
     #  * https://docs.astral.sh/ruff/formatter/#conflicting-lint-rules
-    #  * https://github.com/level12/copier-py-package/issues/13
+    #  * https://github.com/level12/coppy/issues/13
     #
     # These are all redundant when the formatter is being used
     'W191',    # tab-indentation
