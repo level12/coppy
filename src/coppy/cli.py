@@ -1,3 +1,6 @@
+from pathlib import Path
+from shutil import which
+
 import click
 
 from coppy.utils import sub_run
@@ -15,13 +18,18 @@ def version():
 
 
 @cli.command()
+@click.argument(
+    'project_dpath',
+    type=click.Path(path_type=Path, exists=True, file_okay=False, resolve_path=True),
+    default=Path.cwd(),
+)
 @click.option('--head', 'use_head', is_flag=True, help='Use HEAD instead of latest version tag')
-def update(use_head: bool):
+def update(project_dpath: Path, use_head: bool):
     """
     Update project from coppy template
     """
     vcs_ref = ('--vcs-ref', 'HEAD') if use_head else ()
-
+    print('using', which('copier'))
     sub_run(
         'copier',
         'update',
@@ -30,6 +38,7 @@ def update(use_head: bool):
         '--trust',
         '--skip-answered',
         *vcs_ref,
+        project_dpath,
     )
 
 
