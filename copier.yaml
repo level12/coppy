@@ -35,11 +35,6 @@ script_name:
   help: CLI name if any (for use in the shell)
   default: "{{ py_module | slugify('-') }}"
 
-virtualenv_name:
-  type: str
-  help: Virtualenv name
-  default: "{{ project_name | slugify('-') }}"
-
 python_version:
   type: str
   help: Python version (for mise)
