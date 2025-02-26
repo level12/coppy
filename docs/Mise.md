@@ -18,9 +18,10 @@ Mise is used for at least:
 
 ## Host Prep
 
-CPyP projects assume [mise] and [uv] are installed on a developer's host system.
+CPyP projects assume [mise] and [uv] are installed on a developer's host system:
 
-For mise, see: https://mise.jdx.dev/installing-mise.html
+* mise: https://mise.jdx.dev/installing-mise.html
+* uv: https://docs.astral.sh/uv/getting-started/installation/
 
 Once mise is installed, the uv install can be managed with mise:
 
