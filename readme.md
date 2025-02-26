@@ -2,9 +2,7 @@
 
 A [copier](https://copier.readthedocs.io/en/stable/) template to create a Python package.
 
-## Getting Started & Docs
-
-Are all in the [GH wiki](wiki)
+**Getting Started** & other docs are in the [GH Wiki](https://github.com/level12/coppy/wiki).
 
 ## Features
 
