@@ -35,7 +35,7 @@ workdir /home/ubuntu/coppy-pkg
 copy --chown=ubuntu:ubuntu src/coppy/__init__.py src/coppy/__init__.py
 copy --chown=ubuntu:ubuntu src/coppy/version.py src/coppy/version.py
 copy --chown=ubuntu:ubuntu pyproject.toml hatch.toml .
-run uv tool install --editable --from . coppy
+run uv tool install --editable .
 
 entrypoint ["/bin/sleep"]
 cmd ["5"]
