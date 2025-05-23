@@ -7,13 +7,21 @@ _envops:
 _subdirectory: template
 _jinja_extensions:
 - copier_templates_extensions.TemplateExtensionLoader
-- src/coppy_extensions.py:GitExtension
-- src/coppy_extensions.py:SlugifyExtension
+- src/coppy_extensions.py:CoppyExtension
 
 # PROMPT --------------------------------
 project_name:
   type: str
   help: Project name
+
+gh_org:
+  type: str
+  help: GitHub Org
+
+gh_repo:
+  type: str
+  help: GitHub
+  default: "{{ project_name | lower }}"
 
 author_name:
   type: str

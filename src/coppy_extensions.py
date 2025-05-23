@@ -2,6 +2,7 @@ import re
 import subprocess
 import unicodedata
 
+import jinja2
 from jinja2.ext import Extension
 
 
@@ -19,14 +20,22 @@ def slugify(value, separator='-'):
     return re.sub(r'[-_\s]+', separator, value).strip('-_')
 
 
-class GitExtension(Extension):
+@jinja2.pass_context
+def gh_action_badge(ctx, ident):
+    gh_path = f'{ctx.get("gh_org")}/{ctx.get("gh_repo")}'
+    return (
+        f'[![{ident}](https://github.com/{gh_path}/actions/workflows/{ident}.yaml/badge.svg)]'
+        f'(https://github.com/{gh_path}/actions/workflows/{ident}.yaml)'
+    )
+
+
+class CoppyExtension(Extension):
     def __init__(self, environment):
         super().__init__(environment)
+        # globals
         environment.globals['git_user_name'] = git_user_name
         environment.globals['git_user_email'] = git_user_email
+        environment.globals['gh_action_badge'] = gh_action_badge
 
-
-class SlugifyExtension(Extension):
-    def __init__(self, environment):
-        super().__init__(environment)
+        # filters
         environment.filters['slugify'] = slugify

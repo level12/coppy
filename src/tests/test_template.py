@@ -57,15 +57,26 @@ class TestTemplateGen:
         assert gen_pkg.exists('ruff.toml')
         assert gen_pkg.exists('.copier-answers-py.yaml')
 
-    def test_ci_options(self, gen_pkg: Package):
+    def test_ci_options(self, gen_pkg: Package, package: Package):
         # default
         assert_pkg_file_eq(gen_pkg, '.github/workflows/nox.yaml', 'gh-nox.yaml')
         assert not gen_pkg.exists('.circleci/config.yml')
+        snippet = """
+# Enterprise
+[![nox](https://github.com/starfleet/enterprise/actions/workflows/nox.yaml/badge.svg)](https://github.com/starfleet/enterprise/actions/workflows/nox.yaml)
+
+""".lstrip()
+        assert snippet in gen_pkg.read_text('readme.md')
 
         # No nox: the default should switch for circleci when GH is not used
         package.generate(use_gh_nox=False)
         assert not package.exists('.github/workflows/nox.yaml')
         assert package.exists('.circleci/config.yml')
+        snippet = """
+# Enterprise
+
+""".lstrip()
+        assert snippet in package.read_text('readme.md')
 
         # No CI
         package.generate(use_gh_nox=False, use_circleci=False)

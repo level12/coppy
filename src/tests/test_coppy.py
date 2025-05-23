@@ -24,6 +24,8 @@ class TestCoppy:
                 '--data',
                 'project_name=foo',
                 '--data',
+                'gh_org=starfleet',
+                '--data',
                 'author_name=Picard',
                 '--data',
                 'author_email=jpicard@starfleet.space',

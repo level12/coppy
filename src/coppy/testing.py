@@ -32,6 +32,7 @@ class Package:
         kwargs.setdefault('author_name', 'Picard')
         kwargs.setdefault('author_email', 'jpicard@starfleet.space')
         kwargs.setdefault('script_name', '')
+        kwargs.setdefault('gh_org', 'starfleet')
 
         if rm_first and self.dpath.exists():
             shutil.rmtree(self.dpath)
