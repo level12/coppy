@@ -14,11 +14,13 @@ authors = [
 requires-python = '>={{ python_version }}'
 dynamic = ['version']
 readme = 'readme.md'
+{%- if script_name %}
 
-{% if script_name -%}
+
 [project.scripts]
 '{{ script_name }}' = '{{ py_module }}.cli:main'
-{% endif -%}
+{%- endif %}
+
 
 [dependency-groups]
 # Note: keeping Coppy deps grouped separate from app deps should help avoid unnecessary

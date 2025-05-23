@@ -76,11 +76,27 @@ class TestTemplateGen:
         # No script by default
         proj = gen_pkg.toml_config('pyproject.toml')
         assert proj.project.get('scripts') is None
+        snippet = """
+readme = 'readme.md'
+
+
+[dependency-groups]
+"""
+        assert snippet in gen_pkg.read_text('pyproject.toml')
 
         # Script
         package.generate(script_name='ent')
-        proj = package.toml_config('pyproject.toml')
-        assert proj.project.scripts['ent'] == 'enterprise.cli:main'
+        snippet = """
+readme = 'readme.md'
+
+
+[project.scripts]
+'ent' = 'enterprise.cli:main'
+
+
+[dependency-groups]
+"""
+        assert snippet in package.read_text('pyproject.toml')
 
 
 class TestTemplateWithSandbox:
