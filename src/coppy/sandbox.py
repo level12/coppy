@@ -100,6 +100,10 @@ class Container:
         result = self.exec('ls', path, returns=(0, 2), capture=True)
         return result.returncode == 0
 
+    def path_rm(self, path: str):
+        path = path if Path(path).is_absolute() else self.c_proj_dpath / path
+        return self.exec('rm', '-rf', path)
+
     def git_commit(self, repo_dpath: Path | str, *, init=False, tag=None):
         if init:
             self.exec('git', '-C', repo_dpath, 'init')

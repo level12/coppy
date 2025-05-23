@@ -136,6 +136,9 @@ class TestTemplateWithSandbox:
         assert result.stdout.strip() == '0.1.0'
 
     def test_python_and_venv(self, sb: Container):
+        # Delete the .venv so it's re-created otherwise this test will be flaky
+        sb.path_rm('.venv')
+
         # Default python version
         result = sb.mise_exec('python', '--version', capture=True)
         assert result.stdout.strip().startswith('Python 3.13.')
