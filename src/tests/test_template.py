@@ -8,21 +8,27 @@ from coppy.testing import Package, data_fpath
 from coppy.utils import LazyDict
 
 
-class TestTemplate:
+@pytest.fixture()
+def package(tmp_path_factory):
+    temp_path: Path = tmp_path_factory.mktemp('test-py-pkg')
+    return Package(temp_path)
+
+
+def assert_pkg_file_eq(package: Package, p_fpath, d_fpath):
+    assert package.read_text(p_fpath) == data_fpath(d_fpath).read_text()
+
+
+class TestTemplateGen:
     @pytest.fixture(scope='class')
-    def package(self, tmp_path_factory):
+    def gen_pkg(self, tmp_path_factory):
+        """A package with default config"""
         temp_path: Path = tmp_path_factory.mktemp('test-py-pkg')
-        package = Package(temp_path)
-        package.generate()
-        return package
+        gen_pkg = Package(temp_path)
+        gen_pkg.generate()
+        return gen_pkg
 
-    @pytest.fixture(scope='class')
-    def sb(self, package: Package):
-        with package.sandbox() as sb:
-            yield sb
-
-    def test_pyproject(self, package: Package):
-        config = package.toml_config('pyproject.toml')
+    def test_pyproject(self, gen_pkg: Package):
+        config = gen_pkg.toml_config('pyproject.toml')
 
         assert config.project.name == 'Enterprise'
         assert 'scripts' not in config.project
@@ -31,39 +37,78 @@ class TestTemplate:
         assert author.name == 'Picard'
         assert author.email == 'jpicard@starfleet.space'
 
-    def test_pyproject_with_script(self, tmp_path: Path):
-        # Don't use the fixture, we need to re-generate to test a non-default script_name
-        package = Package(tmp_path)
-        package.generate(script_name='ent')
-
-        # Ensure hatch is using uv
-        hatch = package.toml_config('hatch.toml')
+    def test_hatch_uv(self, gen_pkg: Package):
+        hatch = gen_pkg.toml_config('hatch.toml')
         assert hatch.envs.default.installer == 'uv'
 
-        proj = package.toml_config('pyproject.toml')
-        assert proj.project.scripts['ent'] == 'enterprise.cli:main'
-
-        with package.sandbox() as sb:
-            result = sb.uv('run', 'ent', capture=True)
-            assert 'Hello from enterprise.cli' in result.stdout
-
-    def test_hatch_version_sign_tag(self, tmp_path: Path, package: Package):
-        hatch = package.toml_config('hatch.toml')
+    def test_hatch_version_sign_tag(self, gen_pkg: Package, package: Package):
+        hatch = gen_pkg.toml_config('hatch.toml')
         assert hatch.version.get('tag_sign') is None
-        toml_src = package.path('hatch.toml').read_text()
+        toml_src = gen_pkg.path('hatch.toml').read_text()
         assert toml_src.endswith("version.py'\n")
 
-        package = Package(tmp_path)
         package.generate(hatch_version_tag_sign=False)
         hatch = package.toml_config('hatch.toml')
         assert hatch.version.tag_sign is False
         toml_src = package.path('hatch.toml').read_text()
         assert toml_src.endswith('false\n')
 
-    def test_python_and_venv(self, sb: Container):
-        # There is some overlap with the sandbox tests above  These are focused on ensuring the
-        # template is setup as expected for mise, not that the sandbox got configured correctly.
+    def test_static_files(self, gen_pkg: Package):
+        assert gen_pkg.exists('ruff.toml')
+        assert gen_pkg.exists('.copier-answers-py.yaml')
 
+    def test_ci_options(self, gen_pkg: Package):
+        # default
+        assert_pkg_file_eq(gen_pkg, '.github/workflows/nox.yaml', 'gh-nox.yaml')
+        assert not gen_pkg.exists('.circleci/config.yml')
+
+        # No nox: the default should switch for circleci when GH is not used
+        package.generate(use_gh_nox=False)
+        assert not package.exists('.github/workflows/nox.yaml')
+        assert package.exists('.circleci/config.yml')
+
+        # No CI
+        package.generate(use_gh_nox=False, use_circleci=False)
+        assert not package.exists('.github/workflows/nox.yaml')
+        assert not package.exists('.circleci/config.yml')
+
+    def test_scripts(self, gen_pkg: Package, package: Package):
+        # No script by default
+        proj = gen_pkg.toml_config('pyproject.toml')
+        assert proj.project.get('scripts') is None
+
+        # Script
+        package.generate(script_name='ent')
+        proj = package.toml_config('pyproject.toml')
+        assert proj.project.scripts['ent'] == 'enterprise.cli:main'
+
+
+class TestTemplateWithSandbox:
+    """
+    Sandbox tests take longer.  Separate them out for easier targeting of quicker tests.
+
+    There is some overlap with the test_sandbox tests.  These integration tests are focused on
+    ensuring template is setup as expected by actually running commands not just expecting
+    config files.
+    """
+
+    @pytest.fixture(scope='class')
+    def gen_pkg(self, tmp_path_factory):
+        temp_path: Path = tmp_path_factory.mktemp('test-py-pkg')
+        package = Package(temp_path)
+        package.generate()
+        return package
+
+    @pytest.fixture(scope='class')
+    def sb(self, gen_pkg: Package):
+        with gen_pkg.sandbox() as sb:
+            yield sb
+
+    def test_version(self, sb: Container):
+        result = sb.uv('run', 'hatch', 'version', capture=True)
+        assert result.stdout.strip() == '0.1.0'
+
+    def test_python_and_venv(self, sb: Container):
         # Default python version
         result = sb.mise_exec('python', '--version', capture=True)
         assert result.stdout.strip().startswith('Python 3.13.')
@@ -98,16 +143,7 @@ class TestTemplate:
                 == f'Using {py_ver} environment at: /home/ubuntu/.cache/uv-venvs/project'
             )
 
-    def test_static_files(self, package: Package):
-        assert package.exists('ruff.toml')
-        assert package.exists('.copier-answers-py.yaml')
-
-    def test_version(self, sb: Container):
-        result = sb.uv('run', 'hatch', 'version', capture=True)
-        assert result.stdout.strip() == '0.1.0'
-
-    def test_tasks(self, tmp_path: Path):
-        package = Package(tmp_path)
+    def test_tasks(self, package: Package):
         package.generate(hatch_version_tag_sign=False)
 
         with package.sandbox() as sb:
@@ -141,3 +177,10 @@ class TestTemplate:
             result = sb.uv('run', 'hatch', 'version', capture=True)
             date_str = dt.datetime.utcnow().date().strftime(r'%Y%m%d')
             assert result.stdout.strip() == f'0.{date_str}.1'
+
+    def test_script_run(self, package: Package):
+        package.generate(script_name='ent')
+
+        with package.sandbox() as sb:
+            result = sb.uv('run', 'ent', capture=True)
+            assert 'Hello from enterprise.cli' in result.stdout

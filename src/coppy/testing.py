@@ -1,6 +1,7 @@
 from collections.abc import Iterator
 from contextlib import contextmanager
 from pathlib import Path
+import shutil
 import tomllib
 
 import copier
@@ -26,11 +27,14 @@ class Package:
     def __init__(self, dpath: Path):
         self.dpath = dpath
 
-    def generate(self, **kwargs):
+    def generate(self, rm_first=True, **kwargs):
         kwargs.setdefault('project_name', 'Enterprise')
         kwargs.setdefault('author_name', 'Picard')
         kwargs.setdefault('author_email', 'jpicard@starfleet.space')
         kwargs.setdefault('script_name', '')
+
+        if rm_first and self.dpath.exists():
+            shutil.rmtree(self.dpath)
 
         copier.run_copy(
             utils.pkg_dpath.as_posix(),
@@ -50,6 +54,9 @@ class Package:
 
     def exists(self, path: str):
         return self.path(path).exists()
+
+    def read_text(self, path: str):
+        return self.path(path).read_text()
 
     @contextmanager
     def sandbox(self, *args, **kwargs) -> Iterator[Container]:
