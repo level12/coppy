@@ -34,7 +34,11 @@ class Container:
         self.copy_coppy: bool = copy_coppy
 
     def docker(self, *args, **kwargs):
-        return sub_run('docker', *args, **kwargs)
+        print('docker', *args, kwargs)
+        result = sub_run('docker', *args, **kwargs)
+        if kwargs.get('capture', False):
+            print(result.stderr, result.stdout)
+        return result
 
     def exec(self, *args, **kwargs):
         is_bash = args == ('bash',)
