@@ -7,17 +7,22 @@
   - Use `mise docker-build` to rebuild manually if needed
 * CI ran in GH actions, not CircleCI
 
+## Copy Demo Repo
 
-### Test Run Times
+* We have a demo of the default output at: https://github.com/level12/coppy-demo
+* Devs should update this after bumping Coppy to a new version
+  * Which should [get automated](https://github.com/level12/coppy/issues/54) at some point
+
+## Test Run Times
 
 - Test runs are longer than our typical projects.
 - As of Feb 2025, 12 tests take 65s on my (RLS) laptop
 - **Hung?**: The first run of a day can take minutes before the first test runs due to docker
   building the newest [ubuntu-mive](https://github.com/level12/ubuntu-mive) image.  Watch the
   progress with `pytest -s` if you are concerned it is hung.
+- See also: https://github.com/level12/coppy/issues/53
 
-
-### Versions & releases
+## Versions & releases
 
 Versions are date based.  Tools:
 

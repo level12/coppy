@@ -21,7 +21,7 @@ gh_org:
 gh_repo:
   type: str
   help: GitHub
-  default: "{{ project_name | lower }}"
+  default: "{{ project_name | slugify }}"
 
 author_name:
   type: str
@@ -41,7 +41,7 @@ py_module:
 script_name:
   type: str
   help: CLI name if any (for use in the shell)
-  default: "{{ py_module | slugify('-') }}"
+  default: "{{ py_module | slugify }}"
 
 python_version:
   type: str

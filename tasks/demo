@@ -20,7 +20,8 @@ from tasks_lib import demo_dest_default, proj_root, sub_run
 @click.option('--bootstrap/--no-bootstrap', default=True)
 @click.option('--nox/--no-nox', default=True)
 @click.option('--update', 'is_update', is_flag=True, default=False)
-def main(dest: Path, bootstrap: bool, nox: bool, is_update: bool):
+@click.option('--rm-existing', is_flag=True, default=False)
+def main(dest: Path, bootstrap: bool, nox: bool, is_update: bool, rm_existing: bool):
     """
     Generate demo project
     """
@@ -35,9 +36,11 @@ def main(dest: Path, bootstrap: bool, nox: bool, is_update: bool):
         'project_name': pname,
         'author_name': 'Picard',
         'author_email': 'jpicard@starfleet.space',
+        'gh_org': 'level12',
+        'gh_repo': 'coppy-demo',
     }
 
-    if dest.exists():
+    if dest.exists() and rm_existing:
         # Remove all the contents but not the actual directory.  It makes troubleshooting the
         # demo easier b/c you don't have to keep changing out of and then back into the demo
         # directory in the shell.
