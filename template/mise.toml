@@ -9,3 +9,8 @@ _.python.venv.create = true
 includes = [
     'tasks',
 ]
+
+
+[settings]
+# Coppy projects uses .python-version because both mise and uv respect it.
+idiomatic_version_file_enable_tools = ['python']
