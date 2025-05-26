@@ -1,11 +1,9 @@
-# Mise (& uv)
-
 Mise is used for at least:
 
 - Dev [tools]: Python, Node, Terraform, etc.
 - Static [Environment variables](https://mise.jdx.dev/environments/)
 - Python [venv activation] and creation using uv
-  - See also [Python Cookbook]
+  - See also [Mise: Python Cookbook]
 - Task [tasks]: scripts used to manage the project that, usually, need the project's tooling and/or environment setup to function correctly
 
 
@@ -14,11 +12,11 @@ Mise is used for at least:
 [tools]: https://mise.jdx.dev/dev-tools/
 [tasks]: https://mise.jdx.dev/tasks/
 [venv activation]: (https://mise.jdx.dev/lang/python.html#automatic-virtualenv-activation)
-[Python Cookbook]: https://mise.jdx.dev/mise-cookbook/python.html
+[Mise: Python Cookbook]: https://mise.jdx.dev/mise-cookbook/python.html
 
 ## Host Prep
 
-CPyP projects assume [mise] and [uv] are installed on a developer's host system:
+Coppy projects assume [mise] and [uv] are installed on a developer's host system:
 
 * mise: https://mise.jdx.dev/installing-mise.html
 * uv: https://docs.astral.sh/uv/getting-started/installation/
