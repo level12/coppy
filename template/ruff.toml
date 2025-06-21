@@ -77,7 +77,7 @@ ignore = [
 
 
 [lint.flake8-builtins]
-builtins-ignorelist = ['id', 'help', 'compile']
+ignorelist = ['id', 'help', 'compile']
 
 
 [lint.flake8-quotes]
