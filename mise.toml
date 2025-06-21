@@ -1,1 +1,27 @@
-template/mise.toml
+[env]
+PROJECT_SLUG = '{{ config_root | basename | slugify }}'
+
+_.python.venv.path = '{% if env.UV_PROJECT_ENVIRONMENT %}{{ env.UV_PROJECT_ENVIRONMENT }}{% else %}.venv{% endif %}'
+_.python.venv.create = true
+
+# For the demo-pkg script.  Override if needed.
+_DEMO_PKG_DPATH = '~/projects/coppy-demo-pkg/'
+
+[settings]
+# Coppy projects uses .python-version because both mise and uv respect it.
+idiomatic_version_file_enable_tools = ['python']
+
+
+[task_config]
+includes = [
+    'tasks',
+]
+
+################ TASKS #################
+[tasks.demo-pkg]
+description = "Update Coppy demo pkg"
+# The demo command will usually pick a temporary directory by default.  This instructs it to
+# use a fixed path for the demo.  That path should point to a local repo cloned from:
+# https://github.com/level12/coppy-demo/
+env = { DEMO_PKG_DPATH = '{{ env._DEMO_PKG_DPATH }}' }
+run = 'mise demo --no-bootstrap --update --rm-existing'

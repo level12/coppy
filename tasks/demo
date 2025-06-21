@@ -53,7 +53,7 @@ def main(
         # demo easier b/c you don't have to keep changing out of and then back into the demo
         # directory in the shell.
         for path in dest.iterdir():
-            if path.name == '.git' and is_update:
+            if path.name in ('.git', 'uv.lock') and is_update:
                 continue
 
             if path.is_dir():
