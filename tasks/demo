@@ -21,7 +21,15 @@ from tasks_lib import demo_dest_default, proj_root, sub_run
 @click.option('--nox/--no-nox', default=True)
 @click.option('--update', 'is_update', is_flag=True, default=False)
 @click.option('--rm-existing', is_flag=True, default=False)
-def main(dest: Path, bootstrap: bool, nox: bool, is_update: bool, rm_existing: bool):
+@click.option('--head', 'use_head', is_flag=True, default=False)
+def main(
+    dest: Path,
+    bootstrap: bool,
+    nox: bool,
+    is_update: bool,
+    rm_existing: bool,
+    use_head: bool,
+):
     """
     Generate demo project
     """
@@ -59,7 +67,7 @@ def main(dest: Path, bootstrap: bool, nox: bool, is_update: bool, rm_existing: b
         args,
         unsafe=True,
         defaults=True,
-        vcs_ref='HEAD',
+        vcs_ref='HEAD' if use_head else None,
     )
 
     print('Demo created at:', dest)
