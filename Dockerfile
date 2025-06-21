@@ -2,7 +2,7 @@ from ghcr.io/level12/ubuntu-mive:24-3.13
 
 arg UBUNTU_UID=1000
 
-# The id of the user that is active whn running the docker container sandbox needs to match the
+# The id of the user that is active when running the docker container sandbox needs to match the
 # id of the host user that is running the tests and generating the package files that get mounted
 # into the docker container when it's running.
 user root

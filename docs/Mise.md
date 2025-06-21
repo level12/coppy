@@ -50,11 +50,6 @@ Keep mise & uv Python's in-sync with:
  ❯ mise sync python --uv
 ```
 
-### Nightly Updates
-
-See [systemd](https://github.com/level12/coppy/tree/main/systemd) for units to run nightly updates.
-
-
 ## Virtualenv Location
 
 By default, the project's venv will be located in the project directory at `.venv`.
