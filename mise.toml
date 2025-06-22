@@ -24,4 +24,4 @@ description = "Update Coppy demo pkg"
 # use a fixed path for the demo.  That path should point to a local repo cloned from:
 # https://github.com/level12/coppy-demo/
 env = { DEMO_PKG_DPATH = '{{ env._DEMO_PKG_DPATH }}' }
-run = 'mise demo --no-bootstrap --update --rm-existing --head'
+run = 'mise demo --update --rm-existing --head --nox'

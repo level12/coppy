@@ -12,7 +12,7 @@ import shutil
 import click
 import copier
 
-from tasks_lib import demo_dest_default, proj_root, sub_run
+from coppy_tasks_lib import demo_dest_default, proj_root, sub_run
 
 
 @click.command()
@@ -35,7 +35,6 @@ def main(
     """
     if is_update:
         bootstrap = False
-        nox = False
 
     pname = 'CoppyDemo'
     dest = dest.expanduser().resolve()
@@ -75,8 +74,9 @@ def main(
     sub_run('mise', 'trust', cwd=dest, check=False)
     if bootstrap:
         sub_run('mise', 'run', 'bootstrap', cwd=dest)
-        if nox:
-            sub_run('mise', 'exec', '--', 'nox', cwd=dest)
+
+    if nox:
+        sub_run('mise', 'exec', '--', 'nox', cwd=dest)
 
 
 if __name__ == '__main__':
