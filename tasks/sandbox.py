@@ -6,7 +6,7 @@ from pathlib import Path
 import click
 
 from coppy.sandbox import Container
-from tasks_lib import demo_dest_default
+from coppy_tasks_lib import demo_dest_default
 
 
 @click.command()

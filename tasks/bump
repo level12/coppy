@@ -10,7 +10,7 @@ import datetime as dt
 
 import click
 
-from tasks_lib import sub_run
+from coppy_tasks_lib import sub_run
 
 
 def current_version():
