@@ -41,6 +41,7 @@ class CoppyExtension(Extension):
         environment.globals['git_user_name'] = git_user_name
         environment.globals['git_user_email'] = git_user_email
         environment.globals['gh_action_badge'] = gh_action_badge
+        environment.globals['ruff_python_version'] = ruff_python_version
 
         # filters
         environment.filters['slugify'] = slugify
