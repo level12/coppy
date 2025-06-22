@@ -15,5 +15,14 @@ includes = [
 
 ################ TASKS #################
 [tasks.pytest-cov]
+description = 'Full pytest run with html coverage report'
 # .coveragerc sets directory to ./tmp/coverage-html
 run = 'pytest --cov --cov-report=html --no-cov-on-fail'
+
+
+[tasks.upgrade-deps]
+description = "Upgrade uv and pre-commit dependencies"
+run = [
+    'uv sync --upgrade',
+    'pre-commit autoupdate',
+]
