@@ -1,8 +1,10 @@
 [env]
+{% raw -%}
 PROJECT_SLUG = '{{ config_root | basename | slugify }}'
 
 _.python.venv.path = '{% if env.UV_PROJECT_ENVIRONMENT %}{{ env.UV_PROJECT_ENVIRONMENT }}{% else %}.venv{% endif %}'
 _.python.venv.create = true
+{%- endraw %}
 
 
 [task_config]
@@ -14,3 +16,9 @@ includes = [
 [settings]
 # Coppy projects uses .python-version because both mise and uv respect it.
 idiomatic_version_file_enable_tools = ['python']
+
+
+################ TASKS #################
+[tasks.pytest-cov]
+# .coveragerc sets directory to ./tmp/coverage-html
+run = 'pytest --cov --cov-report=html --no-cov-on-fail'

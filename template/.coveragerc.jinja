@@ -1,0 +1,13 @@
+# .coveragerc to control coverage.py
+[run]
+branch = True
+omit =
+    src/{{py_module}}/version.py
+
+source =
+    src/{{py_module}}
+    src/{{py_module}}_tests
+
+
+[html]
+directory = tmp/coverage-html
