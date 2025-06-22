@@ -45,7 +45,7 @@ script_name:
 
 python_version:
   type: str
-  help: Python version (for mise)
+  help: Python version (major.minor only)
   default: '3.13'
 
 hatch_version_tag_sign:

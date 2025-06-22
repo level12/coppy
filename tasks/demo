@@ -76,7 +76,7 @@ def main(
         sub_run('mise', 'run', 'bootstrap', cwd=dest)
 
     if nox:
-        sub_run('mise', 'exec', '--', 'nox', cwd=dest)
+        sub_run('mise', 'exec', '--', 'uv', 'run', 'nox', cwd=dest)
 
 
 if __name__ == '__main__':
