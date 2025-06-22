@@ -3,6 +3,11 @@ This conftest mostly for handling warnings.  Use the other conftest.py files for
 
 - Filters for warnings that are triggered during import go at the top level.
 - Filters for warnings thrown during test runs goes in pytest_configure() below.
+
+Having two conftest.py files is necessary because the warning configuration needs to happen before
+the application's tests and/or code have a chance to import other libraries which may trigger
+warnings.  So this file remains a filesystem level above the "real" conftest.py which does all the
+imports.
 """
 
 import warnings
