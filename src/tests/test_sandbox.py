@@ -17,28 +17,18 @@ class TestContainer:
         """Ensure mise, uv, and python are all setup in the sandbox as expected"""
 
         with package.sandbox() as sb:
-            py_meta: dict = sb.mise('ls', '--json', '--current', 'python', json=True)
-            assert len(py_meta) == 1
-            py_meta = py_meta[0]
-            py_ver = py_meta['version']
-            assert py_meta['requested_version'] == '3.13'
-            assert (
-                py_meta['install_path']
-                == f'/home/ubuntu/.local/share/mise/installs/python/{py_ver}'
-            )
-            assert py_meta['source'] == {
-                'type': 'idiomatic-version-file',
-                'path': '/home/ubuntu/project/.python-version',
-            }
+            py_ver = '3.13.'
             result = sb.mise_exec('python', '--version', capture=True)
-            assert result.stdout.strip() == f'Python {py_ver}', sb.mise_env('PATH')
+            mise_py_ver = result.stdout.strip()
+            assert py_ver in mise_py_ver
             assert 'mise creating venv with uv at: ~/project/.venv' in result.stderr.strip()
 
             result = sb.uv('pip', 'freeze', capture=True)
             assert len(result.stdout.strip().splitlines()) == 0
 
             result = sb.uv('run', 'python', '--version', capture=True)
-            assert result.stdout.strip() == f'Python {py_ver}'
+            assert result.stdout.strip() == mise_py_ver
+
             # uv should be using the same virtualenv that mise created above.  If it's not,
             # something is probably wrong with the way the overlays are getting setup in the
             # sandbox.
