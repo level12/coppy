@@ -17,9 +17,9 @@ from coppy_tasks_lib import demo_dest_default
 )
 @click.option('--bash', is_flag=True)
 @click.option('--doctor', is_flag=True)
-@click.option('--bash', 'bash_on_enter', is_flag=True)
-def main(project_path: Path, bash: bool, doctor: bool, bash_on_enter: bool):
-    with Container(project_path, bash_on_enter=bash_on_enter) as sb:
+@click.option('--break', 'break_on_enter', is_flag=True)
+def main(project_path: Path, bash: bool, doctor: bool, break_on_enter: bool):
+    with Container(project_path, break_on_enter=break_on_enter) as sb:
         sb.exec('printenv')
         sb.exec('pwd')
         sb.exec('ls')

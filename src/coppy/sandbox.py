@@ -22,13 +22,13 @@ class Container:
     def __init__(
         self,
         proj_dpath: Path | None = None,
-        bash_on_enter: bool = False,
+        break_on_enter: bool = False,
         workdir: str | Path | None = None,
         mount_coppy: bool = False,
         copy_coppy: bool = False,
     ):
         self.host_proj_dpath = proj_dpath
-        self.break_on_enter = bash_on_enter
+        self.break_on_enter = break_on_enter
         self.workdir: str | Path = workdir or self.c_proj_dpath
         self.mount_coppy: bool = mount_coppy
         self.copy_coppy: bool = copy_coppy
