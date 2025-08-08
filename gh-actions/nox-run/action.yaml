@@ -21,5 +21,6 @@ runs:
         python-version-file: ${{ inputs.python-version-file }}
 
     - name: Run Nox Session
+      shell: bash
       run: |
         uv run --only-group ${{ inputs.uv-group }} -- nox -s ${{ inputs.nox-session }}
