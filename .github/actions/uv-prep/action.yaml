@@ -1,6 +1,10 @@
-name: "uv nox prep"
+name: "uv prep"
 
 inputs:
+  python-version-file:
+    required: false
+    type: string
+    default: pyproject.toml
 
 runs:
   using: composite
@@ -16,7 +20,7 @@ runs:
     - name: "Set up Python"
       uses: actions/setup-python@$v5
       with:
-        python-version-file: "pyproject.toml"
+        python-version-file: ${{ inputs.python-version-file }}
 
     - name: Install uv
       uses: astral-sh/setup-uv@v6
