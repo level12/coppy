@@ -1,0 +1,25 @@
+name: "nox run"
+
+inputs:
+  nox-session:
+    required: true
+  python-version-file:
+    required: false
+    type: string
+    default: pyproject.toml
+  uv-group:
+    required: false
+    type: string
+    default: nox
+
+
+runs:
+  using: composite
+  steps:
+    - uses: level12/coppy/gh-actions/uv-prep@main
+      with:
+        python-version-file: ${{ inputs.python-version-file }}
+
+    - name: Run Nox Session
+      run: |
+        uv run --only-group ${{ inputs.uv-group }} -- nox -s ${{ inputs.nox-session }}
