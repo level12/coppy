@@ -18,7 +18,7 @@ runs:
 
     # NOTE: use GH's action to install Python b/c uv docs say it will be faster due to caching
     - name: "Set up Python"
-      uses: actions/setup-python@$v5
+      uses: actions/setup-python@v5
       with:
         python-version-file: ${{ inputs.python-version-file }}
 
