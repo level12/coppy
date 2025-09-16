@@ -7,9 +7,13 @@ package_path = Path.cwd()
 nox.options.default_venv_backend = 'uv'
 
 
+def uv_sync(session, group: str):
+    session.run('uv', 'sync', '--active', '--no-default-groups', '--group', group)
+
+
 @nox.session
 def tests(session: nox.Session):
-    session.run('uv', 'sync', '--active', '--no-dev', '--group', 'tests')
+    uv_sync(session, 'tests')
     session.run(
         'pytest',
         '-ra',
@@ -27,7 +31,7 @@ def tests(session: nox.Session):
 
 @nox.session
 def precommit(session: nox.Session):
-    session.run('uv', 'sync', '--active', '--no-dev', '--group', 'pre-commit')
+    uv_sync(session, 'pre-commit')
     session.run(
         'pre-commit',
         'run',
@@ -38,7 +42,7 @@ def precommit(session: nox.Session):
 @nox.session
 def audit(session: nox.Session):
     # Much faster to install the deps first and have pip-audit run against the venv
-    session.run('uv', 'sync', '--active', '--no-dev', '--group', 'audit')
+    uv_sync(session, 'audit')
     session.run(
         'pip-audit',
         '--desc',
