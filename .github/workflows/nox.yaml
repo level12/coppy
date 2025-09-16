@@ -58,4 +58,4 @@ jobs:
       #     mise sandbox --doctor
 
       - name: nox
-        run: mise exec -- uv run --only-group nox nox
+        run: mise exec -- uv run --frozen --only-group nox nox

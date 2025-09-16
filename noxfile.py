@@ -7,9 +7,13 @@ package_path = Path.cwd()
 nox.options.default_venv_backend = 'uv'
 
 
+def uv_sync(session, group: str):
+    session.run('uv', 'sync', '--active', '--frozen', '--only-group', group)
+
+
 @nox.session
 def tests(session: nox.Session):
-    session.run('uv', 'sync', '--active', '--no-dev', '--group', 'tests')
+    uv_sync(session, 'tests')
     session.run(
         'pytest',
         '-ra',
@@ -22,7 +26,7 @@ def tests(session: nox.Session):
 
 @nox.session
 def standards(session: nox.Session):
-    session.run('uv', 'sync', '--active', '--only-group', 'pre-commit')
+    uv_sync(session, 'pre-commit')
     session.run(
         'pre-commit',
         'run',

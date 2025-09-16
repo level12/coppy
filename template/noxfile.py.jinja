@@ -8,7 +8,7 @@ nox.options.default_venv_backend = 'uv'
 
 
 def uv_sync(session, group: str):
-    session.run('uv', 'sync', '--active', '--no-default-groups', '--group', group)
+    session.run('uv', 'sync', '--active', '--frozen', '--only-group', group)
 
 
 @nox.session
