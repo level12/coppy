@@ -19,7 +19,7 @@ def tests(session: nox.Session):
         '-ra',
         '--tb=native',
         '--strict-markers',
-        '--cov={{py_module}}',
+        '--cov',
         '--cov-config=.coveragerc',
         '--cov-report=xml',
         '--no-cov-on-fail',
