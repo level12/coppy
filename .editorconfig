@@ -8,6 +8,7 @@ root = true
 
 # Set the default whitespace settings for all files
 [*]
+charset = utf-8
 
 # Use UNIX-style line endings
 end_of_line = lf
@@ -22,12 +23,6 @@ insert_final_newline = true
 # trim whitespace from the ends of lines
 trim_trailing_whitespace = true
 
-
-[*.py]
-# ensure Python source files are utf-8
-charset = utf-8
-
-
 [*.{yml,yaml}]
 # Set two-space indents for YAML files
 indent_size = 2
@@ -36,3 +31,8 @@ indent_size = 2
 [Makefile]
 # Makefiles *must* use tabs!
 indent_style = tab
+
+
+# A smaller indent keeps lists as lists in the changelog
+[changelog.d/*.md]
+indent_size = 2

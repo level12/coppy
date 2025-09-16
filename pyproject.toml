@@ -30,6 +30,7 @@ dev = [
     {include-group = "nox"},
     "hatch>=1.14.0",
     "ruff>=0.9.6",
+    "towncrier>=25.8.0",
 ]
 # Used by nox
 pre-commit = [

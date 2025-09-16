@@ -1,0 +1,26 @@
+# Docs: https://towncrier.readthedocs.io/en/stable/configuration.html
+# Exanple: https://github.com/python-attrs/attrs/blob/main/pyproject.toml#L274
+
+[tool.towncrier]
+directory = "changelog.d"
+filename = "changelog.md"
+title_format = "## [{version}](https://github.com/level12/coppy/releases/tag/v{version}) - {project_date}"
+issue_format = "[#{issue}](https://github.com/level12/coppy/issues/{issue})"
+
+[[tool.towncrier.type]]
+name = "Security"
+
+[[tool.towncrier.type]]
+name = "Breaking"
+
+[[tool.towncrier.type]]
+name = "Deprecated"
+
+[[tool.towncrier.type]]
+name = "Fixed"
+
+[[tool.towncrier.type]]
+name = "Added"
+
+[[tool.towncrier.type]]
+name = "Changed"
