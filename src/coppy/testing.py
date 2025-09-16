@@ -10,7 +10,7 @@ from coppy import utils
 from coppy.sandbox import Container
 
 
-tests_dpath = utils.src_dpath / 'tests'
+tests_dpath = utils.pkg_dpath / 'tests' / 'coppy_tests'
 data_dpath = tests_dpath / 'data'
 
 
