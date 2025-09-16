@@ -69,6 +69,7 @@ ignore = [
     'Q001',    # bad-quotes-multiline-string
     'Q002',    # bad-quotes-docstring
     'Q003',    # avoidable-escaped-quote
+    'UP038',   # upstream has deprecated / removed
 ]
 
 
