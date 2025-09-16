@@ -1,5 +1,5 @@
 #!/usr/bin/env -S uv run --script
-# mise description="Show sandbox env details"
+# [MISE] description="Show sandbox env details"
 
 from pathlib import Path
 
