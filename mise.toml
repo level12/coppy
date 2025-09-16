@@ -22,3 +22,11 @@ description = "Update Coppy demo pkg"
 # https://github.com/level12/coppy-demo/
 env = { DEMO_PKG_DPATH = '{{ env._DEMO_PKG_DPATH }}' }
 run = 'mise demo --update --rm-existing --head --nox'
+
+
+[tasks.upgrade-deps]
+description = 'Upgrade uv and pre-commit dependencies'
+run = [
+    'uv sync --upgrade',
+    'pre-commit autoupdate',
+]
