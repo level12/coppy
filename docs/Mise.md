@@ -4,7 +4,7 @@ Mise is used for at least:
 - Static [Environment variables](https://mise.jdx.dev/environments/)
 - Python [venv activation] and creation using uv
   - See also [Mise: Python Cookbook]
-- Task [tasks]: scripts used to manage the project that, usually, need the project's tooling and/or environment setup to function correctly
+- [Tasks]: scripts used to manage the project that, usually, need the project's tooling and/or environment setup to function correctly
 
 
 [uv]: https://docs.astral.sh/uv/
@@ -14,63 +14,69 @@ Mise is used for at least:
 [venv activation]: (https://mise.jdx.dev/lang/python.html#automatic-virtualenv-activation)
 [Mise: Python Cookbook]: https://mise.jdx.dev/mise-cookbook/python.html
 
+
 ## Host Prep
 
-Coppy projects assume [mise] and [uv] are installed on a developer's host system:
+Coppy projects assume [mise] and [uv] are installed on a developer's host system
 
-* mise: https://mise.jdx.dev/installing-mise.html
-* uv: https://docs.astral.sh/uv/getting-started/installation/
+We **recommend** installing both mise and uv directly for your OS user account.
 
-Once mise is installed, the uv install can be managed with mise:
+We **no longer recommend** installing uv through mise as uv should be available as a tool without
+going through mise to get access.
 
-```
- ❯ mise use -g ubi:astral-sh/uv
-mise Installed executable into ~/.local/share/mise/installs/ubi-astral-sh-uv/0.6.0/uv
-mise ubi:astral-sh/uv@0.6.0 ✓ installed
-mise ~/.config/mise/config.toml tools: ubi:astral-sh/uv@0.6.0
+[mise]: https://mise.jdx.dev/installing-mise.html
+[uv]: https://docs.astral.sh/uv/getting-started/installation/
 
- ❯ which uv
-~/.local/share/mise/installs/ubi-astral-sh-uv/0.6.0/uv
-```
 
 ### Host Updates
 
-All dev tooling, including anything installed with uv, can be updated with:
+Given the frequency of releases to mive and uv, we recommend updating them frequently.  See our
+[systemd folder](https://github.com/level12/coppy/tree/main/systemd) for service and timer units
+that update these tools nightly.
 
 ```
+# mise
+
  ❯ mise self-update
  ❯ mise up
+ ❯ mise reshim
+
+# Keep mise & uv Python's in-sync with:
+
+ ❯ mise sync python --uv
+
+# uv
+
+ ❯ uv self update
  ❯ uv tool upgrade --all
 ```
 
-
-Keep mise & uv Python's in-sync with:
-
-```
- ❯ mise sync python --uv
-```
 
 ## Virtualenv Location
 
 By default, the project's venv will be located in the project directory at `.venv`.
 
-To set a different location, define `UV_PROJECT_ENVIRONMENT` as a mise env var:
+You can use centralized virtualenvs by ensuring a cache directory exists: `~/.cache/uv-venvs/`.
+E.g.:
 
-```toml
-# Put this in a config that is used by all your projects, e.g. ~/.config/mise/config.toml or ~/mise.toml
-[env]
-UV_PROJECT_ENVIRONMENT = { value='{% if env.PROJECT_SLUG %}~/.cache/uv-venvs/{{ env.PROJECT_SLUG }}{% endif %}', tools = true }
+```
+mkdir ~/.cache/uv-venvs/
 ```
 
-### `uv_venv_auto`
+Mise tasks can use a [uv shebang](https://mise.jdx.dev/mise-cookbook/python.html#uv-scripts) so they
+can function without mise being active.  But:
 
-We can use `uv_venv_auto` when mise respects `UV_PROJECT_ENVIRONMENT`.  Tracking in [#26](https://github.com/level12/coppy/issues/26).
+- This won't work if using centralized virtualenvs b/c UV_PROJECT_ENVIRONMENT is activated by
+  mise.  So when the script runs, it will want to use `.venv`.
+- A workaround, until uv gets [support for centralized
+  venvs](https://github.com/astral-sh/uv/issues/1495#issuecomment-3073898354), is to symlink
+  `.venv` to the central one.
 
 
 ## Design Notes
 
 1. Smooth integration between mise & uv is a high priority
-1. Our repos will operate as [uv projects](https://docs.astral.sh/uv/concepts/projects/) including defining requirements in `pyproject.toml` and using `uv.lock`
-1. Use `.python-version` so [mise](https://mise.jdx.dev/configuration.html#idiomatic-version-files) & [uv](https://docs.astral.sh/uv/concepts/python-versions/#python-version-files) share the version spec file
-1. Developers will manually run `uv sync` to update the active virtualenv (but see [#27](https://github.com/level12/coppy/issues/27))
-1. Python tasks should use a [uv shebang](https://mise.jdx.dev/mise-cookbook/python.html#uv-scripts) so they can function without mise being active.
+1. Our repos will operate as [uv projects](https://docs.astral.sh/uv/concepts/projects/) including
+   defining requirements in `pyproject.toml` and using `uv.lock`
+1. Developers will manually run `uv sync` to update the, presumably mise activated, active
+   virtualenv
