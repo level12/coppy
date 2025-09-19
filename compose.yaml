@@ -1,9 +1,0 @@
-services:
-  coppy-tests:
-    image: coppy-tests
-    container_name: coppy-tests-bash
-    build:
-      args:
-        UBUNTU_UID: ${UBUNTU_UID:-1000}
-    entrypoint: /bin/bash
-    command: ''

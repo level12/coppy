@@ -2,10 +2,19 @@
 
 * Project tasks: `mise tasks`
 * Build a demo project to test functionality: `mise demo [--help]`
-* CI uses a custom image built just for this project
-  - See `compose.yaml` and related
-  - Use `mise docker-build` to rebuild manually if needed
-* CI runs in GH actions, not CircleCI
+* CI runs in GH Actions
+
+
+## OS Test User Required
+
+Tests use a dedicated system user to run tests isolated from the developer's mise/uv config.
+
+- Create/prep user: `mise run test-user-prep [--systemd-skip]`
+- Systemd:
+  - Without `--systemd-skip` a service and timer will be installed to keep mise and uv current
+  - Diagnostic help with tasks: `test-user-systemctl` and `test-user-journalctl`
+- Current task is Ubuntu centric.  Fix & submit a PR for other systems if needed.
+
 
 ## Coppy Demo Repo
 
@@ -13,14 +22,6 @@
 * Devs should update this after bumping Coppy to a new version
   * Which should [get automated](https://github.com/level12/coppy/issues/54) at some point
 
-## Test Run Times
-
-- Test runs are longer than our typical projects.
-- As of Feb 2025, 12 tests take 65s on my (RLS) laptop
-- **Hung?**: The first run of a day can take minutes before the first test runs due to docker
-  building the newest [ubuntu-mive](https://github.com/level12/ubuntu-mive) image. Watch the
-  progress with `pytest -s` if you are concerned it is hung.
-- See also: https://github.com/level12/coppy/issues/53
 
 ## Versions & releases
 

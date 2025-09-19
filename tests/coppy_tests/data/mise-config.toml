@@ -1,2 +1,2 @@
 [env]
-UV_PROJECT_ENVIRONMENT = { value='{% if env.PROJECT_SLUG %}/home/ubuntu/.cache/uv-venvs/{{ env.PROJECT_SLUG }}{% endif %}', tools = true }
+UV_PROJECT_ENVIRONMENT = { value='{% if env.PROJECT_SLUG %}/home/coppy-tests/.cache/uv-venvs/{{ env.PROJECT_SLUG }}{% endif %}', tools = true }

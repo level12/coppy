@@ -2,50 +2,63 @@ from pathlib import Path
 
 import pytest
 
-from coppy.testing import Package
+from .libs.sandbox import UserBox
+from .libs.testing import UserPackage
 
 
-class TestContainer:
+class TestUserBox:
     @pytest.fixture(scope='class')
-    def package(self, tmp_path_factory):
-        temp_path: Path = tmp_path_factory.mktemp('test-py-pkg')
-        package = Package(temp_path)
+    def package(self):
+        package = UserPackage('test-sandbox')
         package.generate()
         return package
 
-    def test_sandbox(self, package: Package):
+    def test_sudo_integration(self):
+        sb = UserBox()
+        assert sb.exec_stdout('id', '-un') == 'coppy-tests'
+        assert sb.exec_stdout('printenv', 'PATH').startswith('/home/coppy-tests/.local/bin:')
+        assert sb.uv_python('import os; print(os.getcwd())') == '/home/coppy-tests'
+        assert (
+            sb.uv_python('import os; print(os.getcwd())', cwd='/home/coppy-tests/tmp')
+            == '/home/coppy-tests/tmp'
+        )
+
+    def test_sandbox(self, package: UserPackage):
         """Ensure mise, uv, and python are all setup in the sandbox as expected"""
 
         with package.sandbox() as sb:
+            nested_venv_dpath = package.dpath / '.venv'
+
+            # The sandbox runs `mise exec` which should result in the creation of the venv.
+            assert nested_venv_dpath.exists()
+
+            # Mise should be using the virtualenv
+            assert sb.mise_env('VIRTUAL_ENV') == [nested_venv_dpath.as_posix()]
+
+            # And just sanity check that uv is using the same venv
+            virtual_env = sb.uv_run('printenv', 'VIRTUAL_ENV')
+            assert virtual_env == nested_venv_dpath.as_posix()
+
+            # Ensure the python version being used is what the project's pyproject.toml called
+            # for.
             py_ver = '3.13.'
-            result = sb.mise_exec('python', '--version', capture=True)
-            mise_py_ver = result.stdout.strip()
+            mise_py_ver = sb.mise_exec('python', '--version')
             assert py_ver in mise_py_ver
-            assert 'mise creating venv with uv at: ~/project/.venv' in result.stderr.strip()
 
-            result = sb.uv('pip', 'freeze', capture=True)
-            assert len(result.stdout.strip().splitlines()) == 0
+            # Ensure mise and uv are both using the python executable from the venv
+            mise_py_fpath = Path(
+                sb.mise_exec(
+                    'python',
+                    '-c',
+                    'import sys;print(sys.executable)',
+                ),
+            ).resolve()
 
-            result = sb.uv('run', 'python', '--version', capture=True)
-            assert result.stdout.strip() == mise_py_ver
+            assert mise_py_fpath == nested_venv_dpath.joinpath('bin/python').resolve()
 
-            # uv should be using the same virtualenv that mise created above.  If it's not,
-            # something is probably wrong with the way the overlays are getting setup in the
-            # sandbox.
-            assert 'Creating virtual environment at: .venv' not in result.stderr.strip()
+            executable_path = sb.uv_python('import sys;print(sys.executable)')
+            assert Path(executable_path).resolve() == mise_py_fpath
 
             # `uv run` should have triggered a `uv sync`
             result = sb.uv('pip', 'freeze', capture=True)
             assert len(result.stdout.strip().splitlines()) > 0
-
-            nested_venv_dpath = '/home/ubuntu/project/.venv'
-            assert sb.mise_env('VIRTUAL_ENV') == [nested_venv_dpath]
-            result = sb.uv('run', 'printenv', 'VIRTUAL_ENV', capture=True)
-            assert result.stdout.strip() == nested_venv_dpath
-
-    def test_path_exists(self, package: Package):
-        with package.sandbox() as sb:
-            assert sb.path_exists('/home/ubuntu/project')
-            assert sb.path_exists('/home/ubuntu/project/mise.toml')
-            assert sb.path_exists('mise.toml')
-            assert not sb.path_exists('.git')

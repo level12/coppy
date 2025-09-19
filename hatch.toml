@@ -1,5 +1,20 @@
 [build]
-dev-mode-dirs = ['src']
+dev-mode-dirs = ['src', 'tests']
+
+
+[build.targets.sdist]
+directory = 'tmp/dist'
+
+
+[build.targets.wheel]
+directory = 'tmp/dist'
+packages = ['src/coppy']
+
+
+## Env: default
+[envs.default]
+installer = "uv"
+
 
 [version]
 source = 'regex_commit'

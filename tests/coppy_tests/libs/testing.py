@@ -7,15 +7,15 @@ import tomllib
 import copier
 
 from coppy import utils
-from coppy.sandbox import Container
+from coppy_tests.libs.sandbox import UserBox
 
-
-tests_dpath = utils.pkg_dpath / 'tests' / 'coppy_tests'
-data_dpath = tests_dpath / 'data'
+from .paths import dirs
 
 
 def data_fpath(rel_path):
-    return data_dpath.joinpath(rel_path)
+    p = dirs.test_data.joinpath(rel_path)
+    assert p.exists()
+    return p
 
 
 def toml_load(fpath: Path):
@@ -59,7 +59,17 @@ class Package:
     def read_text(self, path: str):
         return self.path(path).read_text()
 
+    def path_exists(self, path: str):
+        full_path = path if Path(path).is_absolute() else self.dpath / path
+        return full_path.exists()
+
+
+class UserPackage(Package):
+    def __init__(self, ident: str):
+        pkg_dpath = UserBox.pytest_tmppath / ident
+        super().__init__(pkg_dpath)
+
     @contextmanager
-    def sandbox(self, *args, **kwargs) -> Iterator[Container]:
-        with Container(self.dpath, *args, **kwargs) as sb:
+    def sandbox(self, *args, **kwargs) -> Iterator[UserBox]:
+        with UserBox(self.dpath, *args, **kwargs) as sb:
             yield sb
