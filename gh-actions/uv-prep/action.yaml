@@ -2,15 +2,21 @@ name: "uv prep"
 
 inputs:
   python-version-file:
-    required: false
     type: string
+    required: false
     default: pyproject.toml
+  fetch-depth:
+    type: number
+    required: false
+    default: 1
 
 runs:
   using: composite
   steps:
     - name: Checkout Code
       uses: actions/checkout@v4
+      with:
+        fetch-depth: ${{ inputs.fetch-depth }}
 
     - name: Mark repo as safe for Git
       shell: bash
