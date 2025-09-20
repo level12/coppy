@@ -39,11 +39,7 @@ class CalledProcessError(subprocess.CalledProcessError):
         )
 
     def __str__(self):
-        return (
-            super().__str__()
-            + f'\nSTDOUT: {self.stdout[:1000]}'
-            + f'\nSTDERR: {self.stderr[:1000]}'
-        )
+        return super().__str__() + f'\nSTDOUT: {self.stdout}' + f'\nSTDERR: {self.stderr}'
 
 
 def sub_run(
@@ -86,7 +82,7 @@ def sub_run(
 
 
 def sudo_run(*args, sudo_user=None, env_path=None, **kwargs):
-    user_args = ('-u', sudo_user) if sudo_user else ()
+    user_args = ('-u', sudo_user, f'HOME=/home/{sudo_user}') if sudo_user else ()
     # Sudo only looks for bins in: $ sudo grep secure_path /etc/sudoers
     # If we want to adjust the path, then we need to use `env` to do it.
     env_args = ('env', f'PATH={env_path}') if env_path else ()
