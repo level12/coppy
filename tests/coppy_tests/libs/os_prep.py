@@ -95,6 +95,7 @@ class User:
             if self.name in Group.all_names():
                 group_args = ('-g', self.name)
 
+            log.info(f'Creating user: {self.name}')
             utils.sudo_run(
                 'useradd',
                 '--system',

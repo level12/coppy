@@ -24,11 +24,14 @@ sudoers = """
 @click.option('--reinstall', is_flag=True, default=False)
 @logs.opts_init
 def main(systemd_skip: bool, systemd_force: bool, reinstall: bool):
+    log.info('Test user prep starting...')
+
     coppy_user = User(username)
 
     if reinstall and coppy_user.exists():
         result = utils.sudo_run('pkill', '-u', username, returns=(0, 1))
         if result.returncode == 0:
+            log.info('Waiting on all coppy-tests processes to exit')
             # Wait for user's processes to exit or userdel will fail
             utils.sub_run('pidwait', '-u', username)
         utils.sudo_run('userdel', '-r', username)
@@ -36,31 +39,36 @@ def main(systemd_skip: bool, systemd_force: bool, reinstall: bool):
         # Get rid of cache
         coppy_user = User(username)
 
+    log.info('Ensuring user exists...')
     coppy_user.ensure()
     coppy_user_home = coppy_user.home_dir()
 
     if not coppy_user.is_current:
+        log.info('Adjustments to give current user access to coppy-tests home')
         curr_user = User.current()
-        # This would clear them all (i.e. fix a mistake if you have one)
-        utils.sub_run('sudo', 'setfacl', '-R', '-b', coppy_user_home)
-        # utils.sudo_run('setfacl', '-R', '-m', f'u:{curr_user.name}:rwX', coppy_user_home)
-        # utils.sudo_run('setfacl', '-R', '-d', '-m', f'u:{curr_user.name}:rwX', coppy_user_home)
+
         if coppy_user.name not in curr_user.groups():
             log.info(f'Adding your user to the user group: {coppy_user.name}')
             utils.sudo_run('usermod', '-aG', coppy_user.name, curr_user.name)
             log.warning(
                 f'Please logout and then back in to enable access to the {coppy_user.name} group.',
             )
+            return
         else:
             log.info(f'Your user is already in the group: {coppy_user.name}')
 
         # Sticky group so files created by the dev's user can be accessed by coppy-tests user.
         utils.sudo_run('chmod', 'g+ws', coppy_user_home)
 
-        # Needed for systemd files
         config_dpath = coppy_user_home / '.config/'
         config_dpath.mkdir(exist_ok=True)
+        utils.sudo_run('chmod', '-R', 'g+ws', config_dpath)
 
+        cache_dpath = coppy_user_home / '.cache/'
+        cache_dpath.mkdir(exist_ok=True)
+        utils.sudo_run('chmod', '-R', 'g+ws', cache_dpath)
+
+    log.info('Updating sudoers for passwordless access to coppy test user')
     sudoers_write('coppy', sudoers.format(coppy_user=username))
 
     # Mise & uv
