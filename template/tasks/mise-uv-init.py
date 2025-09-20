@@ -73,9 +73,13 @@ def slugify(text):
 
 
 def print_log(*args, **kwargs):
-    # TODO: would it be more helpful to print errors on stderr like mise/uv do?
     with paths.log().open('a') as fo:
-        print(*args, file=fo)
+        print(*args, file=fo, **kwargs)
+
+
+def print_err(*args, **kwargs):
+    print(*args, file=sys.stderr, **kwargs)
+    print_log(*args, **kwargs)
 
 
 def sub_run(*args, env=None) -> str:
@@ -85,10 +89,10 @@ def sub_run(*args, env=None) -> str:
     try:
         result = subprocess.run(args, check=True, text=True, capture_output=True, env=env)
         if result.stderr:
-            print_log(args, '\n', result.stderr)
+            print_err(args, '\n', result.stderr)
     except subprocess.CalledProcessError as e:
         if e.stderr:
-            print_log(args, '\n', e.stderr)
+            print_err(args, '\n', e.stderr)
         raise
 
     return result.stdout.strip()
