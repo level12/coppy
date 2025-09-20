@@ -1,0 +1,29 @@
+[Unit]
+Description=Mise and uv updates
+After=network.target
+OnFailure=systemd-failure-notify@tooling.service
+
+# Limit to 1st run + 48 retries every 15 mins gives us ~12h of retries.
+StartLimitBurst=49
+# Reset limit interval after 13 hours so it's ready for next nightly calendar run.
+StartLimitIntervalSec=13h
+
+[Service]
+Type=oneshot
+
+# Restart configuration
+Restart=on-failure
+RestartSec=15m
+
+# Timeout shouldn't really be needed but could help with a hung network connection.
+TimeoutStartSec=5m
+
+# mise
+ExecStart=%h/.local/bin/mise self-update
+ExecStart=%h/.local/bin/mise up
+ExecStart=%h/.local/bin/mise sync python --uv
+ExecStart=%h/.local/bin/mise reshim
+
+# uv
+ExecStart=%h/.local/bin/uv self update
+ExecStart=%h/.local/bin/uv tool upgrade --all

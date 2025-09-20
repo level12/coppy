@@ -1,55 +1,63 @@
 from pathlib import Path
 
-from coppy.sandbox import Container
+import pytest
+
+from coppy import cli
+
+from .libs import mocks
+from .libs.click import CLIRunner
+from .libs.sandbox import UserBox
+
+
+pytestmark = pytest.mark.usefixtures('coppy_install')
 
 
 class TestCoppy:
-    def test_build_installed_coppy(self, tmp_path: Path):
-        with Container(tmp_path, mount_coppy=True) as sb:
-            result = sb.exec('coppy', 'version', capture=True)
-            assert result.stdout.strip().startswith('coppy version: ')
+    def test_coppy_install(self):
+        sb = UserBox()
+        version = sb.exec_stdout('coppy', 'version')
+        assert version.startswith('coppy version: ')
 
-    def test_create_then_update(self, tmp_path: Path):
-        with Container(tmp_path, copy_coppy=True) as sb:
-            sb.git_commit(sb.c_coppy_dpath, tag='v100.0', init=True)
 
-            sb.exec(
-                'copier',
-                'copy',
-                '--trust',
-                '--quiet',
-                '--vcs-ref',
-                'HEAD',
-                '--defaults',
-                '--data',
-                'project_name=foo',
-                '--data',
-                'gh_org=starfleet',
-                '--data',
-                'author_name=Picard',
-                '--data',
-                'author_email=jpicard@starfleet.space',
-                '--data',
-                'coppy_dep_url=/home/ubuntu/coppy-pkg',
-                '/home/ubuntu/coppy-pkg',
-                sb.c_proj_dpath,
-            )
+@mocks.patch_obj(cli, 'sub_run')
+class TestCoppyCLI:
+    def test_defaults(self, m_sub_run, cli: CLIRunner):
+        cli.invoke('update')
 
-            assert sb.host_proj_dpath.joinpath('mise.toml').exists()
-            assert not sb.host_proj_dpath.joinpath('full-phasers.txt').exists()
+        m_sub_run.assert_called_once_with(
+            'copier',
+            'update',
+            '--answers-file',
+            '.copier-answers-py.yaml',
+            '--trust',
+            '--skip-answered',
+            Path.cwd(),
+        )
 
-            # Copier won't update if the target directory isn't clean
-            sb.git_commit(sb.c_proj_dpath, init=True)
+    def test_path(self, m_sub_run, cli: CLIRunner):
+        cli.invoke('update', '/tmp')
 
-            # New file committed to the coppy template
-            sb.exec('touch', sb.c_coppy_dpath / 'template/full-phasers.txt')
-            sb.git_commit(sb.c_coppy_dpath)
+        m_sub_run.assert_called_once_with(
+            'copier',
+            'update',
+            '--answers-file',
+            '.copier-answers-py.yaml',
+            '--trust',
+            '--skip-answered',
+            Path('/tmp'),
+        )
 
-            # Shouldn't make an update because, by default, HEAD is not used and we didn't tag
-            # after adding full-phasers.txt.
-            sb.exec('coppy', 'update')
-            assert not sb.host_proj_dpath.joinpath('full-phasers.txt').exists()
+    def test_opt_head(self, m_sub_run, cli: CLIRunner):
+        cli.invoke('update', '--head')
 
-            # But we can tell it to pull from the head instead
-            sb.exec('coppy', 'update', '--head')
-            assert sb.host_proj_dpath.joinpath('full-phasers.txt').exists()
+        m_sub_run.assert_called_once_with(
+            'copier',
+            'update',
+            '--answers-file',
+            '.copier-answers-py.yaml',
+            '--trust',
+            '--skip-answered',
+            '--vcs-ref',
+            'HEAD',
+            Path.cwd(),
+        )

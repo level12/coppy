@@ -1,10 +1,11 @@
 [env]
-{% raw -%}
-PROJECT_SLUG = '{{ config_root | basename | slugify }}'
+# Will use a centralized venv if `~/.cache/uv-venvs` exists.  `.venv` otherwise.
+UV_PROJECT_ENVIRONMENT = "{{ exec(command='tasks/mise-uv-init.py proj-env', cache_key='proj-env', cache_duration='1h') | trim }}"
+_.python.venv.path = '{{ env.UV_PROJECT_ENVIRONMENT }}'
 
-_.python.venv.path = '{% if env.UV_PROJECT_ENVIRONMENT %}{{ env.UV_PROJECT_ENVIRONMENT }}{% else %}.venv{% endif %}'
-_.python.venv.create = true
-{%- endraw %}
+
+[tools]
+python = "{{ exec(command='tasks/mise-uv-init.py py-ver', cache_key='py-ver', cache_duration='1h') | trim }}"
 
 
 [task_config]

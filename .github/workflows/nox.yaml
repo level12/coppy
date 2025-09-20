@@ -8,54 +8,68 @@ on:
   workflow_dispatch:
 
 
+# Limit this workflow to a single run at a time per-branch to avoid wasting worker resources
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 
 jobs:
-  nox:
+
+  # JOB
+  nox-other:
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        session: [precommit, audit]
+
+    steps:
+      - uses: level12/coppy/gh-actions/nox-run@main
+        with:
+          nox-session: ${{ matrix.session }}
+
+
+  # JOB
+  nox-pytest:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
+      - uses: level12/coppy/gh-actions/uv-prep@main
+        with:
+          # Copier errors out with a shallow repo clone.  This makes it a full clone.
+          fetch-depth: 0
 
-      - name: Add ~/bin to PATH
-        run: echo "PATH=/home/runner/bin:$PATH" >> $GITHUB_ENV
-
-      - name: Prep
+      - name: Prep test user
         run: |
-          # Mise
-          mkdir ~/bin
-          curl -LsS https://mise.jdx.dev/mise-latest-linux-x64 > ~/bin/mise
-          chmod +x ~/bin/mise
+          # The script returns early after adding the current user to the new user's group.
+          # This is due to the need to "logout" before the user pick's up the group's identity.
+          uv run --no-dev tasks/test-user-prep.py
 
-          # build the image used to test
-          mise docker-build
 
-          # uv
-          mise use -g ubi:astral-sh/uv
-          mkdir -p /home/runner/.local/share/uv/python/
+          # Permissions for the test user operate assuming the group sticky bit.  Having acls for
+          # the runner user results in the sticky bit not working as intended.  So clear them.
+          sudo setfacl -R -b /home/coppy-tests/
 
-          # Prep mise
-          mise trust
-          mise install
 
-      # Uncomment to help troubleshooting
-      # - name: Debug info
-      #   run: |
-      #     # Python versions
-      #     echo "Python versions:"
-      #     mise exec -- python --version
-      #     mise exec -- uv run python --version
+          # Permissive umask to avoid group write being masked out
+          umask 000
 
-      #     # Path
-      #     echo "Path:"
-      #     echo $PATH
 
-      #     mise demo --no-bootstrap --no-nox
-      #     mise sandbox --doctor
+          # Workaround for: https://github.com/actions/runner-images/issues/13049
+          sudo sed -i '/XDG_RUNTIME_DIR\|\(=\/home\/runner\)/d' /etc/environment
 
-      - name: nox
-        run: mise exec -- uv run --frozen --only-group nox nox
+
+          # Run prep again, this time giving the runner user access to the group created above.
+          # This is necessary because, as best I can tell, there is no way to logout and then
+          # back in to give the runner access to that group.
+          sg coppy-tests -c 'uv run --no-dev  tasks/test-user-prep.py --systemd-skip'
+
+
+      - name: Run pytest
+        run: |
+          # Permissive umask to avoid group write being masked out
+          umask 000
+
+          sg coppy-tests -c 'uv run --frozen --only-group nox -- nox -s pytest'

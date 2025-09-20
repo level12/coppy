@@ -1,4 +1,0 @@
-#!/usr/bin/bash
-# [MISE] description="docker compose build"
-export UBUNTU_UID=`id -u`
-docker compose build --pull coppy-tests

@@ -1,11 +1,12 @@
-import datetime as dt
+import datetime
 from pathlib import Path
 
 import pytest
 
-from coppy.sandbox import Container
-from coppy.testing import Package, data_fpath
 from coppy.utils import LazyDict
+
+from .libs.sandbox import UserBox
+from .libs.testing import Package, UserPackage, data_fpath
 
 
 @pytest.fixture()
@@ -120,63 +121,66 @@ class TestTemplateWithSandbox:
     """
 
     @pytest.fixture(scope='class')
-    def gen_pkg(self, tmp_path_factory):
-        temp_path: Path = tmp_path_factory.mktemp('test-py-pkg')
-        package = Package(temp_path)
+    def pkg(self):
+        package = UserPackage('template-with-sandbox')
         package.generate()
         return package
 
     @pytest.fixture(scope='class')
-    def sb(self, gen_pkg: Package):
-        with gen_pkg.sandbox() as sb:
+    def sb(self, pkg: Package):
+        with pkg.sandbox() as sb:
             yield sb
 
-    def test_version(self, sb: Container):
-        result = sb.uv('run', 'hatch', 'version', capture=True)
-        assert result.stdout.strip() == '0.1.0'
+    def test_version(self, sb: UserBox):
+        result = sb.uv_run('hatch', 'version')
+        assert result == '0.1.0'
 
-    def test_python_and_venv(self, sb: Container):
-        # Delete the .venv so it's re-created otherwise this test will be flaky
-        sb.path_rm('.venv')
-
+    def test_python_and_venv(self, sb: UserBox):
         # Default python version
-        result = sb.mise_exec('python', '--version', capture=True)
-        assert result.stdout.strip().startswith('Python 3.13.')
-
-        # Mise should be configured to create the venv if it doesn't exist
-        assert 'mise creating venv with uv at: ~/project/.venv' in result.stderr.strip()
+        py_ver = sb.mise_exec('python', '--version')
+        assert py_ver.startswith('Python 3.13.')
 
         # Ensure slug is set and mise is activating the virtualenv
-        assert sb.mise_env('PROJECT_SLUG', 'VIRTUAL_ENV', 'UV_PROJECT_ENVIRONMENT') == [
-            'project',
-            '/home/ubuntu/project/.venv',
-        ]
+        venv, uv_proj_env = sb.mise_env(
+            'VIRTUAL_ENV',
+            'UV_PROJECT_ENVIRONMENT',
+        )
+        assert venv.endswith('template-with-sandbox/.venv')
+        assert venv == uv_proj_env
 
-    def test_venv_not_nested(self, sb: Container):
+    def test_uv_project_environment(self):
         """Ensure using a non-nested venv defined by UV_PROJECT_ENVIRONMENT works"""
 
-        with sb.place(data_fpath('mise-config.toml'), '~/.config/mise/config.toml'):
-            result = sb.mise_exec('python', '--version', capture=True)
-            py_ver = result.stdout.strip()
-            assert (
-                'mise creating venv with uv at: ~/.cache/uv-venvs/project' in result.stderr.strip()
-            )
+        # Need a separate package b/c mise cache's the values in mise.toml and they don't refresh
+        # even though we change to centralized_venvs below.
+        pkg = UserPackage('template-central-venvs')
+        pkg.generate()
+
+        with pkg.sandbox(centralized_venvs=True) as sb:
+            sb.mise_exec('uv', 'venv')
+
+            py_ver = sb.mise_exec('python', '--version')
 
             assert sb.mise_env('VIRTUAL_ENV', 'UV_PROJECT_ENVIRONMENT') == [
-                '/home/ubuntu/.cache/uv-venvs/project',
-                '/home/ubuntu/.cache/uv-venvs/project',
+                '/home/coppy-tests/.cache/uv-venvs/template-central-venvs',
+                '/home/coppy-tests/.cache/uv-venvs/template-central-venvs',
             ]
 
-            result = sb.mise_exec('uv', 'pip', 'freeze', capture=True)
+            result = sb.mise_exec('uv', 'pip', 'freeze', stderr=True)
             assert (
-                result.stderr.strip()
-                == f'Using {py_ver} environment at: /home/ubuntu/.cache/uv-venvs/project'
+                result
+                == f'Using {py_ver} environment at: /home/coppy-tests/.cache/uv-venvs/template-central-venvs'  # noqa: E501
             )
 
-    def test_tasks(self, package: Package):
-        package.generate(hatch_version_tag_sign=False)
+    def test_tasks(self, pkg: UserPackage):
+        pkg.generate(hatch_version_tag_sign=False)
 
-        with package.sandbox() as sb:
+        # TODO: we should revisit the pkg vs sandbox isolation for a test like this that modifies
+        # the package.  When the sandbox used docker, modifications in the sandbox didn't affect
+        # subsequent runs because we created a new container for each sandbox and copied the
+        # package into it.  We might want to have the sandbox generate packages as needed instead
+        # of having a package use a sandbox.
+        with pkg.sandbox() as sb:
             # Task listing
             task_meta = sb.mise('tasks', '--json', json=True)
 
@@ -192,25 +196,25 @@ class TestTemplateWithSandbox:
             assert bump.description == 'Bump version'
 
             # Run bootstrap
-            assert not sb.path_exists('.git')
-            assert not sb.path_exists('.git/hooks/pre-commit')
-            assert not sb.path_exists('uv.lock')
+            assert not pkg.path_exists('.git')
+            assert not pkg.path_exists('.git/hooks/pre-commit')
+            assert not pkg.path_exists('uv.lock')
 
             sb.mise('run', 'bootstrap')
 
-            assert sb.path_exists('.git')
-            assert sb.path_exists('.git/hooks/pre-commit')
-            assert sb.path_exists('uv.lock')
+            assert pkg.path_exists('.git')
+            assert pkg.path_exists('.git/hooks/pre-commit')
+            assert pkg.path_exists('uv.lock')
 
             # Run bump
             sb.mise('run', 'bump', '--no-push')
-            result = sb.uv('run', 'hatch', 'version', capture=True)
-            date_str = dt.datetime.utcnow().date().strftime(r'%Y%m%d')
-            assert result.stdout.strip() == f'0.{date_str}.1'
+            hatch_ver = sb.uv_run('hatch', 'version')
+            date_str = datetime.datetime.today().strftime(r'%Y%m%d')
+            assert hatch_ver == f'0.{date_str}.1'
 
-    def test_script_run(self, package: Package):
-        package.generate(script_name='ent')
+    def test_script_run(self, pkg: UserPackage):
+        pkg.generate(script_name='ent')
 
-        with package.sandbox() as sb:
-            result = sb.uv('run', 'ent', capture=True)
-            assert 'Hello from enterprise.cli' in result.stdout
+        with pkg.sandbox() as sb:
+            ent_hello = sb.uv_run('ent')
+            assert 'Hello from enterprise.cli' in ent_hello
