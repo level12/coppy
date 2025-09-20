@@ -26,10 +26,9 @@ coppy = 'coppy.cli:cli'
 
 [dependency-groups]
 dev = [
-    {include-group = "tests"},
+    {include-group = "pytest"},
     {include-group = "pre-commit"},
     {include-group = "nox"},
-    "hatch>=1.14.0",
     "ruff>=0.9.6",
     "towncrier>=25.8.0",
 ]
@@ -39,8 +38,13 @@ pre-commit = [
     'pre-commit-uv>=4.1.4',
 ]
 # Used by nox
-tests = [
+pytest = [
     'pytest>=8.3.4',
+    "hatch>=1.14.0",
+]
+# Used by nox
+audit = [
+    'pip-audit',
 ]
 # Used by CI
 nox = [
