@@ -1,8 +1,9 @@
+import datetime
 from pathlib import Path
 
 import pytest
 
-from coppy.utils import LazyDict, utc_now
+from coppy.utils import LazyDict
 
 from .libs.sandbox import UserBox
 from .libs.testing import Package, UserPackage, data_fpath
@@ -208,7 +209,7 @@ class TestTemplateWithSandbox:
             # Run bump
             sb.mise('run', 'bump', '--no-push')
             hatch_ver = sb.uv_run('hatch', 'version')
-            date_str = utc_now().date().strftime(r'%Y%m%d')
+            date_str = datetime.datetime.today().strftime(r'%Y%m%d')
             assert hatch_ver == f'0.{date_str}.1'
 
     def test_script_run(self, pkg: UserPackage):
