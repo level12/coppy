@@ -59,6 +59,9 @@ mise bootstrap
 
 ## Updating a Project
 
+Before updating, check the [Changelog] for breaking changes!  We'll do our best to keep them
+relatively minor and provide clear instructions when manual invervention is needed.
+
 To update a previously generated Coppy project to the latest version of Coppy, run:
 
 * `coppy update`: for the latest tagged version in `_src` repo, OR
@@ -69,3 +72,5 @@ then review changes in git, modify changes if needed, and commit.
 The update should be pretty safe and only apply changes from Coppy since the target repo was last
 generated or updated from Coppy. Any conflicts with local changes to the project will show up
 as git conflicts to be resolved.
+
+[Changelog]: https://github.com/level12/coppy/blob/main/changelog.md

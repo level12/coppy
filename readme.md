@@ -1,12 +1,27 @@
+# Coppy
 [![Docs <-> Wiki](https://github.com/level12/coppy/actions/workflows/docs.yaml/badge.svg)](https://github.com/level12/coppy/actions/workflows/docs.yaml)
 [![Nox](https://github.com/level12/coppy/actions/workflows/nox.yaml/badge.svg)](https://github.com/level12/coppy/actions/workflows/nox.yaml)
 
 
-# Coppy
-
 A [copier](https://copier.readthedocs.io/en/stable/) template to create a Python package.
 
 **Getting Started** & other docs are in the [GH Wiki](https://github.com/level12/coppy/wiki).
+
+
+## Template Updates
+
+[Copier], the project Coppy is built on, enables code lifecycle management for generated projects.
+That means, it's much easier to keep your project [in-sync with the upstream template] even when you
+have made changes to the template files post-generation.
+
+Before [updating] your Coppy based project, check the [Changelog] for breaking changes.  We'll do our
+best to keep them relatively minor and provide clear instructions when manual invervention is
+needed.
+
+[Copier]: https://copier.readthedocs.io
+[in-sync with the upstream template]: https://copier.readthedocs.io/en/stable/updating/
+[updating]: https://github.com/level12/coppy/wiki#updating-a-project
+[Changelog]: https://github.com/level12/coppy/blob/main/changelog.md
 
 
 ## Features
