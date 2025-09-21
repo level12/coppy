@@ -53,10 +53,15 @@ def uv_sync(session: nox.Session, *groups, project=False, extra=None):
 
     group_args = [arg for group in groups for arg in ('--group', group)]
     extra_args = ('--extra', extra) if extra else ()
+
     run_args = (
         'uv',
         'sync',
         '--active',
+        '--frozen',
+        '--exact',
+        # Use --no-default-groups instead of --only-group as the latter implies
+        # --no-install-project.
         '--no-default-groups',
         *project_args,
         *group_args,

@@ -23,4 +23,4 @@ runs:
     - name: Run Nox Session
       shell: bash
       run: |
-        uv run --frozen --only-group ${{ inputs.uv-group }} -- nox -s ${{ inputs.nox-session }}
+        uv run --frozen --exact --only-group ${{ inputs.uv-group }} -- nox -s ${{ inputs.nox-session }}

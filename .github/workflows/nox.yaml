@@ -23,7 +23,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        session: [precommit, audit]
+        session: [audit, precommit]
 
     steps:
       - uses: level12/coppy/gh-actions/nox-run@main
@@ -45,7 +45,7 @@ jobs:
         run: |
           # The script returns early after adding the current user to the new user's group.
           # This is due to the need to "logout" before the user pick's up the group's identity.
-          uv run --no-dev tasks/test-user-prep.py
+          uv run --frozen --exact --no-dev tasks/test-user-prep.py
 
 
           # Permissions for the test user operate assuming the group sticky bit.  Having acls for
@@ -64,7 +64,7 @@ jobs:
           # Run prep again, this time giving the runner user access to the group created above.
           # This is necessary because, as best I can tell, there is no way to logout and then
           # back in to give the runner access to that group.
-          sg coppy-tests -c 'uv run --no-dev  tasks/test-user-prep.py --systemd-skip'
+          sg coppy-tests -c 'uv run --frozen --exact --no-dev  tasks/test-user-prep.py --systemd-skip'
 
 
       - name: Run pytest
@@ -72,4 +72,4 @@ jobs:
           # Permissive umask to avoid group write being masked out
           umask 000
 
-          sg coppy-tests -c 'uv run --frozen --only-group nox -- nox -s pytest'
+          sg coppy-tests -c 'uv run --frozen --exact --only-group nox -- nox -s pytest'
