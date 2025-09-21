@@ -1,5 +1,5 @@
 # Docs: https://towncrier.readthedocs.io/en/stable/configuration.html
-# Exanple: https://github.com/python-attrs/attrs/blob/main/pyproject.toml#L274
+# Example: https://github.com/python-attrs/attrs/blob/main/pyproject.toml#L274
 
 [tool.towncrier]
 directory = "changelog.d"

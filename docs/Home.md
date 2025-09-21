@@ -60,7 +60,7 @@ mise bootstrap
 ## Updating a Project
 
 Before updating, check the [Changelog] for breaking changes!  We'll do our best to keep them
-relatively minor and provide clear instructions when manual invervention is needed.
+relatively minor and provide clear instructions when manual intervention is needed.
 
 To update a previously generated Coppy project to the latest version of Coppy, run:
 

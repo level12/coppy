@@ -30,7 +30,7 @@ going through mise to get access.
 
 ### Host Updates
 
-Given the frequency of releases to mive and uv, we recommend updating them frequently.  See our
+Given the frequency of releases to mise and uv, we recommend updating them frequently.  See our
 [systemd folder](https://github.com/level12/coppy/tree/main/systemd) for service and timer units
 that update these tools nightly.
 
@@ -41,7 +41,7 @@ that update these tools nightly.
  ❯ mise up
  ❯ mise reshim
 
-# Keep mise & uv Python's in-sync with:
+# Keep mise & uv Pythons in-sync with:
 
  ❯ mise sync python --uv
 

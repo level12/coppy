@@ -7,7 +7,7 @@ on:
       # immediately. Helpful if you want to make multiple updates, preview them, merge commits, etc.
       # before finally merging to master.
       - docs-preview
-      # The the above exception, doc updates will only by synced to the wiki when merged to the
+      # With the above exception, doc updates will only by synced to the wiki when merged to the
       # default branch.  Change this to your default branch name, e.g. "master"
       - main
     paths:
@@ -36,3 +36,11 @@ jobs:
         with:
           docs_path: docs
           github_token: ${{ github.token }}
+
+  sync-docs-ok:
+    runs-on: ubuntu-24.04
+    steps:
+      # We need at least one passing job or the badge will show failed when the above job is
+      # skipped, which happens after every succesful docs build when the wiki is updated.
+      - name: Docs Sync Ok
+        run: echo "docs sync ok"
