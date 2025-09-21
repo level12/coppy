@@ -51,16 +51,17 @@ def opts_init(click_func):
     click.option('--quiet', 'log_level', flag_value=LogLevel.quiet.name, help='WARN+ logging')(
         click_func,
     )
+    click.option('--debug', 'log_level', flag_value=LogLevel.debug.name, help='DEBUG+ logging')(
+        click_func,
+    )
+    # This has to be last until this is fixed: https://github.com/pallets/click/issues/3071
     click.option(
         '--info',
         'log_level',
         flag_value=LogLevel.info.name,
-        help='INFO+ logging',
+        help='INFO+ logging (default)',
         default=True,
     )(
-        click_func,
-    )
-    click.option('--debug', 'log_level', flag_value=LogLevel.debug.name, help='DEBUG+ logging')(
         click_func,
     )
 
