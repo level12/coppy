@@ -1,6 +1,6 @@
 # Coppy
-[![Docs <-> Wiki](https://github.com/level12/coppy/actions/workflows/docs.yaml/badge.svg)](https://github.com/level12/coppy/actions/workflows/docs.yaml)
 [![Nox](https://github.com/level12/coppy/actions/workflows/nox.yaml/badge.svg)](https://github.com/level12/coppy/actions/workflows/nox.yaml)
+[![Docs <-> Wiki](https://github.com/level12/coppy/actions/workflows/docs.yaml/badge.svg)](https://github.com/level12/coppy/actions/workflows/docs.yaml)
 
 
 A [copier](https://copier.readthedocs.io/en/stable/) template to create a Python package.
