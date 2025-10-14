@@ -13,9 +13,9 @@ Getting started & other docs are in the [GH Wiki](https://github.com/level12/cop
 
 ## Changelog
 
-Our [Changelog](https://github.com/level12/coppy/wiki/Changelog) is intended to be a helpful
-resource for maintainers of Coppy projects.  Make sure you review it, especially the **Breaking**
-section of each release, before upgrading to the latest Coppy template (see next section).
+Our [Changelog] is intended to be a helpful resource for maintainers of Coppy projects.  Make sure
+you review it, especially the **Breaking** section of each release, before upgrading to the latest
+Coppy template (see next section).
 
 
 ## Template Updates
@@ -24,14 +24,14 @@ section of each release, before upgrading to the latest Coppy template (see next
 That means, it's much easier to keep your project [in-sync with the upstream template] even when you
 have made changes to the template files post-generation.
 
-Before [updating] your Coppy based project, check the [Changelog] for breaking changes.  We'll do our
-best to keep them relatively minor and provide clear instructions when manual invervention is
+Before [updating] your Coppy based project, check the [Changelog] for breaking changes.  We'll do
+our best to keep them relatively minor and provide clear instructions when manual intervention is
 needed.
 
 [Copier]: https://copier.readthedocs.io
 [in-sync with the upstream template]: https://copier.readthedocs.io/en/stable/updating/
 [updating]: https://github.com/level12/coppy/wiki#updating-a-project
-[Changelog]: https://github.com/level12/coppy/blob/main/changelog.md
+[Changelog]: https://github.com/level12/coppy/wiki/Changelog
 
 
 ## Features

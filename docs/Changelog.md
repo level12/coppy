@@ -44,7 +44,7 @@
   - "tests" -> "pytest" dependency group: mostly for clarity.  While technically breaking, most
     projects won't need to manually change anything unless they've customized that group already.
   - The functions serve as a foundation for more complicated setups with multiple pytest runs,
-    potentially using different environment variables, and paramiterization.  Example of such
+    potentially using different environment variables, and parameterization.  Example of such
     usage in Webgrid's [`noxfile.py`](https://github.com/level12/webgrid/blob/master/noxfile.py).
 
 
