@@ -6,49 +6,53 @@
 
 <!-- towncrier release notes start -->
 
-## [1.20250622.1](https://github.com/level12/coppy/releases/tag/v1.20250622.1) - 2025-10-14
+## [1.20251024.1](https://github.com/level12/coppy/releases/tag/v1.20250622.1) - 2025-10-14
+
 
 ### Breaking
 
-- Moderate: Adjust mise/uv Python bootstrap mechanism and change install recommendations in docs.
-    - If using centralized venvs, ensure `~/.cache/uv-venvs/` exists.  Project venvs will now be
-      configured in that location.
+- Moderate: Adjust mise/uv Python bootstrap mechanism and change install recommendations in docs ([#56](https://github.com/level12/coppy/issues/56)).
     - The new init method which uses a custom task in the project and adjusted `mise.toml` config
       should "just work".  It's tested, but it's also new, so YMMV.
-    - Docs: we now recommend installing uv directly as the OS user and not through Mise.
-    - Remove `UV_PROJECT_ENVIRONMENT` from `~/.config/mise/config.toml` which will be a breaking
+    - If using centralized venvs:
+        - ensure `~/.cache/uv-venvs/` exists.  Project venvs will now be
+          configured in that location.
+        - Remove `UV_PROJECT_ENVIRONMENT` from `~/.config/mise/config.toml` which will be a breaking
       change for existing projects not updated to at least this version of the Coppy template.
 
-      For existing projects that aren't ready to be updated, you should add the
-      `UV_PROJECT_ENVIRONMENT` definition to a project specific `mise.local.toml` file:
+        - For existing projects that aren't ready to be updated to the latest Coppy version, you
+        should add the `UV_PROJECT_ENVIRONMENT` definition to a project specific `mise.local.toml`
+        file:
 
-        ```toml
-        [env]
-        UV_PROJECT_ENVIRONMENT = '{% if env.PROJECT_SLUG %}~/.cache/uv-venvs/{{ env.PROJECT_SLUG }}{% endif %}'
-        ```
+          ```toml
+          [env]
+          UV_PROJECT_ENVIRONMENT = '{% if env.PROJECT_SLUG %}~/.cache/uv-venvs/{{ env.PROJECT_SLUG }}{% endif %}'
+          ```
 
-        When the project updates to at least this version of the Coppy template, that definition
-        should be removed. ([#56](https://github.com/level12/coppy/issues/56))
-- Moderate: move project's tests from `./src` to `./tests`
+          When the project updates to at least this version of the Coppy template, that definition
+          should be removed.
+- Moderate: move project's tests from `./src` to `./tests` ([#75](https://github.com/level12/coppy/issues/75))
     - Advantages: test directory is top-level and more obvious, provides more flexibility if wanting
       to test a generated wheel and not the code in `./src`.  See related issue for example.
-    - Actions **required**: move `conftest.py` and your tests from `./src/` to `./tests` ([#75](https://github.com/level12/coppy/issues/75))
-- Minor: `env-config.yaml` changed HATCH_INDEX_AUTH 1password secret reference
+    - Actions **required**: move `conftest.py` and your tests from `./src/` to `./tests`
+- Minor: `env-config.yaml` changed HATCH_INDEX_AUTH 1password secret reference ([#78](https://github.com/level12/coppy/issues/78))
 
   - From: 'op://my/private/pypi.python.org/api-token'
   - To: 'op://my/private/pypi.org/api-token'
 
-  ([#78](https://github.com/level12/coppy/issues/78))
 - Minor: change python dependency group and nox session name from "tests" to pytest.  Also, enhance
-  noxfile with improved `uv_sync()` and `pytest_run()`.
-      - "tests" -> "pytest" dependency group: mostly for clarity.  While technically breaking, most
-        projects won't need to manually change anything unless they've customized that group already.
-      - The functions serve as a foundation for more complicated setups with multiple pytest runs,
-        potentially using different environment variables, and paramiterization.  Example of such
-        usage in Webgrid's [`noxfile.py`](https://github.com/level12/webgrid/blob/master/noxfile.py). ([#82](https://github.com/level12/coppy/issues/82))
+  noxfile with improved `uv_sync()` and `pytest_run()` ([#82](https://github.com/level12/coppy/issues/82)).
+
+  - "tests" -> "pytest" dependency group: mostly for clarity.  While technically breaking, most
+    projects won't need to manually change anything unless they've customized that group already.
+  - The functions serve as a foundation for more complicated setups with multiple pytest runs,
+    potentially using different environment variables, and paramiterization.  Example of such
+    usage in Webgrid's [`noxfile.py`](https://github.com/level12/webgrid/blob/master/noxfile.py).
+
 
 ### Changed
 
+- Docs: we now recommend installing uv directly as the OS user and not through Mise.
 - `.editorconfig`: move `charset = utf-8` to global as it seems like a sensible modern default. ([#68](https://github.com/level12/coppy/issues/68))
 - Remove "From Coppy" and "App Specific" from pyproject.toml dependency groups.  They didn't stay
   organized with `uv add` and aren't likely to be necessary. ([#72](https://github.com/level12/coppy/issues/72))
@@ -67,5 +71,5 @@
     - GitHub action: use separate jobs and a matrix to parallelize the runs
     - GitHub action: use Coppy's GH actions to DRY the config; drop dependency on ubuntu-mive
     - GitHub action: add codecov integration ([#82](https://github.com/level12/coppy/issues/82))
-- - Change mise task comment headers ([discussion](https://github.com/jdx/mise/discussions/6139)) ([#83](https://github.com/level12/coppy/issues/83))
+- Change mise task comment headers ([discussion](https://github.com/jdx/mise/discussions/6139)) ([#83](https://github.com/level12/coppy/issues/83))
 - Update pre-commit versions

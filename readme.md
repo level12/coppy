@@ -5,7 +5,17 @@
 
 A [copier](https://copier.readthedocs.io/en/stable/) template to create a Python package.
 
-**Getting Started** & other docs are in the [GH Wiki](https://github.com/level12/coppy/wiki).
+
+## Getting Started
+
+Getting started & other docs are in the [GH Wiki](https://github.com/level12/coppy/wiki).
+
+
+## Changelog
+
+Our [Changelog](https://github.com/level12/coppy/wiki/Changelog) is intended to be a helpful
+resource for maintainers of Coppy projects.  Make sure you review it, especially the **Breaking**
+section of each release, before upgrading to the latest Coppy template (see next section).
 
 
 ## Template Updates

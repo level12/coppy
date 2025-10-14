@@ -3,7 +3,7 @@
 
 [tool.towncrier]
 directory = "changelog.d"
-filename = "changelog.md"
+filename = "docs/Changelog.md"
 title_format = "## [{version}](https://github.com/level12/coppy/releases/tag/v{version}) - {project_date}"
 issue_format = "[#{issue}](https://github.com/level12/coppy/issues/{issue})"
 
