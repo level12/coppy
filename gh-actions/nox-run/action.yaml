@@ -11,6 +11,10 @@ inputs:
     required: false
     type: string
     default: nox
+  token:
+    type: string
+    required: false
+    default: ${{ github.token }}
 
 
 runs:
@@ -19,6 +23,7 @@ runs:
     - uses: level12/coppy/gh-actions/uv-prep@main
       with:
         python-version-file: ${{ inputs.python-version-file }}
+        token: ${{ inputs.token }}
 
     - name: Run Nox Session
       shell: bash

@@ -9,6 +9,10 @@ inputs:
     type: number
     required: false
     default: 1
+  token:
+    type: string
+    required: false
+    default: ${{ github.token }}
 
 runs:
   using: composite
@@ -17,6 +21,7 @@ runs:
       uses: actions/checkout@v4
       with:
         fetch-depth: ${{ inputs.fetch-depth }}
+        token: ${{ inputs.token }}
 
     - name: Mark repo as safe for Git
       shell: bash
