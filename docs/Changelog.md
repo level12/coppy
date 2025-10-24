@@ -4,7 +4,7 @@
 
 <!-- towncrier release notes start -->
 
-## [1.20251024.1](https://github.com/level12/coppy/releases/tag/v1.20250622.1) - 2025-10-14
+## [1.20251024.1](https://github.com/level12/coppy/releases/tag/v1.20251024.1) - 2025-10-14
 
 
 ### Breaking
