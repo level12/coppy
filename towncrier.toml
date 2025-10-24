@@ -4,8 +4,10 @@
 [tool.towncrier]
 directory = "changelog.d"
 filename = "docs/Changelog.md"
-title_format = "## [{version}](https://github.com/level12/coppy/releases/tag/v{version}) - {project_date}"
+title_format = "## [{version}](https://github.com/level12/coppy/releases/tag/v{version})"
 issue_format = "[#{issue}](https://github.com/level12/coppy/issues/{issue})"
+package = "coppy"
+package_dir = "src"
 
 [[tool.towncrier.type]]
 name = "Security"

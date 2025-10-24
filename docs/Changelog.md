@@ -4,7 +4,18 @@
 
 <!-- towncrier release notes start -->
 
-## [1.20251024.1](https://github.com/level12/coppy/releases/tag/v1.20251024.1) - 2025-10-14
+## [1.20251024.2](https://github.com/level12/coppy/releases/tag/v1.20251024.2)
+
+### Fixed
+
+- Fix nox GitHub actions permission ([#90](https://github.com/level12/coppy/issues/90))
+
+### Added
+
+- Add ignore file for pip-audit & ignore pip vulnerability
+
+
+## [1.20251024.1](https://github.com/level12/coppy/releases/tag/v1.20251024.1)
 
 
 ### Breaking
