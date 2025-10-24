@@ -20,6 +20,12 @@ inputs:
 runs:
   using: composite
   steps:
+    - name: Debug token
+      shell: bash
+      run: |
+        echo 'github token:' ${{ github.token }}
+        echo 'input token:' ${{ inputs.token }}
+
     - uses: level12/coppy/gh-actions/uv-prep@main
       with:
         python-version-file: ${{ inputs.python-version-file }}

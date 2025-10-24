@@ -17,6 +17,12 @@ inputs:
 runs:
   using: composite
   steps:
+    - name: Debug token
+      shell: bash
+      run: |
+        echo 'github token:' ${{ github.token }}
+        echo 'input token:' ${{ inputs.token }}
+
     - name: Checkout Code
       uses: actions/checkout@v4
       with:
