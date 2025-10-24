@@ -1,0 +1,5 @@
+# Add pip-audit vulnerability ids, one per line, to ignore them.
+# Comments work at the start of a line ONLY.
+
+# pip  25.2 in fallback extraction path.  No 25.3 release available yet.
+GHSA-4xh5-x5gv-qwph

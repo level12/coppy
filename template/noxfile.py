@@ -34,6 +34,7 @@ def audit(session: nox.Session):
         'pip-audit',
         '--desc',
         '--skip-editable',
+        *pip_audit_ignore_args(),
     )
 
 
@@ -107,3 +108,16 @@ def uv_sync(session: nox.Session, *groups, project=False, extra=None):
         *extra_args,
     )
     session.run(*run_args)
+
+
+def pip_audit_ignore_args() -> list | tuple:
+    ignore_fpath = package_path / 'pip-audit-ignore.txt'
+
+    if not ignore_fpath.exists():
+        return ()
+
+    vuln_ids = [
+        line for line in ignore_fpath.read_text().strip().splitlines() if not line.startswith('#')
+    ]
+
+    return [arg for vuln_id in vuln_ids for arg in ('--ignore-vuln', vuln_id)]
