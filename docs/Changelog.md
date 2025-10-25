@@ -4,6 +4,13 @@
 
 <!-- towncrier release notes start -->
 
+## [1.20251025.1](https://github.com/level12/coppy/releases/tag/v1.20251025.1)
+
+### Changed
+
+- Remove pip-audit ignore for vulnerability fixed by pip 25.3 release.  You will need to `uv sync --upgrade` to get the pip update which will then satisfy pip-audit. ([#91](https://github.com/level12/coppy/issues/91))
+
+
 ## [1.20251024.2](https://github.com/level12/coppy/releases/tag/v1.20251024.2)
 
 ### Fixed
