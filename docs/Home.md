@@ -64,8 +64,8 @@ relatively minor and provide clear instructions when manual intervention is need
 
 To update a previously generated Coppy project to the latest version of Coppy, run:
 
-* `coppy update`: for the latest tagged version in `_src` repo, OR
-* `coppy update --head`: head of primary branch in `_src` repo
+* `copier update -a .copier-answers-py.yaml --trust`: for the latest tagged version in `_src` repo, OR
+* `coppy update -a .copier-answers-py.yaml --trust --head`: head of primary branch in `_src` repo
 
 then review changes in git, modify changes if needed, and commit.
 
@@ -73,4 +73,4 @@ The update should be pretty safe and only apply changes from Coppy since the tar
 generated or updated from Coppy. Any conflicts with local changes to the project will show up
 as git conflicts to be resolved.
 
-[Changelog]: https://github.com/level12/coppy/blob/main/changelog.md
+[Changelog]: https://github.com/level12/coppy/blob/main/docs/Changelog.md
