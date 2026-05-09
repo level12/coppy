@@ -3,3 +3,4 @@
 dist
 tmp
 .venv
+AGENTS.local.md
