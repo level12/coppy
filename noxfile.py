@@ -23,10 +23,10 @@ def pytest(session: nox.Session):
 
 
 @nox.session
-def precommit(session: nox.Session):
-    uv_sync(session, 'pre-commit')
+def prek(session: nox.Session):
+    uv_sync(session)
     session.run(
-        'pre-commit',
+        'prek',
         'run',
         '--all-files',
     )

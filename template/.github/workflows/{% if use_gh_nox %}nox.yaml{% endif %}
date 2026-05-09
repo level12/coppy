@@ -22,7 +22,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        session: [audit, precommit]
+        session: [audit, prek]
 
     steps:
       - uses: level12/coppy/gh-actions/nox-run@main

@@ -54,5 +54,5 @@ needed.
 - Testing
   - Nox (tox alternative) test runner
   - [`pytest`](https://docs.pytest.org/en/stable/) with [integrated](https://pypi.org/project/pytest-cov/) code [coverage](https://coverage.readthedocs.io/)
-- pre-commit & [pre-commit-uv](https://github.com/tox-dev/pre-commit-uv) for speed
+- [prek](https://prek.j178.dev/) Git hooks
 - CI: GitHub Actions & CircleCi integration using nox

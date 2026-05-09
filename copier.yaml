@@ -1,5 +1,5 @@
 # CONFIGURATION -------------------------
-_min_copier_version: "9"
+_min_copier_version: "9.5"
 _answers_file: .copier-answers-py.yaml
 _envops:
   autoescape: false
@@ -8,6 +8,11 @@ _subdirectory: template
 _jinja_extensions:
 - copier_template_extensions.TemplateExtensionLoader
 - src/coppy_extensions.py:CoppyExtension
+_migrations:
+  - command: coppy migrate before
+    when: "{{ _stage == 'before' }}"
+  - command: coppy migrate after
+    when: "{{ _stage == 'after' }}"
 
 # PROMPT --------------------------------
 project_name:

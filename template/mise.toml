@@ -22,8 +22,8 @@ run = 'pytest --cov --cov-report=html --no-cov-on-fail'
 
 
 [tasks.upgrade-deps]
-description = 'Upgrade uv and pre-commit dependencies'
+description = 'Upgrade uv and prek dependencies'
 run = [
     'uv sync --upgrade',
-    'pre-commit autoupdate',
+    'prek auto-update',
 ]

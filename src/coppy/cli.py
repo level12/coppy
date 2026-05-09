@@ -1,7 +1,9 @@
 from pathlib import Path
+import sys
 
 import click
 
+from coppy.migrate import Migrator
 from coppy.utils import sub_run
 from coppy.version import VERSION
 
@@ -16,11 +18,23 @@ def version():
     print('coppy version:', VERSION)
 
 
+@cli.command(hidden=True)
+@click.argument('stage', type=click.Choice(('before', 'after')))
+def migrate(stage: str):
+    """Used internally by coppy"""
+    migrator = Migrator(project_dpath=Path.cwd())
+    if stage == 'before':
+        migrator.before()
+        return
+
+    migrator.after()
+
+
 @cli.command()
 @click.argument(
     'project_dpath',
     type=click.Path(path_type=Path, exists=True, file_okay=False, resolve_path=True),
-    default=Path.cwd(),
+    default=Path.cwd,
 )
 @click.option('--head', 'use_head', is_flag=True, help='Use HEAD instead of latest version tag')
 def update(project_dpath: Path, use_head: bool):
@@ -29,6 +43,8 @@ def update(project_dpath: Path, use_head: bool):
     """
     vcs_ref = ('--vcs-ref', 'HEAD') if use_head else ()
     sub_run(
+        sys.executable,
+        '-m',
         'copier',
         'update',
         '--answers-file',

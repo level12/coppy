@@ -1,0 +1,137 @@
+from pathlib import Path
+import subprocess
+
+import pytest
+import yaml
+
+from coppy import utils
+from coppy.migrate import Migrator
+from coppy.utils import sub_run
+
+from .libs import mocks
+
+
+PRE_COMMIT_CONFIG = """
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: check-yaml
+      - id: check-json
+""".lstrip()
+
+
+class TestMigrate:
+    @pytest.fixture()
+    def project_dpath(self, tmp_path: Path) -> Path:
+        return tmp_path
+
+    def test_converts_yaml_to_toml(self, project_dpath: Path):
+        self.write_pre_commit_config(project_dpath)
+
+        migrator = Migrator(project_dpath)
+        migrator.before()
+        migrator.after()
+
+        assert not (project_dpath / '.coppy-prek.toml').exists()
+        assert 'check-json' in (project_dpath / 'prek.toml').read_text()
+
+    def test_after_overwrites_templated_prek(self, project_dpath: Path):
+        self.write_pre_commit_config(project_dpath)
+
+        migrator = Migrator(project_dpath)
+        migrator.before()
+        (project_dpath / 'prek.toml').write_text('# curated template content\n')
+        migrator.after()
+
+        prek_text = (project_dpath / 'prek.toml').read_text()
+        assert 'check-json' in prek_text
+        assert 'curated template content' not in prek_text
+
+    def test_skips_when_yaml_missing(self, project_dpath: Path):
+        migrator = Migrator(project_dpath)
+        migrator.before()
+        migrator.after()
+
+        assert not (project_dpath / '.coppy-prek.toml').exists()
+        assert not (project_dpath / 'prek.toml').exists()
+
+    def test_before_raises_on_invalid_yaml(self, project_dpath: Path):
+        (project_dpath / '.pre-commit-config.yaml').write_text('repos: [\n')
+
+        with pytest.raises(subprocess.CalledProcessError):
+            Migrator(project_dpath).before()
+
+    def test_replaces_existing_pre_commit_hook(self, project_dpath: Path):
+        self.init_git_repo(project_dpath)
+        self.write_pre_commit_config(project_dpath)
+        hook_fpath = self.install_old_pre_commit_hook(project_dpath)
+
+        migrator = Migrator(project_dpath)
+        migrator.before()
+        migrator.after()
+
+        assert not (project_dpath / '.coppy-prek.toml').exists()
+        assert hook_fpath.exists()
+        assert hook_fpath.read_text()
+        assert 'old-pre-commit' not in hook_fpath.read_text()
+
+    def test_leaves_missing_hook_alone(self, project_dpath: Path):
+        self.init_git_repo(project_dpath)
+        self.write_pre_commit_config(project_dpath)
+        hook_fpath = project_dpath / '.git/hooks/pre-commit'
+
+        assert not hook_fpath.exists()
+
+        migrator = Migrator(project_dpath)
+        migrator.before()
+        migrator.after()
+
+        assert not (project_dpath / '.coppy-prek.toml').exists()
+        assert (project_dpath / 'prek.toml').exists()
+        assert not hook_fpath.exists()
+
+    def test_after_is_noop_without_converted_file(self, project_dpath: Path):
+        hook_fpath = self.install_old_pre_commit_hook(project_dpath)
+
+        with mocks.patch('coppy.migrate.sub_run') as m_sub_run:
+            Migrator(project_dpath).after()
+
+        m_sub_run.assert_not_called()
+        assert 'old-pre-commit' in hook_fpath.read_text()
+
+    def test_before_cleans_stale_temp_without_yaml(self, project_dpath: Path):
+        temp_prek_fpath = project_dpath / '.coppy-prek.toml'
+        prek_fpath = project_dpath / 'prek.toml'
+        temp_prek_fpath.write_text('stale converted content\n')
+        prek_fpath.write_text('hand curated content\n')
+
+        migrator = Migrator(project_dpath)
+        migrator.before()
+        migrator.after()
+
+        assert not temp_prek_fpath.exists()
+        assert prek_fpath.read_text() == 'hand curated content\n'
+
+    def test_copier_wires_hidden_migrate_commands(self):
+        copier_cfg = yaml.safe_load((utils.pkg_dpath / 'copier.yaml').read_text())
+
+        assert copier_cfg['_migrations'] == [
+            {'command': 'coppy migrate before', 'when': "{{ _stage == 'before' }}"},
+            {'command': 'coppy migrate after', 'when': "{{ _stage == 'after' }}"},
+        ]
+
+    def write_pre_commit_config(self, project_dpath: Path):
+        (project_dpath / '.pre-commit-config.yaml').write_text(PRE_COMMIT_CONFIG)
+
+    def init_git_repo(self, project_dpath: Path):
+        sub_run('git', 'init', cwd=project_dpath)
+        sub_run('git', 'config', 'user.name', 'Coppy Tests', cwd=project_dpath)
+        sub_run('git', 'config', 'user.email', 'coppy-tests@example.com', cwd=project_dpath)
+
+    def install_old_pre_commit_hook(self, project_dpath: Path) -> Path:
+        hook_fpath = project_dpath / '.git/hooks/pre-commit'
+        hook_fpath.parent.mkdir(parents=True, exist_ok=True)
+        hook_fpath.write_text('#!/bin/sh\necho old-pre-commit\n')
+        hook_fpath.chmod(0o755)
+        return hook_fpath

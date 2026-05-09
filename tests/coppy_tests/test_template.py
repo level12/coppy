@@ -151,25 +151,25 @@ class TestTemplateWithSandbox:
     def test_uv_project_environment(self):
         """Ensure using a non-nested venv defined by UV_PROJECT_ENVIRONMENT works"""
 
-        # Need a separate package b/c mise cache's the values in mise.toml and they don't refresh
-        # even though we change to centralized_venvs below.
-        pkg = UserPackage('template-central-venvs')
+        # Need a separate package b/c mise caches values in mise.toml and they don't refresh even
+        # though we change to centralized_venvs below. Use a unique path to avoid reusing an old
+        # centralized venv from a previous test run.
+        ident = 'template-central-venvs-' + datetime.datetime.now(datetime.UTC).strftime('%H%M%S%f')
+        pkg = UserPackage(ident)
         pkg.generate()
 
         with pkg.sandbox(centralized_venvs=True) as sb:
-            sb.mise_exec('uv', 'venv')
-
             py_ver = sb.mise_exec('python', '--version')
 
             assert sb.mise_env('VIRTUAL_ENV', 'UV_PROJECT_ENVIRONMENT') == [
-                '/home/coppy-tests/.cache/uv-venvs/template-central-venvs',
-                '/home/coppy-tests/.cache/uv-venvs/template-central-venvs',
+                f'/home/coppy-tests/.cache/uv-venvs/{ident}',
+                f'/home/coppy-tests/.cache/uv-venvs/{ident}',
             ]
 
             result = sb.mise_exec('uv', 'pip', 'freeze', stderr=True)
             assert (
                 result
-                == f'Using {py_ver} environment at: /home/coppy-tests/.cache/uv-venvs/template-central-venvs'  # noqa: E501
+                == f'Using {py_ver} environment at: /home/coppy-tests/.cache/uv-venvs/{ident}'
             )
 
     def test_tasks(self, pkg: UserPackage):

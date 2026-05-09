@@ -17,6 +17,8 @@ dependencies = [
     "colorlog>=6.9.0",
     "copier>=9.5.0",
     "copier-template-extensions>=0.3.0",
+    # Required for runtime migrations.  Not just a dev dependency.
+    "prek>=0.3.13",
 ]
 
 
@@ -27,15 +29,9 @@ coppy = 'coppy.cli:cli'
 [dependency-groups]
 dev = [
     {include-group = "pytest"},
-    {include-group = "pre-commit"},
     {include-group = "nox"},
     "ruff>=0.9.6",
     "towncrier>=25.8.0",
-]
-# Used by nox
-pre-commit = [
-    'pre-commit>=4.1.0',
-    'pre-commit-uv>=4.1.4',
 ]
 # Used by nox
 pytest = [
@@ -49,4 +45,10 @@ audit = [
 # Used by CI
 nox = [
     'nox>=2025.2.9',
+]
+
+# Used by nox
+# Kept separate from runtime so that `nox -s prek` doesn't need to install the app's deps.
+prek = [
+    'prek>=0.3.13',
 ]
