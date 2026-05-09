@@ -361,3 +361,39 @@ Agreed.
   the stale-temp cleanup path.
 - `pytest -q tests/coppy_tests/test_coppy.py tests/coppy_tests/test_migrate.py` passed
   with `15 passed`.
+
+## Phase II.4 Instruction
+
+> ❯ coppy update --head
+> Updating to template version 1.20251025.1.post5.dev0+e02fa62
+>  > Running task 1 of 2: coppy migrate before
+> Converted `/home/rsyring/projects/pre-commit-hooks/.pre-commit-config.yaml` → `/home/rsyring/projects/pre-commit-hooks/.coppy-prek.toml`
+>  > Running task 2 of 2: coppy migrate after
+> Overwriting existing hook at `.git/hooks/pre-commit`
+> prek installed at `.git/hooks/pre-commit`
+
+Above was the output from running this on a project.  I see two problems:
+
+- We don't need the full path for the "Converted ..." line.  Just show the file name.
+- There is no line showing that `.coppy-prek.toml` got saved to prek.toml.  Add that.
+
+
+## Phase II.4 Outcome
+
+- `Migrator.before()` now captures `prek util yaml-to-toml` output and emits a concise
+  CLI line using filenames only:
+  - `Converted `.pre-commit-config.yaml` → `.coppy-prek.toml``
+- `Migrator.after()` now emits an explicit line when the converted temp file becomes
+  the final project config:
+  - `Saved `.coppy-prek.toml` → `prek.toml``
+
+
+## Phase II.4 Validation Outcome
+
+- Targeted Ruff format/lint passed for `src/coppy/migrate.py` and
+  `tests/coppy_tests/test_migrate.py`.
+- Added direct tests for the Phase II.4 output behavior:
+  - `test_before_reports_relative_conversion_paths`
+  - `test_after_reports_temp_saved_to_prek`
+- `pytest -q tests/coppy_tests/test_migrate.py tests/coppy_tests/test_coppy.py`
+  passed (`17 passed`).

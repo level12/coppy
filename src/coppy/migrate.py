@@ -2,6 +2,8 @@ from dataclasses import dataclass, field
 from pathlib import Path
 import sys
 
+import click
+
 from coppy.utils import sub_run
 
 
@@ -38,12 +40,17 @@ class Migrator:
             self.temp_prek_fpath,
             self.pre_commit_config_fpath,
             cwd=self.project_dpath,
+            capture=True,
+        )
+        click.echo(
+            f'Converted `{self.pre_commit_config_fpath.name}` → `{self.temp_prek_fpath.name}`',
         )
 
     def after(self) -> None:
         converted = self.temp_prek_fpath.exists()
         if converted:
             self.temp_prek_fpath.replace(self.prek_fpath)
+            click.echo(f'Saved `{self.temp_prek_fpath.name}` → `{self.prek_fpath.name}`')
 
         if not converted:
             return

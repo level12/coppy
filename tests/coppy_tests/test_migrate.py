@@ -36,6 +36,15 @@ class TestMigrate:
         assert not (project_dpath / '.coppy-prek.toml').exists()
         assert 'check-json' in (project_dpath / 'prek.toml').read_text()
 
+    def test_before_reports_relative_conversion_paths(self, project_dpath: Path, capsys):
+        self.write_pre_commit_config(project_dpath)
+
+        Migrator(project_dpath).before()
+
+        out = capsys.readouterr().out
+        assert 'Converted `.pre-commit-config.yaml` → `.coppy-prek.toml`' in out
+        assert project_dpath.as_posix() not in out
+
     def test_after_overwrites_templated_prek(self, project_dpath: Path):
         self.write_pre_commit_config(project_dpath)
 
@@ -47,6 +56,18 @@ class TestMigrate:
         prek_text = (project_dpath / 'prek.toml').read_text()
         assert 'check-json' in prek_text
         assert 'curated template content' not in prek_text
+
+    def test_after_reports_temp_saved_to_prek(self, project_dpath: Path, capsys):
+        self.write_pre_commit_config(project_dpath)
+
+        migrator = Migrator(project_dpath)
+        migrator.before()
+        capsys.readouterr()
+
+        migrator.after()
+
+        out = capsys.readouterr().out
+        assert 'Saved `.coppy-prek.toml` → `prek.toml`' in out
 
     def test_skips_when_yaml_missing(self, project_dpath: Path):
         migrator = Migrator(project_dpath)
