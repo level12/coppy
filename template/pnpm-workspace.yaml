@@ -1,0 +1,3 @@
+# Supply-chain hardening for pnpm.
+# Require package releases to be at least 3 days old (4320 minutes).
+minimumReleaseAge: 4320

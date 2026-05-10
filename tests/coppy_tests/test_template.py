@@ -3,6 +3,7 @@ from pathlib import Path
 
 import pytest
 
+from coppy import utils
 from coppy.utils import LazyDict
 
 from .libs.sandbox import UserBox
@@ -58,6 +59,20 @@ class TestTemplateGen:
         assert gen_pkg.exists('mise.lock')
         assert gen_pkg.exists('ruff.toml')
         assert gen_pkg.exists('.copier-answers-py.yaml')
+
+    def test_supply_chain_configs(self):
+        template_expected = {
+            '.npmrc': 'min-release-age=3',
+            'pnpm-workspace.yaml': 'minimumReleaseAge: 4320',
+            'bunfig.toml': 'minimumReleaseAge = 259200',
+            '.yarnrc.yml': 'npmMinimalAgeGate: "3d"',
+            'uv.toml': 'exclude-newer = "3 days"',
+        }
+
+        assert 'exclude-newer = "3 days"' in (utils.pkg_dpath / 'uv.toml').read_text()
+
+        for rel_fpath, expected_text in template_expected.items():
+            assert expected_text in (utils.pkg_dpath / 'template' / rel_fpath).read_text()
 
     def test_ci_options(self, gen_pkg: Package, package: Package):
         # default

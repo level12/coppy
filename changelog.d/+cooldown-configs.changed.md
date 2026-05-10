@@ -1,0 +1,1 @@
+- Add project-local npm, pnpm, Bun, Yarn, and uv cooldown config files with a 3-day default for generated projects.

@@ -1,0 +1,4 @@
+# Supply-chain hardening for Bun.
+[install]
+# Require package releases to be at least 3 days old (259200 seconds).
+minimumReleaseAge = 259200
