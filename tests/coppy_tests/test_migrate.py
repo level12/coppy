@@ -29,7 +29,7 @@ class TestMigrate:
     def test_converts_yaml_to_toml(self, project_dpath: Path):
         self.write_pre_commit_config(project_dpath)
 
-        migrator = Migrator(project_dpath)
+        migrator = Migrator(project_dpath, mise_lock=False)
         migrator.before()
         migrator.after()
 
@@ -48,7 +48,7 @@ class TestMigrate:
     def test_after_overwrites_templated_prek(self, project_dpath: Path):
         self.write_pre_commit_config(project_dpath)
 
-        migrator = Migrator(project_dpath)
+        migrator = Migrator(project_dpath, mise_lock=False)
         migrator.before()
         (project_dpath / 'prek.toml').write_text('# curated template content\n')
         migrator.after()
@@ -60,7 +60,7 @@ class TestMigrate:
     def test_after_reports_temp_saved_to_prek(self, project_dpath: Path, capsys):
         self.write_pre_commit_config(project_dpath)
 
-        migrator = Migrator(project_dpath)
+        migrator = Migrator(project_dpath, mise_lock=False)
         migrator.before()
         capsys.readouterr()
 
@@ -70,7 +70,7 @@ class TestMigrate:
         assert 'Saved `.coppy-prek.toml` → `prek.toml`' in out
 
     def test_skips_when_yaml_missing(self, project_dpath: Path):
-        migrator = Migrator(project_dpath)
+        migrator = Migrator(project_dpath, mise_lock=False)
         migrator.before()
         migrator.after()
 
@@ -88,7 +88,7 @@ class TestMigrate:
         self.write_pre_commit_config(project_dpath)
         hook_fpath = self.install_old_pre_commit_hook(project_dpath)
 
-        migrator = Migrator(project_dpath)
+        migrator = Migrator(project_dpath, mise_lock=False)
         migrator.before()
         migrator.after()
 
@@ -104,7 +104,7 @@ class TestMigrate:
 
         assert not hook_fpath.exists()
 
-        migrator = Migrator(project_dpath)
+        migrator = Migrator(project_dpath, mise_lock=False)
         migrator.before()
         migrator.after()
 
@@ -116,7 +116,7 @@ class TestMigrate:
         hook_fpath = self.install_old_pre_commit_hook(project_dpath)
 
         with mocks.patch('coppy.migrate.sub_run') as m_sub_run:
-            Migrator(project_dpath).after()
+            Migrator(project_dpath, mise_lock=False).after()
 
         m_sub_run.assert_not_called()
         assert 'old-pre-commit' in hook_fpath.read_text()
@@ -127,12 +127,84 @@ class TestMigrate:
         temp_prek_fpath.write_text('stale converted content\n')
         prek_fpath.write_text('hand curated content\n')
 
-        migrator = Migrator(project_dpath)
+        migrator = Migrator(project_dpath, mise_lock=False)
         migrator.before()
         migrator.after()
 
         assert not temp_prek_fpath.exists()
         assert prek_fpath.read_text() == 'hand curated content\n'
+
+    def test_after_runs_mise_lock_when_lock_missing(self, project_dpath: Path, capsys):
+        with mocks.patch('coppy.migrate.sub_run') as m_sub_run:
+            m_sub_run.return_value = subprocess.CompletedProcess(('mise', 'lock'), 0, '', '')
+            Migrator(project_dpath).after()
+
+        m_sub_run.assert_called_once_with(
+            'mise',
+            'lock',
+            cwd=project_dpath,
+            capture=True,
+            check=False,
+        )
+        assert '`mise.lock` missing or empty; running `mise lock`' in capsys.readouterr().out
+
+    def test_after_runs_mise_lock_when_lock_blank(self, project_dpath: Path):
+        self.write_mise_lock(project_dpath, content=' \n\t')
+
+        with mocks.patch('coppy.migrate.sub_run') as m_sub_run:
+            m_sub_run.return_value = subprocess.CompletedProcess(('mise', 'lock'), 0, '', '')
+            Migrator(project_dpath).after()
+
+        m_sub_run.assert_called_once_with(
+            'mise',
+            'lock',
+            cwd=project_dpath,
+            capture=True,
+            check=False,
+        )
+
+    def test_after_skips_mise_lock_when_populated(self, project_dpath: Path):
+        self.write_mise_lock(project_dpath)
+
+        with mocks.patch('coppy.migrate.sub_run') as m_sub_run:
+            Migrator(project_dpath).after()
+
+        m_sub_run.assert_not_called()
+
+    def test_after_reports_failed_mise_lock_without_raising(self, project_dpath: Path, capsys):
+        with mocks.patch('coppy.migrate.sub_run') as m_sub_run:
+            m_sub_run.return_value = subprocess.CompletedProcess(('mise', 'lock'), 1, '', 'boom\n')
+
+            Migrator(project_dpath).after()
+
+        out = capsys.readouterr()
+        assert '`mise.lock` missing or empty; running `mise lock`' in out.out
+        assert '`mise lock` failed with exit code 1' in out.err
+        assert 'boom' in out.err
+
+    def test_after_runs_prek_install_before_failed_mise_lock(self, project_dpath: Path, capsys):
+        hook_fpath = project_dpath / '.git/hooks/pre-commit'
+        hook_fpath.parent.mkdir(parents=True, exist_ok=True)
+        hook_fpath.write_text('#!/bin/sh\n')
+        (project_dpath / '.coppy-prek.toml').write_text('repos = []\n')
+        migrator = Migrator(project_dpath)
+
+        with (
+            mocks.patch_obj(Migrator, 'pre_commit_hook_fpath', return_value=hook_fpath),
+            mocks.patch('coppy.migrate.sub_run') as m_sub_run,
+        ):
+            m_sub_run.side_effect = [
+                subprocess.CompletedProcess((migrator.python_executable, '-m', 'prek'), 0, '', ''),
+                subprocess.CompletedProcess(('mise', 'lock'), 1, '', 'boom\n'),
+            ]
+
+            migrator.after()
+
+        assert (project_dpath / 'prek.toml').exists()
+        out = capsys.readouterr()
+        assert '`mise lock` failed with exit code 1' in out.err
+        assert m_sub_run.call_args_list[0].args[1:4] == ('-m', 'prek', 'install')
+        assert m_sub_run.call_args_list[1].args == ('mise', 'lock')
 
     def test_copier_wires_hidden_migrate_commands(self):
         copier_cfg = yaml.safe_load((utils.pkg_dpath / 'copier.yaml').read_text())
@@ -144,6 +216,9 @@ class TestMigrate:
 
     def write_pre_commit_config(self, project_dpath: Path):
         (project_dpath / '.pre-commit-config.yaml').write_text(PRE_COMMIT_CONFIG)
+
+    def write_mise_lock(self, project_dpath: Path, *, content: str = 'locked\n'):
+        (project_dpath / 'mise.lock').write_text(content)
 
     def init_git_repo(self, project_dpath: Path):
         sub_run('git', 'init', cwd=project_dpath)

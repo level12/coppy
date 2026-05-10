@@ -55,6 +55,7 @@ class TestTemplateGen:
         assert toml_src.endswith('false\n')
 
     def test_static_files(self, gen_pkg: Package):
+        assert gen_pkg.exists('mise.lock')
         assert gen_pkg.exists('ruff.toml')
         assert gen_pkg.exists('.copier-answers-py.yaml')
 

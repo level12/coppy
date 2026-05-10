@@ -4,13 +4,14 @@ import sys
 
 import click
 
-from coppy.utils import sub_run
+from coppy.utils import CalledProcessError, sub_run
 
 
 @dataclass(slots=True)
 class Migrator:
     project_dpath: Path
     python_executable: str | Path = field(default_factory=lambda: sys.executable)
+    mise_lock: bool = True
 
     @property
     def pre_commit_config_fpath(self) -> Path:
@@ -23,6 +24,10 @@ class Migrator:
     @property
     def prek_fpath(self) -> Path:
         return self.project_dpath / 'prek.toml'
+
+    @property
+    def mise_lock_fpath(self) -> Path:
+        return self.project_dpath / 'mise.lock'
 
     def before(self) -> None:
         if not self.pre_commit_config_fpath.exists():
@@ -52,25 +57,45 @@ class Migrator:
             self.temp_prek_fpath.replace(self.prek_fpath)
             click.echo(f'Saved `{self.temp_prek_fpath.name}` → `{self.prek_fpath.name}`')
 
-        if not converted:
+        if converted and (hook_fpath := self.pre_commit_hook_fpath()) and hook_fpath.exists():
+            sub_run(
+                self.python_executable,
+                '-m',
+                'prek',
+                'install',
+                '-f',
+                '-t',
+                'pre-commit',
+                cwd=self.project_dpath,
+            )
+
+        if self.mise_lock:
+            self.ensure_mise_lock()
+
+    def ensure_mise_lock(self) -> None:
+        if self.mise_lock_fpath.exists() and self.mise_lock_fpath.read_text().strip():
             return
 
-        if not (hook_fpath := self.pre_commit_hook_fpath()):
+        click.echo('`mise.lock` missing or empty; running `mise lock`')
+
+        try:
+            result = sub_run(
+                'mise',
+                'lock',
+                cwd=self.project_dpath,
+                capture=True,
+                check=False,
+            )
+        except CalledProcessError as e:
+            click.echo(f'`mise lock` failed: {e}', err=True)
             return
 
-        if not hook_fpath.exists():
+        if result.returncode == 0:
             return
 
-        sub_run(
-            self.python_executable,
-            '-m',
-            'prek',
-            'install',
-            '-f',
-            '-t',
-            'pre-commit',
-            cwd=self.project_dpath,
-        )
+        click.echo(f'`mise lock` failed with exit code {result.returncode}', err=True)
+        if result.stderr:
+            click.echo(result.stderr.strip(), err=True)
 
     def pre_commit_hook_fpath(self) -> Path | None:
         result = sub_run(
