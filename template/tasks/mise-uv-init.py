@@ -4,13 +4,10 @@
 
 PURPOSE - this script, in combination with mise.toml, facilitates:
 
-- Bootstrapping and installing the Python version from pyproject.toml, which mise doesn't read.
 - Sync mise Python installs with uv Python installs so mise uses the same Python install as uv
   (not just the same version).
 - Provides for a centralized venv instead of `./venv`
     - Used automatically if `~/.cache/uv-venvs/` exists
-- Creates the project's venv before mise looks for it.
-
 
 RUN CONTEXT:
 
@@ -98,41 +95,14 @@ def sub_run(*args, env=None) -> str:
     return result.stdout.strip()
 
 
-def main(action: str):
-    assert action in ('proj-env', 'py-ver')
+def main():
+    print_log(dt.datetime.now(), 'proj-venv:', paths.project_venv())
 
-    print_log(dt.datetime.now(), 'action:', action, 'proj-venv:', paths.project_venv())
-
-    if action == 'proj-env':
-        print(paths.project_venv())
-        return
-
-    # Uv run --no-sync ensures the venv exists without syncing the packages.  The latter would be ok
-    # for the intial creation of the venv on project bootstrap but would be unexpected when mise
-    # re-runs this script periodically when it's cache of the python version expires.
-    #
-    # This also ensures that the venv exists before mise processes the venv directive
-    # "_.python.venv.path" which saves us from mise thinking the venv doesn't exist if using the
-    # shell integration which caches the venv not existing.
-    py_ver = sub_run(
-        'uv',
-        'run',
-        '--no-sync',
-        '--',
-        'python',
-        '--version',
-        env={'UV_PROJECT_ENVIRONMENT': paths.project_venv()},
-    )
-
-    # Python --version output is like "Python 3.12.11" and we just want the "3.12.11" part.
-    # NOTE: trailing space after Python is necessary!
-    py_ver = py_ver.replace('Python ', '', 1).strip()
-
-    # Sync mise & uv Python versions so that mise has all the same versions that uv has and doesn't
-    # spend time downlaoding/installing the same version that's already present locally.
+    # Sync mise & uv Python versions so that neither tool spends time downlaoding/installing the
+    # same version that's already present locally.
     sub_run('mise', '--no-config', 'sync', 'python', '--uv')
 
-    print(py_ver)
+    print(paths.project_venv().as_posix(), end='')
 
 
 if __name__ == '__main__':
