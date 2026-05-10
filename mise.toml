@@ -30,6 +30,7 @@ run = 'mise demo --update --rm-existing --head --nox'
 
 [tasks.upgrade-deps]
 description = 'Upgrade uv and prek dependencies'
+dir = "{{ config_root }}"
 run = [
     'uv sync --upgrade',
     'prek auto-update',

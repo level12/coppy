@@ -17,12 +17,15 @@ includes = [
 ################ TASKS #################
 [tasks.pytest-cov]
 description = 'Full pytest run with html coverage report'
-# .coveragerc sets directory to ./tmp/coverage-html
+# .coveragerc sets html output directory to: tmp/coverage-html
+# But coverage only looks for the rc file in the CWD, so start in proj root.
+dir = "{{ config_root }}"
 run = 'pytest --cov --cov-report=html --no-cov-on-fail'
 
 
 [tasks.upgrade-deps]
 description = 'Upgrade uv and prek dependencies'
+dir = "{{ config_root }}"
 run = [
     'uv sync --upgrade',
     'prek auto-update',
