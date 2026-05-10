@@ -6,7 +6,7 @@ inputs:
   python-version-file:
     required: false
     type: string
-    default: pyproject.toml
+    default: ""
   uv-group:
     required: false
     type: string

@@ -4,7 +4,7 @@ inputs:
   python-version-file:
     type: string
     required: false
-    default: pyproject.toml
+    default: ""
   fetch-depth:
     type: number
     required: false
@@ -14,7 +14,7 @@ runs:
   using: composite
   steps:
     - name: Checkout Code
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6
       with:
         fetch-depth: ${{ inputs.fetch-depth }}
 
@@ -22,11 +22,32 @@ runs:
       shell: bash
       run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
 
+    - name: Resolve Python version file
+      id: resolve-python-version-file
+      shell: bash
+      run: |
+        python_version_file='${{ inputs.python-version-file }}'
+
+        if [[ -z "$python_version_file" ]]; then
+          for candidate in .python-version .python-versions; do
+            if [[ -f "$candidate" ]]; then
+              python_version_file="$candidate"
+              break
+            fi
+          done
+        fi
+
+        if [[ -z "$python_version_file" ]]; then
+          python_version_file='pyproject.toml'
+        fi
+
+        echo "python-version-file=$python_version_file" >> "$GITHUB_OUTPUT"
+
     # NOTE: use GH's action to install Python b/c uv docs say it will be faster due to caching
     - name: "Set up Python"
-      uses: actions/setup-python@v5
+      uses: actions/setup-python@v6
       with:
-        python-version-file: ${{ inputs.python-version-file }}
+        python-version-file: ${{ steps.resolve-python-version-file.outputs.python-version-file }}
 
     - name: Install uv
-      uses: astral-sh/setup-uv@v6
+      uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b # v8.1.0
