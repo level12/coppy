@@ -29,12 +29,9 @@ runs:
         python_version_file='${{ inputs.python-version-file }}'
 
         if [[ -z "$python_version_file" ]]; then
-          for candidate in .python-version .python-versions; do
-            if [[ -f "$candidate" ]]; then
-              python_version_file="$candidate"
-              break
-            fi
-          done
+          if [[ -f .python-version ]]; then
+            python_version_file='.python-version'
+          fi
         fi
 
         if [[ -z "$python_version_file" ]]; then
