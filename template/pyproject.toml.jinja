@@ -11,7 +11,11 @@ name = '{{ project_name }}'
 authors = [
     {name = '{{ author_name }}', email = '{{ author_email }}'},
 ]
+{% if python_version_min == python_version -%}
 requires-python = '~={{ python_version }}.0'
+{% else -%}
+requires-python = '>={{ python_version_min }}'
+{% endif -%}
 dynamic = ['version']
 readme = 'readme.md'
 {%- if script_name %}

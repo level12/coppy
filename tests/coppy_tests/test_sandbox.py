@@ -34,6 +34,7 @@ class TestUserBox:
 
             # Mise should be using the virtualenv
             assert sb.mise_env('VIRTUAL_ENV') == [nested_venv_dpath.as_posix()]
+            assert sb.mise_env('UV_PYTHON') == [nested_venv_dpath.joinpath('bin/python').as_posix()]
 
             # And just sanity check that uv is using the same venv
             virtual_env = sb.uv_run('printenv', 'VIRTUAL_ENV')

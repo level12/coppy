@@ -45,4 +45,12 @@ This project is `coppy`.  It has it's own project config files like mise.toml .
 
 It houses a [copier](https://copier.readthedocs.io) template at `./template`.
 
-It's CRITICAL, when doing work, that you understand if the operator wants you to be changing code for `coppy` or the copier template.
+It's CRITICAL, when doing work, that you understand if the operator wants you to be changing code
+for `coppy` or the copier template.
+
+
+# Testing: copier.run_copy uses the local dirty working tree
+
+When verifying template tests: `copier.run_copy(..., vcs_ref='HEAD')` uses the local dirty working
+tree, not just committed changes. Do not blame uncommitted template changes for missing generated
+output.

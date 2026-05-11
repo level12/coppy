@@ -53,6 +53,11 @@ python_version:
   help: Python version (major.minor only)
   default: '3.13'
 
+python_version_min:
+  type: str
+  help: Minimum supported Python version (major.minor only)
+  default: '{{ python_version }}'
+
 hatch_version_tag_sign:
   type: bool
   help: Sign git commits that add version tags?

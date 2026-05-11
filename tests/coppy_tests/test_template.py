@@ -33,11 +33,21 @@ class TestTemplateGen:
         config = gen_pkg.toml_config('pyproject.toml')
 
         assert config.project.name == 'Enterprise'
+        assert config.project['requires-python'] == '~=3.13.0'
+        assert gen_pkg.read_text('.python-version').strip() == '3.13'
         assert 'scripts' not in config.project
 
         author = LazyDict(config.project.authors[0])
         assert author.name == 'Picard'
         assert author.email == 'jpicard@starfleet.space'
+
+    def test_pyproject_python_version_min(self, package: Package):
+        package.generate(python_version='3.13', python_version_min='3.12')
+
+        config = package.toml_config('pyproject.toml')
+
+        assert config.project['requires-python'] == '>=3.12'
+        assert package.read_text('.python-version').strip() == '3.13'
 
     def test_hatch_uv(self, gen_pkg: Package):
         hatch = gen_pkg.toml_config('hatch.toml')
@@ -56,6 +66,7 @@ class TestTemplateGen:
         assert toml_src.endswith('false\n')
 
     def test_static_files(self, gen_pkg: Package):
+        assert gen_pkg.exists('.python-version')
         assert gen_pkg.exists('mise.lock')
         assert gen_pkg.exists('ruff.toml')
         assert gen_pkg.exists('.copier-answers-py.yaml')
@@ -157,12 +168,14 @@ class TestTemplateWithSandbox:
         assert py_ver.startswith('Python 3.13.')
 
         # Ensure slug is set and mise is activating the virtualenv
-        venv, uv_proj_env = sb.mise_env(
+        venv, uv_proj_env, uv_python = sb.mise_env(
             'VIRTUAL_ENV',
             'UV_PROJECT_ENVIRONMENT',
+            'UV_PYTHON',
         )
         assert venv.endswith('template-with-sandbox/.venv')
         assert venv == uv_proj_env
+        assert uv_python == f'{venv}/bin/python'
 
     def test_uv_project_environment(self):
         """Ensure using a non-nested venv defined by UV_PROJECT_ENVIRONMENT works"""
@@ -176,17 +189,42 @@ class TestTemplateWithSandbox:
 
         with pkg.sandbox(centralized_venvs=True) as sb:
             py_ver = sb.mise_exec('python', '--version')
+            venv, uv_proj_env = sb.mise_env('VIRTUAL_ENV', 'UV_PROJECT_ENVIRONMENT')
+            hash_part = Path(venv).name.removeprefix(f'{ident}-')
 
-            assert sb.mise_env('VIRTUAL_ENV', 'UV_PROJECT_ENVIRONMENT') == [
-                f'/home/coppy-tests/.cache/uv-venvs/{ident}',
-                f'/home/coppy-tests/.cache/uv-venvs/{ident}',
-            ]
+            assert venv == uv_proj_env
+            assert Path(venv).parent == Path('/home/coppy-tests/.cache/uv-venvs')
+            assert Path(venv).name.startswith(f'{ident}-')
+            assert hash_part
+            assert len(hash_part) == 4
+            assert hash_part.isalnum()
+            assert hash_part == hash_part.lower()
 
             result = sb.mise_exec('uv', 'pip', 'freeze', stderr=True)
-            assert (
-                result
-                == f'Using {py_ver} environment at: /home/coppy-tests/.cache/uv-venvs/{ident}'
-            )
+            assert result == f'Using {py_ver} environment at: {venv}'
+
+    def test_uv_project_environment_hash_disabled(self):
+        ident = 'template-central-venvs-zero-' + datetime.datetime.now(datetime.UTC).strftime(
+            '%H%M%S%f',
+        )
+        pkg = UserPackage(ident)
+        pkg.generate()
+
+        mise_toml_fpath = pkg.path('mise.toml')
+        mise_toml_fpath.write_text(
+            mise_toml_fpath.read_text().replace('[env]\n', "[env]\nCOPPY_VENV_HASH_LEN = '0'\n", 1),
+        )
+
+        with pkg.sandbox(centralized_venvs=True) as sb:
+            py_ver = sb.mise_exec('python', '--version')
+            venv, uv_proj_env = sb.mise_env('VIRTUAL_ENV', 'UV_PROJECT_ENVIRONMENT')
+
+            assert venv == uv_proj_env
+            assert Path(venv).parent == Path('/home/coppy-tests/.cache/uv-venvs')
+            assert Path(venv).name == ident
+
+            result = sb.mise_exec('uv', 'pip', 'freeze', stderr=True)
+            assert result == f'Using {py_ver} environment at: {venv}'
 
     def test_tasks(self, pkg: UserPackage):
         pkg.generate(hatch_version_tag_sign=False)

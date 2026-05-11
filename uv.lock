@@ -250,6 +250,7 @@ audit = [
 dev = [
     { name = "hatch" },
     { name = "nox" },
+    { name = "prek" },
     { name = "pytest" },
     { name = "ruff" },
     { name = "towncrier" },
@@ -280,6 +281,7 @@ audit = [{ name = "pip-audit" }]
 dev = [
     { name = "hatch", specifier = ">=1.14.0" },
     { name = "nox", specifier = ">=2025.2.9" },
+    { name = "prek", specifier = ">=0.3.13" },
     { name = "pytest", specifier = ">=8.3.4" },
     { name = "ruff", specifier = ">=0.9.6" },
     { name = "towncrier", specifier = ">=25.8.0" },

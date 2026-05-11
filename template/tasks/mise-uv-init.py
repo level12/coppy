@@ -4,10 +4,14 @@
 
 PURPOSE - this script, in combination with mise.toml, facilitates:
 
-- Sync mise Python installs with uv Python installs so mise uses the same Python install as uv
-  (not just the same version).
+- Sync mise Python installs with uv Python installs so mise uses the same Python install as uv (not
+  just the same version).
 - Provides for a centralized venv instead of `./venv`
     - Used automatically if `~/.cache/uv-venvs/` exists
+    - Uses the project name + 4 char hash (by default) for the venv name.
+        - Set env var `COPPY_VENV_HASH_LEN` to an int value to change the length or "0" to turn off.
+        - COPPY_VENV_HASH_LEN can be set in mise.toml but not mise.local.toml b/c the latter gets
+          processed after this file gets ran.
 
 RUN CONTEXT:
 
@@ -31,12 +35,31 @@ MISE CACHING:
 
 import datetime as dt
 import functools
+import hashlib
 from os import environ
 from pathlib import Path
 import re
+import string
 import subprocess
 import sys
 import tempfile
+
+
+VENV_NAME_HASH_LEN = int(environ.get('COPPY_VENV_HASH_LEN', '4'))
+
+ALPHANUMERIC = string.digits + string.ascii_lowercase
+
+
+def base36_digest(value: str, length: int = 4) -> str:
+    digest = hashlib.sha256(value.encode()).digest()
+    number = int.from_bytes(digest, byteorder='big')
+
+    chars = []
+    for _ in range(length):
+        number, remainder = divmod(number, 36)
+        chars.append(ALPHANUMERIC[remainder])
+
+    return ''.join(reversed(chars))
 
 
 class paths:
@@ -46,6 +69,11 @@ class paths:
     @classmethod
     @functools.cache
     def project_slug(cls) -> str:
+        if VENV_NAME_HASH_LEN:
+            root = cls.project.resolve()
+            digest = base36_digest(str(root), length=VENV_NAME_HASH_LEN)
+            return f'{slugify(cls.project.name)}-{digest}'
+
         return slugify(cls.project.name)
 
     @classmethod
@@ -106,4 +134,4 @@ def main():
 
 
 if __name__ == '__main__':
-    main(*sys.argv[1:])
+    main()
