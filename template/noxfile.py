@@ -69,7 +69,7 @@ def pytest_run(session: nox.Session, *args, **env):
 
     session.run(
         'pytest',
-        '-ra',
+        '-rA',
         '--tb=native',
         '--strict-markers',
         '--cov',
@@ -117,7 +117,9 @@ def pip_audit_ignore_args() -> list | tuple:
         return ()
 
     vuln_ids = [
-        line for line in ignore_fpath.read_text().strip().splitlines() if not line.startswith('#')
+        line
+        for line in ignore_fpath.read_text().strip().splitlines()
+        if line.strip() and not line.startswith('#')
     ]
 
     return [arg for vuln_id in vuln_ids for arg in ('--ignore-vuln', vuln_id)]
