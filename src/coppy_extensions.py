@@ -16,7 +16,8 @@ def git_user_email() -> str:
 
 @jinja2.pass_context
 def ruff_python_version(ctx) -> str:
-    return 'py' + ctx.get('python_version').replace('.', '')
+    python_version = ctx.get('python_version_min') or ctx.get('python_version')
+    return 'py' + python_version.replace('.', '')
 
 
 def slugify(value, separator='-'):
