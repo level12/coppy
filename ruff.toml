@@ -74,6 +74,9 @@ ignore = [
 
 [lint.per-file-ignores]
 'tasks/*.py' = ['EXE003']
+# Polyglot sh/python bootstrap: the sh preamble must be the first statement, so imports
+# can't be at the top of the file.  (EXE003 already covered by the tasks/*.py glob above.)
+'tasks/mise-uv-init.py' = ['E402']
 
 
 [lint.flake8-builtins]

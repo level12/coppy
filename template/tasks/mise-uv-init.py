@@ -1,4 +1,18 @@
-#!/usr/bin/env python3
+#!/bin/sh
+# Polyglot bootstrap (valid as both /bin/sh and python).  This runs during mise's env
+# evaluation, before any venv/tool exists, so it must use a real *system* python3 and never
+# a mise/uv shim.  `#!/usr/bin/env python3` can't be used: env resolves `python3` to mise's
+# shim, which re-enters mise and exhausts process limits (os error 11).  The sh preamble
+# below re-execs this file under the first real python3 it finds (covers Linux + macOS);
+# to python the whole preamble is just an ignored string literal.
+""":"
+for _py in /usr/bin/python3 /opt/homebrew/bin/python3 /usr/local/bin/python3; do
+    [ -x "$_py" ] && exec "$_py" "$0" "$@"
+done
+echo 'mise-uv-init: no system python3 found (checked /usr/bin, Homebrew, /usr/local)' >&2
+exit 1
+"""
+
 """
 #MISE hide=true
 
