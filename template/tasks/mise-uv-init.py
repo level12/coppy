@@ -11,7 +11,7 @@ for _py in /usr/bin/python3 /opt/homebrew/bin/python3 /usr/local/bin/python3; do
 done
 echo 'mise-uv-init: no system python3 found (checked /usr/bin, Homebrew, /usr/local)' >&2
 exit 1
-"""
+":"""
 
 """
 #MISE hide=true
