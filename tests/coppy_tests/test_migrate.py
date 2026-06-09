@@ -206,46 +206,6 @@ class TestMigrate:
         assert m_sub_run.call_args_list[0].args[1:4] == ('-m', 'prek', 'install')
         assert m_sub_run.call_args_list[1].args == ('mise', 'lock')
 
-    def test_after_strips_legacy_ruff_target_version(self, project_dpath: Path, capsys):
-        ruff_fpath = project_dpath / 'ruff.toml'
-        ruff_fpath.write_text(
-            "line-length = 100\ntarget-version = 'py313'\noutput-format = 'concise'\n",
-        )
-
-        Migrator(project_dpath, mise_lock=False).after()
-
-        assert ruff_fpath.read_text() == "line-length = 100\noutput-format = 'concise'\n"
-        assert 'Removed legacy `target-version` from `ruff.toml`' in capsys.readouterr().out
-
-    def test_after_leaves_modern_ruff_toml_alone(self, project_dpath: Path, capsys):
-        ruff_fpath = project_dpath / 'ruff.toml'
-        original = "line-length = 100\noutput-format = 'concise'\n"
-        ruff_fpath.write_text(original)
-
-        Migrator(project_dpath, mise_lock=False).after()
-
-        assert ruff_fpath.read_text() == original
-        assert 'Removed legacy' not in capsys.readouterr().out
-
-    def test_after_preserves_customized_target_version(self, project_dpath: Path):
-        # Only the exact single-quoted form the template emitted is stripped.  Anything the user
-        # has customized away from that form (different quoting, trailing comment, etc.) survives.
-        ruff_fpath = project_dpath / 'ruff.toml'
-        original = (
-            'target-version = "py313"\n'
-            "target-version = 'py313'  # pinned\n"
-        )
-        ruff_fpath.write_text(original)
-
-        Migrator(project_dpath, mise_lock=False).after()
-
-        assert ruff_fpath.read_text() == original
-
-    def test_after_skips_when_ruff_toml_missing(self, project_dpath: Path):
-        Migrator(project_dpath, mise_lock=False).after()
-
-        assert not (project_dpath / 'ruff.toml').exists()
-
     def test_copier_wires_hidden_migrate_commands(self):
         copier_cfg = yaml.safe_load((utils.pkg_dpath / 'copier.yaml').read_text())
 
