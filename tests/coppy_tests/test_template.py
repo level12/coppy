@@ -1,5 +1,6 @@
 import datetime
 from pathlib import Path
+import subprocess
 
 import pytest
 
@@ -49,12 +50,14 @@ class TestTemplateGen:
         assert config.project['requires-python'] == '>=3.12'
         assert package.read_text('.python-version').strip() == '3.13'
 
-    def test_ruff_tracks_python_version_min(self, gen_pkg: Package, package: Package):
-        assert gen_pkg.toml_config('ruff.toml')['target-version'] == 'py313'
+    def test_ruff_target_version_unset(self, gen_pkg: Package, package: Package):
+        # Omit `target-version` from ruff.toml so ruff auto-derives it from `requires-python`
+        # in pyproject.toml.  Otherwise the two pins drift whenever a user later edits
+        # `requires-python` without re-running copier.
+        assert 'target-version' not in gen_pkg.toml_config('ruff.toml')
 
         package.generate(python_version='3.13', python_version_min='3.12')
-
-        assert package.toml_config('ruff.toml')['target-version'] == 'py312'
+        assert 'target-version' not in package.toml_config('ruff.toml')
 
     def test_hatch_uv(self, gen_pkg: Package):
         hatch = gen_pkg.toml_config('hatch.toml')
@@ -143,6 +146,39 @@ readme = 'readme.md'
 [dependency-groups]
 """
         assert snippet in package.read_text('pyproject.toml')
+
+
+class TestMiseUvInitPolyglot:
+    """`template/tasks/mise-uv-init.py` is a polyglot that must parse as both /bin/sh and Python.
+
+    Mise runs the script's sh preamble before any python3 shim exists, so the preamble must
+    re-exec under a real system python3 without sh choking on the trailing terminator.
+    """
+
+    @pytest.fixture(scope='class')
+    def script_fpath(self) -> Path:
+        return utils.pkg_dpath / 'template' / 'tasks' / 'mise-uv-init.py'
+
+    def test_python_compiles(self, script_fpath: Path):
+        compile(script_fpath.read_text(), str(script_fpath), 'exec')
+
+    def test_sh_preamble_syntax(self, script_fpath: Path):
+        # The preamble is delimited by the polyglot opener/closer.  An invalid closer (e.g. a
+        # bare `"""`) leaves an unterminated sh quote and fails `sh -n`.
+        lines = script_fpath.read_text().splitlines()
+        start = next(i for i, line in enumerate(lines) if line.startswith('""":"'))
+        end = next(
+            i for i, line in enumerate(lines[start + 1 :], start + 1) if line.startswith('":"""')
+        )
+        preamble = '\n'.join(lines[start : end + 1])
+
+        result = subprocess.run(
+            ['/bin/sh', '-n'],
+            input=preamble,
+            capture_output=True,
+            text=True,
+        )
+        assert result.returncode == 0, result.stderr
 
 
 class TestTemplateWithSandbox:

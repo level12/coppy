@@ -1,10 +1,17 @@
 from dataclasses import dataclass, field
 from pathlib import Path
+import re
 import sys
 
 import click
 
 from coppy.utils import CalledProcessError, sub_run
+
+
+# Matches the exact line older versions of the template emitted in ruff.toml:
+#   target-version = 'py313'
+# Stripping it lets ruff auto-derive the target from pyproject.toml's `requires-python`.
+LEGACY_RUFF_TARGET_VERSION_RE = re.compile(r"^target-version = 'py\d+'\n", re.MULTILINE)
 
 
 @dataclass(slots=True)
@@ -28,6 +35,10 @@ class Migrator:
     @property
     def mise_lock_fpath(self) -> Path:
         return self.project_dpath / 'mise.lock'
+
+    @property
+    def ruff_toml_fpath(self) -> Path:
+        return self.project_dpath / 'ruff.toml'
 
     def before(self) -> None:
         if not self.pre_commit_config_fpath.exists():
@@ -69,8 +80,25 @@ class Migrator:
                 cwd=self.project_dpath,
             )
 
+        self.strip_legacy_ruff_target_version()
+
         if self.mise_lock:
             self.ensure_mise_lock()
+
+    def strip_legacy_ruff_target_version(self) -> None:
+        if not self.ruff_toml_fpath.exists():
+            return
+
+        old_text = self.ruff_toml_fpath.read_text()
+        new_text = LEGACY_RUFF_TARGET_VERSION_RE.sub('', old_text)
+        if new_text == old_text:
+            return
+
+        self.ruff_toml_fpath.write_text(new_text)
+        click.echo(
+            'Removed legacy `target-version` from `ruff.toml`; '
+            "ruff will derive it from `pyproject.toml`'s `requires-python`",
+        )
 
     def ensure_mise_lock(self) -> None:
         if self.mise_lock_fpath.exists() and self.mise_lock_fpath.read_text().strip():
