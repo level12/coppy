@@ -17,6 +17,9 @@ Exceptions to the permission policies:
 - Ok: changes to files inside known system temporary directories like `/tmp`.
 - Ok: create/update runtime artifacts like `.pyc`
 - Ok: to make changes with uv that impact this project's venv ONLY
+- Ok: tests may create, modify, and delete test artifacts under
+  `/home/coppy-tests`.
+- Ok: test commands may execute processes as the existing `coppy-tests` user.
 
 # Conditional Instructions Index
 
