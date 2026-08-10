@@ -14,12 +14,6 @@ def git_user_email() -> str:
     return subprocess.getoutput('git config user.email').strip()
 
 
-@jinja2.pass_context
-def ruff_python_version(ctx) -> str:
-    python_version = ctx.get('python_version_min') or ctx.get('python_version')
-    return 'py' + python_version.replace('.', '')
-
-
 def slugify(value, separator='-'):
     value = unicodedata.normalize('NFKD', str(value)).encode('ascii', 'ignore').decode('ascii')
     value = re.sub(r'[^\w\s-]', '', value.lower())
@@ -42,7 +36,6 @@ class CoppyExtension(Extension):
         environment.globals['git_user_name'] = git_user_name
         environment.globals['git_user_email'] = git_user_email
         environment.globals['gh_action_badge'] = gh_action_badge
-        environment.globals['ruff_python_version'] = ruff_python_version
 
         # filters
         environment.filters['slugify'] = slugify

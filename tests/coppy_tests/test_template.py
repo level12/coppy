@@ -49,13 +49,6 @@ class TestTemplateGen:
         assert config.project['requires-python'] == '>=3.12'
         assert package.read_text('.python-version').strip() == '3.13'
 
-    def test_ruff_tracks_python_version_min(self, gen_pkg: Package, package: Package):
-        assert gen_pkg.toml_config('ruff.toml')['target-version'] == 'py313'
-
-        package.generate(python_version='3.13', python_version_min='3.12')
-
-        assert package.toml_config('ruff.toml')['target-version'] == 'py312'
-
     def test_hatchling_backend(self, gen_pkg: Package):
         config = gen_pkg.toml_config('pyproject.toml')
         hatch = gen_pkg.toml_config('hatch.toml')
