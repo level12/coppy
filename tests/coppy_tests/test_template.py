@@ -21,8 +21,9 @@ def assert_pkg_file_eq(package: Package, p_fpath, d_fpath):
 
 
 class TestTemplateGen:
+    @classmethod
     @pytest.fixture(scope='class')
-    def gen_pkg(self, tmp_path_factory):
+    def gen_pkg(cls, tmp_path_factory):
         """A package with default config"""
         temp_path: Path = tmp_path_factory.mktemp('test-py-pkg')
         gen_pkg = Package(temp_path)
@@ -152,14 +153,16 @@ class TestTemplateWithSandbox:
     config files.
     """
 
+    @classmethod
     @pytest.fixture(scope='class')
-    def pkg(self):
+    def pkg(cls):
         package = UserPackage('template-with-sandbox')
         package.generate()
         return package
 
+    @classmethod
     @pytest.fixture(scope='class')
-    def sb(self, pkg: Package):
+    def sb(cls, pkg: Package):
         with pkg.sandbox() as sb:
             yield sb
 

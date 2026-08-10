@@ -7,8 +7,9 @@ from .libs.testing import UserPackage
 
 
 class TestUserBox:
+    @classmethod
     @pytest.fixture(scope='class')
-    def package(self):
+    def package(cls):
         package = UserPackage('test-sandbox')
         package.generate()
         return package
