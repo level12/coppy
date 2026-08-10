@@ -1,7 +1,6 @@
 [build-system]
 requires = [
     'hatchling',
-    'hatch-regex-commit',
 ]
 build-backend = 'hatchling.build'
 
@@ -37,7 +36,6 @@ dev = [
 # Used by nox
 pytest = [
     'pytest>=8.3.4',
-    "hatch>=1.14.0",
 ]
 # Used by nox
 audit = [

@@ -56,21 +56,20 @@ class TestTemplateGen:
 
         assert package.toml_config('ruff.toml')['target-version'] == 'py312'
 
-    def test_hatch_uv(self, gen_pkg: Package):
+    def test_hatchling_backend(self, gen_pkg: Package):
+        config = gen_pkg.toml_config('pyproject.toml')
         hatch = gen_pkg.toml_config('hatch.toml')
-        assert hatch.envs.default.installer == 'uv'
 
-    def test_hatch_version_sign_tag(self, gen_pkg: Package, package: Package):
-        hatch = gen_pkg.toml_config('hatch.toml')
-        assert hatch.version.get('tag_sign') is None
-        toml_src = gen_pkg.path('hatch.toml').read_text()
-        assert toml_src.endswith("version.py'\n")
+        assert config['build-system']['requires'] == ['hatchling']
+        assert config['build-system']['build-backend'] == 'hatchling.build'
+        assert config.project.dynamic == ['version']
+        assert hatch.build['dev-mode-dirs'] == ['src']
+        assert hatch.version.source == 'regex'
+        assert hatch.version.path == 'src/enterprise/version.py'
 
-        package.generate(hatch_version_tag_sign=False)
-        hatch = package.toml_config('hatch.toml')
-        assert hatch.version.tag_sign is False
-        toml_src = package.path('hatch.toml').read_text()
-        assert toml_src.endswith('false\n')
+    def test_version_source(self, gen_pkg: Package):
+        assert gen_pkg.read_text('src/enterprise/__init__.py') == ''
+        assert gen_pkg.read_text('src/enterprise/version.py') == "VERSION = '0.1.0'\n"
 
     def test_static_files(self, gen_pkg: Package):
         assert gen_pkg.exists('.python-version')
@@ -166,8 +165,9 @@ class TestTemplateWithSandbox:
             yield sb
 
     def test_version(self, sb: UserBox):
-        result = sb.uv_run('hatch', 'version')
-        assert result == '0.1.0'
+        sb.mise_exec('uv', 'sync')
+        result = sb.mise('run', 'version', 'show', capture=True)
+        assert result.stdout.strip() == '0.1.0'
 
     def test_python_and_venv(self, sb: UserBox):
         # Default python version
@@ -234,8 +234,6 @@ class TestTemplateWithSandbox:
             assert result == f'Using {py_ver} environment at: {venv}'
 
     def test_tasks(self, pkg: UserPackage):
-        pkg.generate(hatch_version_tag_sign=False)
-
         # TODO: we should revisit the pkg vs sandbox isolation for a test like this that modifies
         # the package.  When the sandbox used docker, modifications in the sandbox didn't affect
         # subsequent runs because we created a new container for each sandbox and copied the
@@ -246,32 +244,48 @@ class TestTemplateWithSandbox:
             task_meta = sb.mise('tasks', '--json', json=True)
 
             assert len(task_meta) == 4
-            task_meta = sorted(task_meta, key=lambda rec: rec['name'])
+            task_meta = {rec['name']: LazyDict(rec) for rec in task_meta}
 
-            bootstrap = LazyDict(task_meta[0])
+            bootstrap = task_meta['bootstrap']
             assert bootstrap.name == 'bootstrap'
             assert bootstrap.description == 'Bootstrap project'
 
-            bump = LazyDict(task_meta[1])
-            assert bump.name == 'bump'
-            assert bump.description == 'Bump version'
+            version_task = task_meta['version']
+            assert version_task.name == 'version'
+            assert version_task.description == 'Manage version'
 
-            # Run bootstrap
+            # Prepare a minimal git repo so bump can create a commit and tag.
             assert not pkg.path_exists('.git')
-            assert not pkg.path_exists('.git/hooks/pre-commit')
-            assert not pkg.path_exists('uv.lock')
-
-            sb.mise('run', 'bootstrap')
+            sb.exec('git', 'init')
+            sb.exec('git', 'config', 'user.name', 'Coppy Tests')
+            sb.exec('git', 'config', 'user.email', 'coppy-tests@example.com')
+            sb.exec('git', 'add', '.')
+            sb.exec('git', 'commit', '-m', 'initial commit')
 
             assert pkg.path_exists('.git')
-            assert pkg.path_exists('.git/hooks/pre-commit')
-            assert pkg.path_exists('uv.lock')
+
+            # Mirror real usage: initialize the project's managed environment before running tasks.
+            sb.mise_exec('uv', 'sync')
+            assert sb.mise_exec('python', '-c', 'import click, enterprise_tasks_lib') == ''
 
             # Run bump
-            sb.mise('run', 'bump', '--no-push')
-            hatch_ver = sb.uv_run('hatch', 'version')
+            # Tests have no release signing key; exercise the environment-variable override while
+            # keeping the generated bump command's signing default unchanged.
+            sb.exec(
+                'env',
+                'COPPY_VERSION_SIGN=false',
+                sb.local_bin_dpath / 'mise',
+                'run',
+                'version',
+                'bump',
+                '--no-push',
+            )
+            result = sb.mise('run', 'version', 'show', capture=True)
+            version = result.stdout.strip()
             date_str = datetime.datetime.today().strftime(r'%Y%m%d')
-            assert hatch_ver == f'0.{date_str}.1'
+            assert version == f'0.{date_str}.1'
+            assert sb.exec_stdout('git', 'tag', '--list') == f'v{version}'
+            assert f'Release v{version}' in sb.exec_stdout('git', 'cat-file', '-p', f'v{version}')
 
     def test_script_run(self, pkg: UserPackage):
         pkg.generate(script_name='ent')

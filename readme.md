@@ -37,7 +37,7 @@ needed.
 ## Features
 
 - `pyproject.toml` package config
-    - [Hatch](https://hatch.pypa.io/latest/) build backend
+    - [Hatchling](https://hatch.pypa.io/latest/) build backend
     - [uv project](https://docs.astral.sh/uv/guides/projects/) for dependencies, etc.
 - [Ruff](https://docs.astral.sh/ruff/) linting & formatting
   - Enforce single quotes
@@ -49,7 +49,7 @@ needed.
     - Other [tools](https://mise.jdx.dev/dev-tools/) when needed (e.g. npm, Terraform)
     - Project [tasks](https://mise.jdx.dev/tasks/)
 - Versioning
-  - Date based by default (`mise bump --help`)
+  - Date based by default (`mise version bump --help`)
   - Bumping automatically commits, tags, and (by default) pushes
 - Testing
   - Nox (tox alternative) test runner

@@ -58,11 +58,6 @@ python_version_min:
   help: Minimum supported Python version (major.minor only)
   default: '{{ python_version }}'
 
-hatch_version_tag_sign:
-  type: bool
-  help: Sign git commits that add version tags?
-  default: True
-
 use_gh_nox:
     type: bool
     default: true

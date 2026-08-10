@@ -128,7 +128,7 @@ def main():
 
     # Sync mise & uv Python versions so that neither tool spends time downlaoding/installing the
     # same version that's already present locally.
-    sub_run('mise', '--no-config', 'sync', 'python', '--uv')
+    # sub_run('mise', '--no-config', 'sync', 'python', '--uv')
 
     print(paths.project_venv().as_posix(), end='')
 

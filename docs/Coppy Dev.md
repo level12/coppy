@@ -27,9 +27,9 @@ Tests use a dedicated system user to run tests isolated from the developer's mis
 
 Versions are date based. Tools:
 
-- Current version: `hatch version`
-- Bump version based on date, tag, push: `mise bump`
-   - Options: `mise bump -- --help`
+- Current version: `mise version show`
+- Bump version based on date, tag, push: `mise version bump`
+   - Options: `mise version -- --help`
 
 There is no actual "release" for this project since it only lives on GitHub and no artifacts need to
 be published. But, the most recent tag is, by default, what is used by `copier update` and `uv tool

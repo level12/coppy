@@ -3,16 +3,7 @@
 dev-mode-dirs = ['src']
 
 
-## Env: default
-[envs.default]
-installer = "uv"
-
-
 ## Version
 [version]
-source = 'regex_commit'
+source = 'regex'
 path = 'src/{{ py_module }}/version.py'
-{% if not hatch_version_tag_sign %}
-# https://github.com/frankie567/hatch-regex-commit?#version-source-options
-tag_sign = false
-{% endif -%}

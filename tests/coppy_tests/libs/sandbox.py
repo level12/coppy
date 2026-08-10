@@ -3,6 +3,7 @@ from pathlib import Path
 import shutil
 
 from coppy.utils import sub_run, sudo_run
+from coppy.version import VERSION
 
 from .os_prep import User
 from .paths import dirs, tmp_dir
@@ -92,8 +93,8 @@ class UserBox:
         pass
 
     def coppy_install(self) -> Path:
-        version = sub_run('hatch', 'version', capture=True).stdout.strip()
-        sub_run('hatch', 'build', '--clean', '--target', 'wheel')
+        version = VERSION
+        sub_run('uv', 'build', '--wheel', '--out-dir', dirs.dist)
         wheel_name = f'coppy-{version}-py3-none-any.whl'
         wheel_fpath = dirs.dist / wheel_name
 
