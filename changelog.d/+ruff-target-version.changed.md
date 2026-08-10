@@ -1,6 +1,6 @@
 Generated `ruff.toml` no longer pins `target-version`
 
-Ruff now auto-derives its target from `pyproject.toml`'s `requires-python`, so edits to the
-project's supported Python versions stay in sync with ruff without re-running copier.
+Ruff now auto-derives its target from `pyproject.toml`'s `requires-python`, so edits to
+the project's supported Python versions stay in sync with ruff without re-running copier.
 
-https://docs.astral.sh/ruff/configuration/#inferring-the-python-version
+<https://docs.astral.sh/ruff/configuration/#inferring-the-python-version>

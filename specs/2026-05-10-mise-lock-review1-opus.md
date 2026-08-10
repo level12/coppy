@@ -5,7 +5,9 @@ Scope: staged changes to `src/coppy/migrate.py`, `template/mise.lock`,
 
 Reviewer model: Claude Opus 4.7 (Augment Agent).
 
+
 ## High
+
 
 ### 1. Failure of `mise lock` aborts `prek install` (regression risk)
 
@@ -18,6 +20,7 @@ would always reinstall the prek hook when applicable; that guarantee is now lost
 Fix: move `self.ensure_mise_lock()` to the end of `after()` (after the `prek install`
 block), so a `mise lock` failure cannot regress the existing prek behavior.
 
+
 ### 2. `template/mise.lock` is not yet committed — `test_static_files` will fail
 
 `tests/coppy_tests/libs/testing.py` calls `copier.run_copy(..., vcs_ref='HEAD')`,
@@ -27,7 +30,9 @@ which generates the project from the committed tree, not the working/staged tree
 fail when run against the current working tree until the staged change is
 committed. Verify CI runs the test post‑commit, or note this expectation.
 
+
 ## Medium
+
 
 ### 3. `copier update` will likely conflict on `mise.lock`
 
@@ -46,6 +51,7 @@ Suggested fixes:
 - Or make `template/mise.lock` a no-op placeholder that is intentionally
   regenerated and document the conflict resolution.
 
+
 ### 4. Missing changelog entry
 
 The repo uses `changelog.d/` (towncrier-style); the only existing fragment is
@@ -53,6 +59,7 @@ The repo uses `changelog.d/` (towncrier-style); the only existing fragment is
 for users without a populated `mise.lock`. That is a user‑visible behavior change
 (new dependency on `mise` being on PATH at update time, network/cache implications).
 Add a changelog fragment describing it.
+
 
 ### 5. `mise` becomes a hard prerequisite for `coppy update`
 
@@ -65,9 +72,12 @@ mise‑based projects, so this is defensible, but consider:
 
 At minimum, document the new requirement in the changelog/readme.
 
+
 ## Low
 
+
 ### 6. `after()` now unconditionally invokes a real subprocess; tests work around
+
 it with manual file-writing in 7 places
 
 Adding `self.ensure_mise_lock()` to `Migrator.after()` means every test that calls
@@ -81,6 +91,7 @@ Two cleaner options:
 - Or split the mise-lock concern into its own helper invoked separately from
   `after()`, so the conversion tests do not need to know about it at all.
 
+
 ### 7. New tests don't isolate `project_dpath` from real `mise` invocation paths
 
 `test_after_runs_mise_lock_when_lock_missing` and `..._when_lock_blank` mock
@@ -90,6 +101,7 @@ assert that no real `mise.lock` ends up on disk, and they share `project_dpath`
 consider adding `assert not (project_dpath / 'mise.lock').exists()` for the
 "missing" case to make the precondition explicit.
 
+
 ### 8. `ensure_mise_lock` provides no user-visible feedback
 
 The neighboring conversion path in `after()` uses `click.echo(...)` to tell the
@@ -97,6 +109,7 @@ user what happened. `ensure_mise_lock()` runs `mise lock` silently from coppy's
 side. Consider an echo such as `Generating mise.lock...` or
 `mise.lock missing/empty; running mise lock` so the migration step is
 self-explanatory in the copier output.
+
 
 ### 9. `ensure_mise_lock` runs on every update, unconditionally
 
@@ -109,6 +122,7 @@ non‑blank lock exists," consider moving this out of `migrate.py` (which is
 semantically about migrations) into a post‑generation step or a `mise.lock.jinja`
 that runs `mise lock` itself.
 
+
 ### 10. Empty `template/mise.lock` is a load‑bearing marker
 
 Shipping an empty file purely to be overwritten by `mise lock` is fragile and
@@ -116,16 +130,19 @@ non‑obvious. A short comment in the template (e.g., a sibling note in
 `template/mise.toml` or a brief `readme`/`tasks` mention) — or generating the lock
 directly during template render — would make the intent clearer. Not a blocker.
 
+
 ### 11. No explicit test for the populated-lock skip path
 
 Add a direct test like `test_after_skips_mise_lock_when_populated` so the intended
 `exists() and read_text().strip()` skip behavior stays explicit and protected.
+
 
 ### 12. Style nit: redundant existence check
 
 `mise_lock_fpath.exists() and mise_lock_fpath.read_text().strip()` can be reduced
 to `try: ... except FileNotFoundError: ...` or `read_text(...)` guarded once. Not
 required; current form is readable.
+
 
 ## Tests — coverage gaps
 
@@ -135,6 +152,7 @@ required; current form is readable.
   `prek install` runs even when `ensure_mise_lock` would invoke `mise lock`.
 - No test asserts the `before()` path is unaffected by mise (it is not, but a
   one‑liner test would lock that in).
+
 
 ## Nits / questions
 

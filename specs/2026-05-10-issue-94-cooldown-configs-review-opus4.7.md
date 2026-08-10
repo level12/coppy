@@ -4,6 +4,7 @@ Reviewer: Augment Agent (model: Claude Opus 4.7)
 Spec: `specs/2026-05-10-issue-94-cooldown-configs.md`
 Scope: working-tree changes (staged + unstaged + untracked) for issue #94.
 
+
 ## What was reviewed
 
 - New template files: `template/.npmrc`, `template/.yarnrc.yml`,
@@ -22,7 +23,9 @@ Bun 1.3 (`install.minimumReleaseAge`, seconds), Yarn berry (`npmMinimalAgeGate`,
 duration string), uv ≥ 0.9.17 (`exclude-newer` accepts `"3 days"`). All keys,
 locations and unit conversions in the diff are correct.
 
+
 ## High-priority findings
+
 
 ### 1. New test does not exercise template generation (test quality)
 
@@ -49,6 +52,7 @@ def test_supply_chain_configs(self, gen_pkg: Package):
 That should be tracked explicitly (Open Question or follow-up issue), not
 just left implicit in spec Findings.
 
+
 ### 2. `pnpm-workspace.yaml` shipped despite spec listing it as a blocker
 
 The spec's Blockers section explicitly says: "If `pnpm-workspace.yaml` causes
@@ -65,6 +69,7 @@ docs and confirmed in pnpm issue #10008) in `template/.npmrc` and dropping
 `pnpm-workspace.yaml` would avoid the workspace-root side effect. Either
 take that path or close the blocker in the spec with an explicit decision
 before merge.
+
 
 ### 3. Repo-root `uv.toml` silently changes coppy contributor workflow
 
@@ -91,6 +96,7 @@ before merge.
   entries link the issue (e.g. `pytest-ini.changed.md` references `#96`);
   add `(#94)` for consistency.
 
+
 ### 4. Aube inclusion is unmotivated
 
 `template/aube-workspace.yaml` ships a config for a brand-new package
@@ -103,7 +109,9 @@ kept, note that aube already defaults `minimumReleaseAge` to 1440 (per its
 settings doc and `crates/aube-settings/settings.toml`), so the file is only
 overriding 1 day → 3 days; that's worth a one-line comment in the file.
 
+
 ## Medium-priority findings
+
 
 ### 5. Yarn config likely redundant against current default
 
@@ -112,6 +120,7 @@ days). For Yarn versions that include that change, our explicit `"3d"` is a
 no-op. That is harmless, but if the intent is to *guarantee* 3 days even on
 older Yarn, document it; if the intent is just to be explicit, say so in a
 file comment so the next reader doesn't wonder.
+
 
 ### 6. Cooldown-window literal duplicated across 6 places
 
@@ -126,6 +135,7 @@ truth. Acceptable for now, but worth either:
 - factoring the test's `template_expected` dict into a small fixture so
   there's one place to update test side.
 
+
 ### 7. Comment style is uneven
 
 `.npmrc` comment: "at least 3 days old" but does not annotate the unit.
@@ -134,6 +144,7 @@ window. pnpm/aube/bun comments correctly translate to "(N units)". Bring
 all six files to the same shape — one line saying what the setting does,
 one line annotating the value as "= 3 days" — for parity. Pure stylistic;
 not blocking.
+
 
 ### 8. Spec hygiene
 
@@ -147,6 +158,7 @@ not blocking.
 - Per `agent-specs.md`, keep the spec focused on decisions and outcomes;
   the per-tool unit table in Findings is fine while the configs are still
   in flight, but trim it once the code is the source of truth.
+
 
 ## Low-priority / nits (not blocking)
 
@@ -162,6 +174,7 @@ not blocking.
   utils` plus `utils.LazyDict`, but that is purely a style nit.
 - No `_exclude` change in `copier.yaml` was needed; default file selection
   picks these up. Worth a one-liner in spec Decisions for the next reader.
+
 
 ## Summary
 

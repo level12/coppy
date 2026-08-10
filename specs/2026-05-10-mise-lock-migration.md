@@ -1,3 +1,6 @@
+# Spec: Mise Lock Migration
+
+
 ## Summary
 
 - Add a blank `mise.lock` to the copier template root.
@@ -17,9 +20,12 @@
 
 - Existing generated projects may not have a root `mise.lock` yet.
 - A blank template `mise.lock` gives newly generated projects the expected file shape.
-- Existing projects still need post-update handling so the lockfile is created or repaired.
-- The current migration hook runs on every `coppy update`, so this check must stay safe and idempotent.
-- Review feedback raised follow-up questions around future copier-update conflicts, migration ordering, and version-gating.
+- Existing projects still need post-update handling so the lockfile is created or
+  repaired.
+- The current migration hook runs on every `coppy update`, so this check must stay safe
+  and idempotent.
+- Review feedback raised follow-up questions around future copier-update conflicts,
+  migration ordering, and version-gating.
 
 
 ## Decisions
@@ -32,28 +38,30 @@
 
 ## Open Questions
 
-- Should `template/mise.lock` be excluded from future `copier update` merges to avoid conflicts once users have a populated lockfile?
+- Should `template/mise.lock` be excluded from future `copier update` merges to avoid
+  conflicts once users have a populated lockfile?
 
-No.  We will never change the content of mise.lock and copier will therefore never try to update it
-during an update operation.
+No. We will never change the content of mise.lock and copier will therefore never try to
+update it during an update operation.
 
-- Should `ensure_mise_lock()` run after `prek install`, or otherwise avoid blocking existing post-migration behavior if `mise lock` fails?
+- Should `ensure_mise_lock()` run after `prek install`, or otherwise avoid blocking
+  existing post-migration behavior if `mise lock` fails?
 
-Yes. ensure_mise_lock() should run at the end of the after() logic.  If it fails, report it, but
-don't throw an exception (`check=False`).
+Yes. ensure_mise_lock() should run at the end of the after() logic. If it fails, report
+it, but don't throw an exception (`check=False`).
 
 - Should this migration be version-gated so it does not run on every future update?
 
-Nope.  We are making the migration idempotent so that it can always run and only take action
-when the action is reasonably desired.
+Nope. We are making the migration idempotent so that it can always run and only take
+action when the action is reasonably desired.
 
 
 ## Validation Outcomes
 
 - Targeted formatting/linting passed on the touched Python files.
 - Targeted tests passed:
-  - `tests/coppy_tests/test_migrate.py`
-  - `tests/coppy_tests/test_template.py`
+    - `tests/coppy_tests/test_migrate.py`
+    - `tests/coppy_tests/test_template.py`
 - Latest focused run result: `27 passed`.
 
 
@@ -66,7 +74,8 @@ This is feedback for the review1-opus.md file related to this spec:
 3. Ignore, addressed above in open questions
 4. Add a changelog entry
 5. We address this by not throwing an exception if `mise lock` fails
-6. Add a variable to Migrator(mise_lock=True).  Set it to `False` in the tests.  Remove all the pre-creates of mise.lock.
+6. Add a variable to Migrator(mise_lock=True). Set it to `False` in the tests. Remove all
+   the pre-creates of mise.lock.
 7. Pedantic, ignore
 8. Agreed, add output for the user that `mise lock` was ran
 9. Pedantic, ignore
