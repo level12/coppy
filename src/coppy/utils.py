@@ -45,7 +45,7 @@ class CalledProcessError(subprocess.CalledProcessError):
 def sub_run(
     *args,
     capture=False,
-    returns: None | Iterable[int] = None,
+    returns: Iterable[int] | None = None,
     json=False,
     **kwargs,
 ) -> subprocess.CompletedProcess:

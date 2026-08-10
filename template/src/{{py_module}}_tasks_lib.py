@@ -6,7 +6,7 @@ import subprocess
 def sub_run(
     *args,
     capture=False,
-    returns: None | Iterable[int] = None,
+    returns: Iterable[int] | None = None,
     **kwargs,
 ) -> subprocess.CompletedProcess:
     kwargs.setdefault('check', not bool(returns))
