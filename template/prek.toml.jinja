@@ -34,6 +34,17 @@ hooks = [
   { id = 'check-ruff-versions' },
 ]
 
+{% if use_rumdl -%}
+[[repos]]
+repo = 'https://github.com/rvben/rumdl-pre-commit'
+rev = 'v0.2.9'
+hooks = [
+  { id = 'rumdl-fmt' },
+  { id = 'rumdl' },
+]
+
+{% endif -%}
+
 [[repos]]
 repo = 'https://github.com/astral-sh/uv-pre-commit'
 rev = "0.12.3"

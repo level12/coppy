@@ -5,6 +5,9 @@
 # For the demo-pkg script.  Override in mise.local.toml if needed.
 _DEMO_PKG_DPATH = '~/projects/coppy-demo-pkg/'
 
+[tools]
+rumdl = 'latest'
+
 [hooks]
 enter = "uv sync"
 

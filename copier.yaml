@@ -67,3 +67,8 @@ use_circleci:
     type: bool
     default: "{% if use_gh_nox %}{% else %}true{% endif %}"
     help: CircleCI for CI?
+
+use_rumdl:
+    type: bool
+    default: true
+    help: rumdl for Markdown linting and formatting?

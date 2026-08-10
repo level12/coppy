@@ -67,6 +67,7 @@ class TestTemplateGen:
 
     def test_static_files(self, gen_pkg: Package):
         assert gen_pkg.exists('.python-version')
+        assert gen_pkg.exists('rumdl.toml')
         assert gen_pkg.exists('mise.lock')
         assert gen_pkg.exists('ruff.toml')
         assert gen_pkg.exists('.copier-answers-py.yaml')
@@ -76,6 +77,18 @@ class TestTemplateGen:
         assert mise_config.settings['python']['uv_venv_auto'] == 'create|source'
         assert 'UV_PROJECT_ENVIRONMENT' not in mise_config.get('env', {})
         assert 'UV_PYTHON' not in mise_config.get('env', {})
+
+        assert mise_config.tools.rumdl == 'latest'
+        assert 'rumdl-fmt' in gen_pkg.read_text('prek.toml')
+        assert 'rumdl' in gen_pkg.read_text('prek.toml')
+
+    def test_without_rumdl(self, package: Package):
+        package.generate(use_rumdl=False)
+
+        assert not package.exists('rumdl.toml')
+        assert 'tools' not in package.toml_config('mise.toml')
+        assert 'rumdl-fmt' not in package.read_text('prek.toml')
+        assert 'rumdl-pre-commit' not in package.read_text('prek.toml')
 
     def test_supply_chain_configs(self):
         template_expected = {

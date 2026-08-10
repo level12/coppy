@@ -1,6 +1,11 @@
 [hooks]
 enter = "uv sync"
 
+{% if use_rumdl -%}
+[tools]
+rumdl = 'latest'
+{% endif -%}
+
 
 [settings]
 # Have mise get it's Python version from .python-version.  We get two other benefits:
