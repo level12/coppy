@@ -76,6 +76,12 @@ class TestTemplateGen:
         assert gen_pkg.exists('mise.lock')
         assert gen_pkg.exists('ruff.toml')
         assert gen_pkg.exists('.copier-answers-py.yaml')
+        assert not gen_pkg.exists('tasks/mise-uv-init.py')
+
+        mise_config = gen_pkg.toml_config('mise.toml')
+        assert mise_config.settings['python']['uv_venv_auto'] == 'create|source'
+        assert 'UV_PROJECT_ENVIRONMENT' not in mise_config.get('env', {})
+        assert 'UV_PYTHON' not in mise_config.get('env', {})
 
     def test_supply_chain_configs(self):
         template_expected = {
@@ -174,64 +180,14 @@ class TestTemplateWithSandbox:
         py_ver = sb.mise_exec('python', '--version')
         assert py_ver.startswith('Python 3.13.')
 
-        # Ensure slug is set and mise is activating the virtualenv
-        venv, uv_proj_env, uv_python = sb.mise_env(
-            'VIRTUAL_ENV',
-            'UV_PROJECT_ENVIRONMENT',
-            'UV_PYTHON',
-        )
+        # Ensure mise activates uv's project environment.
+        venv = sb.mise_env('VIRTUAL_ENV')[0]
         assert venv.endswith('template-with-sandbox/.venv')
-        assert venv == uv_proj_env
-        assert uv_python == f'{venv}/bin/python'
+        assert Path(venv).is_dir()
 
-    def test_uv_project_environment(self):
-        """Ensure using a non-nested venv defined by UV_PROJECT_ENVIRONMENT works"""
-
-        # Need a separate package b/c mise caches values in mise.toml and they don't refresh even
-        # though we change to centralized_venvs below. Use a unique path to avoid reusing an old
-        # centralized venv from a previous test run.
-        ident = 'template-central-venvs-' + datetime.datetime.now(datetime.UTC).strftime('%H%M%S%f')
-        pkg = UserPackage(ident)
-        pkg.generate()
-
-        with pkg.sandbox(centralized_venvs=True) as sb:
-            py_ver = sb.mise_exec('python', '--version')
-            venv, uv_proj_env = sb.mise_env('VIRTUAL_ENV', 'UV_PROJECT_ENVIRONMENT')
-            hash_part = Path(venv).name.removeprefix(f'{ident}-')
-
-            assert venv == uv_proj_env
-            assert Path(venv).parent == Path('/home/coppy-tests/.cache/uv-venvs')
-            assert Path(venv).name.startswith(f'{ident}-')
-            assert hash_part
-            assert len(hash_part) == 4
-            assert hash_part.isalnum()
-            assert hash_part == hash_part.lower()
-
-            result = sb.mise_exec('uv', 'pip', 'freeze', stderr=True)
-            assert result == f'Using {py_ver} environment at: {venv}'
-
-    def test_uv_project_environment_hash_disabled(self):
-        ident = 'template-central-venvs-zero-' + datetime.datetime.now(datetime.UTC).strftime(
-            '%H%M%S%f',
-        )
-        pkg = UserPackage(ident)
-        pkg.generate()
-
-        mise_toml_fpath = pkg.path('mise.toml')
-        mise_toml_fpath.write_text(
-            mise_toml_fpath.read_text().replace('[env]\n', "[env]\nCOPPY_VENV_HASH_LEN = '0'\n", 1),
-        )
-
-        with pkg.sandbox(centralized_venvs=True) as sb:
-            py_ver = sb.mise_exec('python', '--version')
-            venv, uv_proj_env = sb.mise_env('VIRTUAL_ENV', 'UV_PROJECT_ENVIRONMENT')
-
-            assert venv == uv_proj_env
-            assert Path(venv).parent == Path('/home/coppy-tests/.cache/uv-venvs')
-            assert Path(venv).name == ident
-
-            result = sb.mise_exec('uv', 'pip', 'freeze', stderr=True)
-            assert result == f'Using {py_ver} environment at: {venv}'
+        # The new mise integration does not need either of the old override variables.
+        sb.mise_exec('sh', '-c', 'test -z "${UV_PROJECT_ENVIRONMENT+x}"')
+        sb.mise_exec('sh', '-c', 'test -z "${UV_PYTHON+x}"')
 
     def test_tasks(self, pkg: UserPackage):
         # TODO: we should revisit the pkg vs sandbox isolation for a test like this that modifies

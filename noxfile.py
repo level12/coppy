@@ -19,12 +19,6 @@ def pytest(session: nox.Session):
         '--strict-markers',
         'tests',
         *session.posargs,
-        # Nox sets these for uv-backed sessions, but they redirect Hatch's uv installer away from
-        # its isolated hatch-build environment.
-        env={
-            'UV_PROJECT_ENVIRONMENT': None,
-            'UV_PYTHON': None,
-        },
     )
 
 

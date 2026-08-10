@@ -1,18 +1,5 @@
 
 [env]
-
-############## PYTHON ##############
-
-# Will use a centralized venv if `~/.cache/uv-venvs` exists.  `.venv` otherwise.
-UV_PROJECT_ENVIRONMENT = "{{ exec(command='tasks/mise-uv-init.py', cache_key='uv-proj-env', cache_duration='1h') }}"
-_.python.venv.path = '{{ env.UV_PROJECT_ENVIRONMENT }}'
-_.python.venv.create = true
-
-# Configure uv to use the mise managed venv's python so that uv doesn't have to walk PATH to find
-# the bin.  That can be problematic if you have another venv or python on the path and uv finds the
-# wrong one.
-UV_PYTHON = "{{ env.UV_PROJECT_ENVIRONMENT }}/bin/python"
-
 ################ APP ################
 
 # For the demo-pkg script.  Override in mise.local.toml if needed.
@@ -26,11 +13,10 @@ enter = "uv sync"
 # Have mise get it's Python version from .python-version(s).  We get two other benefits:
 # 1) uv, apart from mise, will pick the correct python version, and `uv run` and similar can be used
 #   apart from mise.
-#     - NOTE: If you depend on UV_PROJECT_ENVIRONMENT for centralized venv, and mise sets that,
-#       this doesn't help much.  But if you are using .venv, or setting UV_PROJECT_ENVIRONMENT
-#       outside mise, it can be helpful.
 # 2) GitHub's setup-python action can be directed to the .python-version(s) file
 idiomatic_version_file_enable_tools = ["python"]
+
+python.uv_venv_auto = "create|source"
 
 
 [task_config]

@@ -54,23 +54,16 @@ that update these tools nightly.
 
 ## Virtualenv Location
 
-By default, the project's venv will be located in the project directory at `.venv`.
+By default, uv creates the project environment at `.venv`.
 
-You can use centralized virtualenvs by ensuring a cache directory exists: `~/.cache/uv-venvs/`.
-E.g.:
+[Centralized project environments](https://docs.astral.sh/uv/concepts/projects/layout/#centralized-project-environments) can be enabled with an environment variable, e.g. in your user-level mise config, typically `~/.config/mise/config.toml`:
 
+```toml
+[env]
+UV_PREVIEW_FEATURES = "centralized-project-envs"
 ```
-mkdir ~/.cache/uv-venvs/
-```
 
-Mise tasks can use a [uv shebang](https://mise.jdx.dev/mise-cookbook/python.html#uv-scripts) so they
-can function without mise being active.  But:
-
-- This won't work if using centralized virtualenvs b/c UV_PROJECT_ENVIRONMENT is activated by
-  mise.  So when the script runs, it will want to use `.venv`.
-- A workaround, until uv gets [support for centralized
-  venvs](https://github.com/astral-sh/uv/issues/1495#issuecomment-3073898354), is to symlink
-  `.venv` to the central one.
+When enabled by a developer, uv stores the environment in its cache and maintains `.venv` as a compatibility link for the project.
 
 
 ## Design Notes

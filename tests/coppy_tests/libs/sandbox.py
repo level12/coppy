@@ -23,17 +23,14 @@ class UserBox:
     home_dpath = user.home_dir()
     tmp_dpath = home_dpath / 'tmp'
     local_bin_dpath = home_dpath / '.local/bin'
-    cache_uv_venvs = home_dpath / '.cache/uv-venvs'
     sudo_PATH = f'{local_bin_dpath}:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
     pytest_tmppath = tmp_dir(tmp_dpath, 'pytest-run')
 
     def __init__(
         self,
         cwd: Path | None = None,
-        centralized_venvs: bool = False,
     ):
         self.cwd = cwd or self.home_dpath
-        self.centralized_venvs = centralized_venvs
 
     def exec(self, *args, **kwargs):
         kwargs.setdefault('cwd', self.cwd)
@@ -70,21 +67,16 @@ class UserBox:
         return result.splitlines()
 
     def __enter__(self):
-        if self.centralized_venvs:
-            self.cache_uv_venvs.mkdir(exist_ok=True, parents=True)
-        else:
-            if self.cache_uv_venvs.exists():
-                shutil.rmtree(self.cache_uv_venvs)
-
         self.mise('trust')
 
         # Help keep tests from interfering with each other
         self.mise('--no-config', 'cache', 'clear')
 
-        # Mise exec should read mise.toml which should trigger the mise-uv-init.py script which
-        # should create the virtualenv.  That's all we want to do that this point as it simulates
-        # what would happen when a dev first changes directory into a project (assuming they have
-        # the mise integrated in their shell).
+        # uv_venv_auto detects projects by their uv.lock, so perform the same initial sync required
+        # by the generated project's setup instructions before asking mise to activate the venv.
+        self.uv('sync')
+
+        # Mise exec should now read mise.toml and activate the uv-managed virtualenv.
         self.mise_exec('echo')
 
         return self

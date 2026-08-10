@@ -29,16 +29,18 @@ class TestUserBox:
         with package.sandbox() as sb:
             nested_venv_dpath = package.dpath / '.venv'
 
-            # The sandbox runs `mise exec` which should result in the creation of the venv.
+            # The sandbox runs the initial uv sync and then asks mise to activate the venv.
             assert nested_venv_dpath.exists()
 
             # Mise should be using the virtualenv
             assert sb.mise_env('VIRTUAL_ENV') == [nested_venv_dpath.as_posix()]
-            assert sb.mise_env('UV_PYTHON') == [nested_venv_dpath.joinpath('bin/python').as_posix()]
+
+            sb.mise_exec('sh', '-c', 'test -z "${UV_PROJECT_ENVIRONMENT+x}"')
+            sb.mise_exec('sh', '-c', 'test -z "${UV_PYTHON+x}"')
 
             # And just sanity check that uv is using the same venv
             virtual_env = sb.uv_run('printenv', 'VIRTUAL_ENV')
-            assert virtual_env == nested_venv_dpath.as_posix()
+            assert Path(virtual_env) == nested_venv_dpath
 
             # Ensure the python version being used is what the project's pyproject.toml called
             # for.
