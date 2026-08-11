@@ -5,6 +5,7 @@ line-length = 90
 
 [per-file-ignores]
 "changelog.d/*.md" = ["MD041"]
+"docs/*.md" = ["MD057"]
 
 
 # MD013: Line length.
