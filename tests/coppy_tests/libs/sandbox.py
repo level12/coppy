@@ -86,7 +86,7 @@ class UserBox:
 
     def coppy_install(self) -> Path:
         version = VERSION
-        sub_run('uv', 'build', '--wheel', '--out-dir', dirs.dist)
+        sub_run('uv', 'build', '--wheel', '--out-dir', dirs.dist, cwd=dirs.pkg)
         wheel_name = f'coppy-{version}-py3-none-any.whl'
         wheel_fpath = dirs.dist / wheel_name
 
