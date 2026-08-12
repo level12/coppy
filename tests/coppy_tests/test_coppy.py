@@ -4,6 +4,7 @@ import sys
 import pytest
 
 from coppy import cli as cli_mod
+from coppy import utils
 
 from .libs import mocks
 from .libs.click import CLIRunner
@@ -18,6 +19,16 @@ class TestCoppy:
         sb = UserBox()
         version = sb.exec_stdout('coppy', 'version')
         assert version.startswith('coppy version: ')
+
+    def test_pytest_config_matches_template(self):
+        boundary = '    #----------------------------------------------------------'
+        coppy_lines = (utils.pkg_dpath / 'pytest.ini').read_text().splitlines()
+        template_lines = (utils.template / 'pytest.ini').read_text().splitlines()
+
+        coppy_boundary = coppy_lines.index(boundary)
+        template_boundary = template_lines.index(boundary)
+
+        assert coppy_lines[: coppy_boundary + 1] == template_lines[: template_boundary + 1]
 
 
 @mocks.patch_obj(cli_mod, 'sub_run')

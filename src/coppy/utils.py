@@ -18,6 +18,7 @@ log = logger()
 
 src_dpath = tests_dpath = Path(__file__).parent.parent
 pkg_dpath = src_dpath.parent
+template = src_dpath.parent
 
 
 class LazyDict(containers.LazyDict):
