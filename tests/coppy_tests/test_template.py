@@ -90,19 +90,26 @@ class TestTemplateGen:
         assert 'rumdl-fmt' not in package.read_text('prek.toml')
         assert 'rumdl-pre-commit' not in package.read_text('prek.toml')
 
-    def test_supply_chain_configs(self):
+    def test_supply_chain_configs(self, gen_pkg: Package, package: Package):
         template_expected = {
             '.npmrc': 'min-release-age=3',
             'pnpm-workspace.yaml': 'minimumReleaseAge: 4320',
             'bunfig.toml': 'minimumReleaseAge = 259200',
             '.yarnrc.yml': 'npmMinimalAgeGate: "3d"',
-            'uv.toml': 'exclude-newer = "3 days"',
         }
 
         assert 'exclude-newer = "3 days"' in (utils.pkg_dpath / 'uv.toml').read_text()
+        assert 'exclude-newer = "3 days"' in gen_pkg.read_text('uv.toml')
 
         for rel_fpath, expected_text in template_expected.items():
-            assert expected_text in (utils.pkg_dpath / 'template' / rel_fpath).read_text()
+            assert expected_text in gen_pkg.read_text(rel_fpath)
+
+        package.generate(use_js_cooldown=False)
+
+        assert 'use_js_cooldown: false' in package.read_text('.copier-answers-py.yaml')
+        assert package.exists('uv.toml')
+        for rel_fpath in template_expected:
+            assert not package.exists(rel_fpath)
 
     def test_ci_options(self, gen_pkg: Package, package: Package):
         # default

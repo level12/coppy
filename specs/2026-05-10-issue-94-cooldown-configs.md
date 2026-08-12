@@ -38,11 +38,11 @@
 
 - Use a 3-day default across tools, expressed in each tool's native units.
 - Keep JS package-manager configs only in `template/`.
+- Generate JS package-manager configs by default, with a Copier option for projects that
+  have no JavaScript build to omit all four files.
 - Keep `template/pnpm-workspace.yaml`; it is the documented project-local pnpm config
   surface for `minimumReleaseAge`.
 - Keep `uv.toml` in both the repo root and `template/`.
-- Keep the interim test simple until the template files are committed and can be exercised
-  through the existing `HEAD`-based generation helper.
 - Do not add package allowlists/exclusions in this pass.
 
 
@@ -51,20 +51,9 @@
 - Should we later add trusted-package allowlists for fast-moving internal dependencies?
 
 
-## Blockers
-
-- I cannot consult Claude from this environment because no Claude integration/tool is
-  available.
-- Existing template generation tests use `copier.run_copy(..., vcs_ref='HEAD')`, so new
-  template files added in the working tree are not visible in generated-project assertions
-  until committed.
-
-
 ## Validation Outcomes
 
-- `ruff format` / `ruff check` passed on `tests/coppy_tests/test_template.py`.
-- Targeted pytest passed:
-    - `tests/coppy_tests/test_template.py::TestTemplateGen::test_supply_chain_configs`
-    - `tests/coppy_tests/test_template.py::TestTemplateGen::test_static_files`
-- `test_supply_chain_configs` is intentionally an interim source-file check until the new
-  template files are committed and visible to the existing generation helper.
+- Full `ruff format` / `ruff check` sequence passed.
+- All nine `TestTemplateGen` tests passed.
+- Generation coverage confirms the default includes all cooldown configs and opting out
+  omits the four JavaScript package-manager files while retaining `uv.toml`.

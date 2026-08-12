@@ -72,3 +72,8 @@ use_rumdl:
     type: bool
     default: true
     help: rumdl for Markdown linting and formatting?
+
+use_js_cooldown:
+    type: bool
+    default: true
+    help: Add JavaScript package-manager cooldown configs?
