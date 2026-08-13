@@ -23,7 +23,15 @@ repos:
 
 
 class TestUvVersion:
-    @pytest.mark.parametrize('uv_output', ['uv 0.9.17', 'uv 0.10.0', 'uv 1.0.0'])
+    @pytest.mark.parametrize(
+        'uv_output',
+        [
+            'uv 0.9.17',
+            'uv 0.10.0',
+            'uv 1.0.0',
+            'uv 0.12.3 (x86_64-unknown-linux-gnu)',
+        ],
+    )
     def test_supported(self, uv_output: str):
         assert UvVersion.check(uv_output) is None
 

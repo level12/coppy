@@ -10,7 +10,7 @@ from coppy.utils import CalledProcessError, sub_run
 
 class UvVersion:
     UV_MIN_VERSION = (0, 9, 17)
-    UV_VERSION_RE = re.compile(r'^uv (\d+)\.(\d+)\.(\d+)$')
+    UV_VERSION_RE = re.compile(r'^uv (\d+)\.(\d+)\.(\d+)(?: \([^)]+\))?$')
 
     @classmethod
     def check(cls, uv_output=None):
