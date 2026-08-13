@@ -85,6 +85,7 @@ class Migrator:
     def after(self) -> None:
         converted = self.temp_prek_fpath.exists()
         if converted:
+            self.add_rendered_rumdl_config()
             self.temp_prek_fpath.replace(self.prek_fpath)
             click.echo(f'Saved `{self.temp_prek_fpath.name}` → `{self.prek_fpath.name}`')
 
@@ -102,6 +103,42 @@ class Migrator:
 
         if self.mise_lock:
             self.ensure_mise_lock()
+
+    def add_rendered_rumdl_config(self) -> None:
+        """Preserve newly enabled rumdl config when the converted legacy config wins."""
+        rumdl_repo = 'https://github.com/rvben/rumdl-pre-commit'
+        uv_repo = 'https://github.com/astral-sh/uv-pre-commit'
+        rumdl_config_re = re.compile(
+            rf"""^\[\[repos\]\]\nrepo = ['"]{re.escape(rumdl_repo)}['"]\n.*?"""
+            r"""(?=^\[\[repos\]\]|\Z)""",
+            flags=re.MULTILINE | re.DOTALL,
+        )
+        uv_config_re = re.compile(
+            rf"""^(?=\[\[repos\]\]\nrepo = ['"]{re.escape(uv_repo)}['"]$)""",
+            flags=re.MULTILINE,
+        )
+
+        if not self.prek_fpath.exists():
+            return
+
+        rendered_config = self.prek_fpath.read_text()
+        converted_config = self.temp_prek_fpath.read_text()
+        if rumdl_repo not in rendered_config or rumdl_repo in converted_config:
+            return
+
+        rumdl_config_match = rumdl_config_re.search(rendered_config)
+        assert rumdl_config_match
+        rumdl_config = f'{rumdl_config_match.group().rstrip()}\n\n'
+
+        converted_config, replacements = uv_config_re.subn(
+            rumdl_config,
+            converted_config,
+            count=1,
+        )
+        if not replacements:
+            converted_config = f'{converted_config.rstrip()}\n\n{rumdl_config.rstrip()}\n'
+
+        self.temp_prek_fpath.write_text(converted_config)
 
     def ensure_mise_lock(self) -> None:
         if self.mise_lock_fpath.exists() and self.mise_lock_fpath.read_text().strip():

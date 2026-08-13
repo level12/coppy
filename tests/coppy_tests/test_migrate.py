@@ -21,6 +21,24 @@ repos:
       - id: check-json
 """.lstrip()
 
+RUMDL_CONFIG = """
+[[repos]]
+repo = 'https://github.com/rvben/rumdl-pre-commit'
+rev = 'v0.2.55'
+hooks = [
+  { id = 'rumdl' },
+]
+""".lstrip()
+
+UV_CONFIG = """
+[[repos]]
+repo = "https://github.com/astral-sh/uv-pre-commit"
+rev = "0.12.3"
+hooks = [
+  { id = "uv-lock" },
+]
+""".lstrip()
+
 
 class TestUvVersion:
     @pytest.mark.parametrize(
@@ -103,6 +121,76 @@ class TestMigrate:
         prek_text = (project_dpath / 'prek.toml').read_text()
         assert 'check-json' in prek_text
         assert 'curated template content' not in prek_text
+
+    def test_after_adds_rendered_rumdl_before_uv(self, project_dpath: Path):
+        converted_config = f"""
+[[repos]]
+repo = 'https://example.com/custom-hooks'
+
+{UV_CONFIG}
+""".lstrip()
+        self.write_prek_configs(
+            project_dpath,
+            converted=converted_config,
+            rendered=f'{RUMDL_CONFIG}\n{UV_CONFIG}',
+        )
+
+        Migrator(project_dpath, mise_lock=False).after()
+
+        prek_config = (project_dpath / 'prek.toml').read_text()
+        assert 'https://example.com/custom-hooks' in prek_config
+        assert RUMDL_CONFIG in prek_config
+        assert prek_config.index('rumdl-pre-commit') < prek_config.index('uv-pre-commit')
+
+    def test_after_appends_rendered_rumdl_without_uv(self, project_dpath: Path):
+        converted_config = """
+[[repos]]
+repo = 'https://example.com/custom-hooks'
+""".lstrip()
+        self.write_prek_configs(
+            project_dpath,
+            converted=converted_config,
+            rendered=RUMDL_CONFIG,
+        )
+
+        Migrator(project_dpath, mise_lock=False).after()
+
+        prek_config = (project_dpath / 'prek.toml').read_text()
+        assert prek_config.index('https://example.com/custom-hooks') < prek_config.index(
+            'rumdl-pre-commit',
+        )
+        assert prek_config.endswith("  { id = 'rumdl' },\n]\n")
+
+    def test_after_does_not_add_rumdl_when_not_rendered(self, project_dpath: Path):
+        converted_config = f"""
+[[repos]]
+repo = 'https://example.com/custom-hooks'
+
+{UV_CONFIG}
+""".lstrip()
+        self.write_prek_configs(
+            project_dpath,
+            converted=converted_config,
+            rendered=UV_CONFIG,
+        )
+
+        Migrator(project_dpath, mise_lock=False).after()
+
+        assert (project_dpath / 'prek.toml').read_text() == converted_config
+
+    def test_after_does_not_duplicate_converted_rumdl(self, project_dpath: Path):
+        converted_config = f'{RUMDL_CONFIG}\n{UV_CONFIG}'
+        self.write_prek_configs(
+            project_dpath,
+            converted=converted_config,
+            rendered=f'{RUMDL_CONFIG}\n{UV_CONFIG}',
+        )
+
+        Migrator(project_dpath, mise_lock=False).after()
+
+        prek_config = (project_dpath / 'prek.toml').read_text()
+        assert prek_config == converted_config
+        assert prek_config.count('rumdl-pre-commit') == 1
 
     def test_after_reports_temp_saved_to_prek(self, project_dpath: Path, capsys):
         self.write_pre_commit_config(project_dpath)
@@ -263,6 +351,10 @@ class TestMigrate:
 
     def write_pre_commit_config(self, project_dpath: Path):
         (project_dpath / '.pre-commit-config.yaml').write_text(PRE_COMMIT_CONFIG)
+
+    def write_prek_configs(self, project_dpath: Path, *, converted: str, rendered: str):
+        (project_dpath / '.coppy-prek.toml').write_text(converted)
+        (project_dpath / 'prek.toml').write_text(rendered)
 
     def write_mise_lock(self, project_dpath: Path, *, content: str = 'locked\n'):
         (project_dpath / 'mise.lock').write_text(content)
