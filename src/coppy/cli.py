@@ -3,7 +3,7 @@ import sys
 
 import click
 
-from coppy.migrate import Migrator
+from coppy.migrate import Migrator, UvVersion
 from coppy.utils import sub_run
 from coppy.version import VERSION
 
@@ -41,6 +41,10 @@ def update(project_dpath: Path, use_head: bool):
     """
     Update project from coppy template
     """
+    # Check before updating project or the user may have to manually fix the uv.toml file before
+    # their project will work again.
+    UvVersion.check()
+
     vcs_ref = ('--vcs-ref', 'HEAD') if use_head else ()
     sub_run(
         sys.executable,

@@ -1,10 +1,41 @@
 from dataclasses import dataclass, field
 from pathlib import Path
+import re
 import sys
 
 import click
 
 from coppy.utils import CalledProcessError, sub_run
+
+
+class UvVersion:
+    UV_MIN_VERSION = (0, 9, 17)
+    UV_VERSION_RE = re.compile(r'^uv (\d+)\.(\d+)\.(\d+)$')
+
+    @classmethod
+    def check(cls, uv_output=None):
+        """uv_output is only intended to ease testing"""
+
+        if uv_output is None:
+            result = sub_run('uv', '--version', capture=True)
+            uv_output = result.stdout.strip()
+
+        match = cls.UV_VERSION_RE.match(uv_output)
+        if not match:
+            raise click.ClickException(
+                f'Could not determine uv version from: {uv_output}',
+            )
+
+        version = tuple(int(part) for part in match.groups())
+        if version >= cls.UV_MIN_VERSION:
+            return
+
+        version_text = '.'.join(str(part) for part in version)
+        min_version_text = '.'.join(str(part) for part in cls.UV_MIN_VERSION)
+        raise click.ClickException(
+            f'uv {version_text} is too old for Coppy cooldown configuration; '
+            f'uv {min_version_text} or newer is required. Upgrade uv then retry `coppy update`.',
+        )
 
 
 @dataclass(slots=True)

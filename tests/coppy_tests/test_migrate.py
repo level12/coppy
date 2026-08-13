@@ -1,11 +1,12 @@
 from pathlib import Path
 import subprocess
 
+import click
 import pytest
 import yaml
 
 from coppy import utils
-from coppy.migrate import Migrator
+from coppy.migrate import Migrator, UvVersion
 from coppy.utils import sub_run
 
 from .libs import mocks
@@ -19,6 +20,44 @@ repos:
       - id: check-yaml
       - id: check-json
 """.lstrip()
+
+
+class TestUvVersion:
+    @pytest.mark.parametrize('uv_output', ['uv 0.9.17', 'uv 0.10.0', 'uv 1.0.0'])
+    def test_supported(self, uv_output: str):
+        assert UvVersion.check(uv_output) is None
+
+    def test_too_old(self):
+        with pytest.raises(click.ClickException) as exc_info:
+            UvVersion.check('uv 0.9.16')
+
+        message = exc_info.value.message
+        assert 'uv 0.9.16 is too old' in message
+        assert 'uv 0.9.17 or newer is required' in message
+        assert 'Upgrade uv then retry `coppy update`' in message
+
+    @pytest.mark.parametrize(
+        'uv_output',
+        ['unexpected output', 'uv 0.9.17-alpha.1', 'uv 0.9.17garbage'],
+    )
+    def test_unrecognized(self, uv_output: str):
+        with pytest.raises(click.ClickException) as exc_info:
+            UvVersion.check(uv_output)
+
+        assert exc_info.value.message == f'Could not determine uv version from: {uv_output}'
+
+    def test_sub_run_uv_call(self):
+        """
+        The tests above all use uv_output to bypass sub_run().
+
+        This test checks to make sure sub_run() is used to call uv correctly.
+        """
+        result = subprocess.CompletedProcess(('uv', '--version'), 0, 'uv 0.9.17\n', '')
+
+        with mocks.patch('coppy.migrate.sub_run', return_value=result) as m_sub_run:
+            UvVersion.check()
+
+        m_sub_run.assert_called_once_with('uv', '--version', capture=True)
 
 
 class TestMigrate:

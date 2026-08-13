@@ -29,6 +29,7 @@
     - Yarn: project `.yarnrc.yml` with `npmMinimalAgeGate`
     - uv: project `uv.toml` with `exclude-newer`
 - uv local config applies to project commands, but not `uv tool` commands.
+- Relative durations such as `exclude-newer = "3 days"` require uv 0.9.17 or newer.
 - Coppy itself does not need the JS package-manager cooldown files at repo root.
 - pnpm's current docs put `minimumReleaseAge` in `pnpm-workspace.yaml`; `.npmrc` is
   documented as auth/registry-only for pnpm v11.
@@ -43,6 +44,8 @@
 - Keep `template/pnpm-workspace.yaml`; it is the documented project-local pnpm config
   surface for `minimumReleaseAge`.
 - Keep `uv.toml` in both the repo root and `template/`.
+- Require `coppy update` to verify uv 0.9.17 or newer before applying the template and
+  direct users with older versions to upgrade uv.
 - Do not add package allowlists/exclusions in this pass.
 
 
@@ -55,5 +58,9 @@
 
 - Full `ruff format` / `ruff check` sequence passed.
 - All nine `TestTemplateGen` tests passed.
+- All tests in `tests/coppy_tests/test_coppy.py` passed.
 - Generation coverage confirms the default includes all cooldown configs and opting out
   omits the four JavaScript package-manager files while retaining `uv.toml`.
+- CLI integration coverage executes the real uv version check and confirms a supported
+  version reaches Copier while old or unrecognized versions return a Click error without
+  invoking Copier.

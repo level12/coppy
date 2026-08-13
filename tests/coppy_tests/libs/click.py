@@ -17,3 +17,5 @@ class CLIRunner(click.testing.CliRunner):
                 f'STDOUT: {result.stdout}\n'
                 f'STDERR: {result.stderr}',
             )
+
+        return result

@@ -65,12 +65,17 @@ mise bootstrap
 Before updating, check the [Changelog] for breaking changes! We'll do our best to keep
 them relatively minor and provide clear instructions when manual intervention is needed.
 
+Upgrade Coppy itself before running `coppy update` as newer coppy versions may have
+updates to help smooth migrations:
+
+```shell
+uv tool upgrade coppy
+```
+
 To update a previously generated Coppy project to the latest version of Coppy, run:
 
-- `copier update -a .copier-answers-py.yaml --trust`: for the latest tagged version in
-  `_src` repo, OR
-- `coppy update -a .copier-answers-py.yaml --trust --head`: head of primary branch in
-  `_src` repo
+- `coppy update`: latest tagged version from the template source stored in `_src`
+- `coppy update --head`: `HEAD` from the template source stored in `_src`
 
 then review changes in git, modify changes if needed, and commit.
 
