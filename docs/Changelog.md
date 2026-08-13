@@ -23,6 +23,7 @@ This will make your update to this version easier:
 - `rm -r .nox/` which can help with some venv issues
 - `mise run upgrade-deps` which should ensure your pre-commit is also running the latest
   uv version hook.
+    - Then commit the lock file changes
 
 
 ### Breaking
