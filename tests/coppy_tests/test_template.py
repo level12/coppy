@@ -114,7 +114,7 @@ max_line_length = 90
         package.generate(use_js_cooldown=False)
 
         assert 'use_js_cooldown: false' in package.read_text('.copier-answers-py.yaml')
-        assert package.exists('uv.toml')
+        assert 'exclude-newer = "3 days"' in package.read_text('uv.toml')
         for rel_fpath in template_expected:
             assert not package.exists(rel_fpath)
 
