@@ -1,7 +1,7 @@
 # Coppy Development
 
 - Project tasks: `mise tasks`
-- Build a demo project to test functionality: `mise demo [--help]`
+- Build a demo project to test functionality: `mise run demo-gen [-- --help]`
 - CI runs in GH Actions
 
 

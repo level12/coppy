@@ -2,7 +2,7 @@
 [env]
 ################ APP ################
 
-# For the demo-pkg script.  Override in mise.local.toml if needed.
+# For the demo-update script.  Override in mise.local.toml if needed.
 _DEMO_PKG_DPATH = '~/projects/coppy-demo-pkg/'
 
 [tools]
@@ -29,13 +29,13 @@ includes = [
 
 
 ################ TASKS #################
-[tasks.demo-pkg]
+[tasks.demo-update]
 description = "Update Coppy demo pkg"
 # The demo command will usually pick a temporary directory by default.  This instructs it to
 # use a fixed path for the demo.  That path should point to a local repo cloned from:
 # https://github.com/level12/coppy-demo/
 env = { DEMO_PKG_DPATH = '{{ env._DEMO_PKG_DPATH }}' }
-run = 'mise demo --update --rm-existing --head --nox'
+run = 'mise run demo-gen --update --rm-existing --head --nox'
 
 
 [tasks.upgrade-deps]

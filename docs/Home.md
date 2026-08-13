@@ -41,7 +41,7 @@ copier copy --trust gh:level12/coppy .../projects/some-new-pkg
 copier copy --trust .../coppy-pkg .../projects/some-new-pkg
 
 # If doing local development on coppy itself, the demo is the easiest way to generate a project
-mise demo -- --help
+mise run demo-gen -- --help
 ```
 
 The method you choose (local vs. GH) affects the `_src` value stored in the copier answers
