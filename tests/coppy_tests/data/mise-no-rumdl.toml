@@ -2,8 +2,7 @@
 enter = "uv sync"
 
 
-[tools]{% if use_rumdl %}
-rumdl = 'latest'{% endif %}
+[tools]
 
 
 [settings]
@@ -27,13 +26,13 @@ includes = [
 description = 'Full pytest run with html coverage report'
 # .coveragerc sets html output directory to: tmp/coverage-html
 # But coverage only looks for the rc file in the CWD, so start in proj root.
-dir = "{% raw %}{{ config_root }}{% endraw %}"
+dir = "{{ config_root }}"
 run = 'pytest --cov --cov-report=html --no-cov-on-fail'
 
 
 [tasks.upgrade-deps]
 description = 'Upgrade mise, uv, and prek dependencies'
-dir = "{% raw %}{{ config_root }}{% endraw %}"
+dir = "{{ config_root }}"
 run = [
     'mise lock --bump',
     'uv sync --upgrade',

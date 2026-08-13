@@ -4,6 +4,7 @@ _answers_file: .copier-answers-py.yaml
 _envops:
   autoescape: false
   keep_trailing_newline: true
+  undefined: jinja2.StrictUndefined
 _subdirectory: template
 _jinja_extensions:
 - copier_template_extensions.TemplateExtensionLoader
