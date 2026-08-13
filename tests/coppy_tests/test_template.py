@@ -122,6 +122,13 @@ class TestTemplateGen:
 """.lstrip()
         assert snippet in gen_pkg.read_text('readme.md')
 
+        # Codecov can be omitted while keeping the GitHub nox workflow
+        package.generate(use_codecov=False)
+        nox_workflow = package.read_text('.github/workflows/nox.yaml')
+        assert 'codecov' not in nox_workflow.lower()
+        assert 'id-token' not in nox_workflow
+        assert 'use_codecov: false' in package.read_text('.copier-answers-py.yaml')
+
         # No nox: the default should switch for circleci when GH is not used
         package.generate(use_gh_nox=False)
         assert not package.exists('.github/workflows/nox.yaml')

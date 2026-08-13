@@ -10,7 +10,7 @@ on:
 
 # Limit this workflow to a single run at a time per-branch to avoid wasting worker resources
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
+  group: {% raw %}${{ github.workflow }}-${{ github.ref }}{% endraw %}
   cancel-in-progress: true
 
 
@@ -27,23 +27,25 @@ jobs:
     steps:
       - uses: level12/coppy/gh-actions/nox-run@main
         with:
-          nox-session: ${{ matrix.session }}
+          nox-session: {% raw %}${{ matrix.session }}{% endraw %}
 
   # JOB
   nox-pytest:
     runs-on: ubuntu-latest
-
+{% if use_codecov %}
     # Specifying the permissions block sets anything not-specified to `none` so we have have to
     # re-specify the default read permission to be able to set the write permission.
     permissions:
       contents: read    # For actions/checkout
       id-token: write   # For codecov OIDC
+{%- endif %}
 
     steps:
       - uses: level12/coppy/gh-actions/nox-run@main
         with:
           nox-session: pytest
-
+{% if use_codecov %}
       - uses: codecov/codecov-action@v5
         with:
           use_oidc: true
+{%- endif %}
