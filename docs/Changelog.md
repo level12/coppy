@@ -15,6 +15,16 @@
 ## [1.20260812.1](https://github.com/level12/coppy/releases/tag/v1.20260812.1)
 
 
+### Before updating
+
+This will make your update to this version easier:
+
+- Update uv to the latest version. `uv self update` usually works.
+- `rm -r .nox/` which can help with some venv issues
+- `mise run upgrade-deps` which should ensure your pre-commit is also running the latest
+  uv version hook.
+
+
 ### Breaking
 
 - Add project-local npm, pnpm, Bun, Yarn, and uv cooldown config files with a 3-day
