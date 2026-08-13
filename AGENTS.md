@@ -69,3 +69,31 @@ changing code for `coppy` or the copier template.
 When verifying template tests: `copier.run_copy(..., vcs_ref='HEAD')` uses the local dirty
 working tree, not just committed changes. Do not blame uncommitted template changes for
 missing generated output.
+
+
+## Running tests that use the `coppy-tests` system user
+
+Run pytest as the normal project user from the repository root. Do **not** run pytest as
+`coppy-tests`; the test harness uses `sudo` internally to run generated-project commands
+as that user with the correct `HOME` and `PATH`.
+
+Use mise for every installed test command:
+
+```shell
+# Targeted template tests
+mise exec -- pytest tests/coppy_tests/test_template.py::TestTemplateGen
+
+# Full test suite
+mise exec -- pytest
+```
+
+The outer pytest process creates and rotates test directories and a `pytest-run-current`
+symlink under `/home/coppy-tests/tmp` during test collection. Therefore:
+
+- Run these commands with filesystem access to `/home/coppy-tests`; in a sandboxed agent
+  environment, request the required escalation for the test command.
+- A sandbox failure such as `Read-only file system: /home/coppy-tests/tmp/pytest-run-current`
+  means the outer pytest process lacks that access. Do not work around it by changing the
+  test, its paths, ownership, or permissions.
+- Do not run multiple pytest processes concurrently because they share and rotate the same
+  `/home/coppy-tests/tmp/pytest-run-*` directories.
