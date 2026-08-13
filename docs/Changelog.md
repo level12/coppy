@@ -4,6 +4,22 @@
 
 <!-- towncrier release notes start -->
 
+## [1.20260813.1](https://github.com/level12/coppy/releases/tag/v1.20260813.1)
+
+
+### Fixed
+
+- Preserve mise's `{{ config_root }}` template expressions in generated `mise.toml` files.
+  Keep `[tools]` regardless of rumdl setting.
+- Preserve the rumdl prek hook when migrating a project from pre-commit to prek.
+
+
+### Changed
+
+- Set Markdown's EditorConfig line length to 90 when rumdl is enabled, matching
+  `rumdl.toml`.
+
+
 ## [1.20260812.2](https://github.com/level12/coppy/releases/tag/v1.20260812.2)
 
 
