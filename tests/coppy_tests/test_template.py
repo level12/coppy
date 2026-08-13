@@ -86,6 +86,9 @@ max_line_length = 90
 """.lstrip()
         assert expected in gen_pkg.read_text('.editorconfig')
 
+    def test_rumdl(self, gen_pkg: Package):
+        utils.sub_run('rumdl', 'check', '.', cwd=gen_pkg.dpath)
+
     def test_without_rumdl(self, package: Package):
         package.generate(use_rumdl=False)
 
@@ -121,6 +124,7 @@ max_line_length = 90
         assert not gen_pkg.exists('.circleci/config.yml')
         snippet = """
 # Enterprise
+
 [![nox](https://github.com/starfleet/enterprise/actions/workflows/nox.yaml/badge.svg)](https://github.com/starfleet/enterprise/actions/workflows/nox.yaml)
 
 """.lstrip()
