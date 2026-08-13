@@ -78,12 +78,21 @@ class TestTemplateGen:
     def test_mise(self, gen_pkg: Package):
         assert_pkg_file_eq(gen_pkg, 'mise.toml', 'mise.toml')
 
+    def test_editorconfig_rumdl(self, gen_pkg: Package):
+        expected = """
+[*.md]
+# Match the line length setting in rumdl.toml.
+max_line_length = 90
+""".lstrip()
+        assert expected in gen_pkg.read_text('.editorconfig')
+
     def test_without_rumdl(self, package: Package):
         package.generate(use_rumdl=False)
 
         assert not package.exists('rumdl.toml')
         assert_pkg_file_eq(package, 'mise.toml', 'mise-no-rumdl.toml')
         assert 'rumdl' not in package.read_text('prek.toml')
+        assert 'max_line_length' not in package.read_text('.editorconfig')
 
     def test_supply_chain_configs(self, gen_pkg: Package, package: Package):
         template_expected = {

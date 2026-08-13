@@ -30,6 +30,13 @@ trim_trailing_whitespace = true
 indent_size = 2
 
 
+{% if use_rumdl -%}
+[*.md]
+# Match the line length setting in rumdl.toml.
+max_line_length = 90
+
+
+{% endif -%}
 [Makefile]
 # Makefiles *must* use tabs!
 indent_style = tab
