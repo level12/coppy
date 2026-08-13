@@ -7,8 +7,6 @@ Mise is used for at least:
 - [Tasks]: scripts used to manage the project that, usually, need the project's tooling
   and/or environment setup to function correctly
 
-[uv]: https://docs.astral.sh/uv/
-[mise]: https://mise.jdx.dev/
 [tools]: https://mise.jdx.dev/dev-tools/
 [tasks]: https://mise.jdx.dev/tasks/
 [venv activation]: (<https://mise.jdx.dev/lang/python.html#automatic-virtualenv-activation>)

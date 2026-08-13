@@ -44,7 +44,8 @@ Exceptions to the permission policies:
 ## System Commands
 
 - Use ripgrep `/usr/bin/rg` instead of `grep` because it's faster
-- Anything installed through mise you will have to run with `mise exec -- ...`
+- `__MISE_SESSION` doesn't indicate mise is active for you. You ALWAYS have to run mise
+  tools through `mise exec`
 
 
 ## File paths prefer dashes

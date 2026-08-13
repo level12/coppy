@@ -1,5 +1,3 @@
-# Documentation
-
 All our docs are here in the GH wiki. See the nav `-->` for additional documentation.
 
 

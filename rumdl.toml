@@ -5,7 +5,9 @@ line-length = 90
 
 [per-file-ignores]
 "changelog.d/*.md" = ["MD041"]
-"docs/*.md" = ["MD057"]
+# MD041 - require H1 heading
+# MD057 - Relative links should point to existing files due to wiki/... links
+"docs/*.md" = ["MD041", "MD057"]
 
 
 # MD013: Line length.
