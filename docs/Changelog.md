@@ -15,7 +15,7 @@
 ## [1.20260812.1](https://github.com/level12/coppy/releases/tag/v1.20260812.1)
 
 
-### Before updating
+### Before (and after) updating
 
 This will make your update to this version easier:
 
@@ -24,6 +24,8 @@ This will make your update to this version easier:
 - `mise run upgrade-deps` which should ensure your pre-commit is also running the latest
   uv version hook.
     - Then commit the lock file changes
+
+After running `coppy update`, run `uv sync`.
 
 
 ### Breaking
