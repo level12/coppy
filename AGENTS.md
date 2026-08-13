@@ -92,8 +92,9 @@ symlink under `/home/coppy-tests/tmp` during test collection. Therefore:
 
 - Run these commands with filesystem access to `/home/coppy-tests`; in a sandboxed agent
   environment, request the required escalation for the test command.
-- A sandbox failure such as `Read-only file system: /home/coppy-tests/tmp/pytest-run-current`
-  means the outer pytest process lacks that access. Do not work around it by changing the
-  test, its paths, ownership, or permissions.
+- A sandbox failure such as
+  `Read-only file system: /home/coppy-tests/tmp/pytest-run-current` means the outer pytest
+  process lacks that access. Do not work around it by changing the test, its paths,
+  ownership, or permissions.
 - Do not run multiple pytest processes concurrently because they share and rotate the same
   `/home/coppy-tests/tmp/pytest-run-*` directories.

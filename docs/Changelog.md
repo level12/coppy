@@ -4,6 +4,14 @@
 
 <!-- towncrier release notes start -->
 
+## [1.20260812.2](https://github.com/level12/coppy/releases/tag/v1.20260812.2)
+
+
+### Changed
+
+- Switch the rumdl prek hook to check Markdown without formatting it.
+
+
 ## [1.20260812.1](https://github.com/level12/coppy/releases/tag/v1.20260812.1)
 
 
