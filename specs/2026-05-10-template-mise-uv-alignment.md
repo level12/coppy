@@ -71,16 +71,16 @@
 
 1. Add `python_version_min` to `copier.yaml`, defaulting to `python_version`.
 2. Update `template/pyproject.toml.jinja` so `requires-python` renders:
-   - `~={{ python_version }}.0` when `python_version_min == python_version`
-   - `>={{ python_version_min }}` when they differ
+    - `~={{ python_version }}.0` when `python_version_min == python_version`
+    - `>={{ python_version_min }}` when they differ
 3. Add `template/.python-version.jinja` with `{{ python_version }}`.
 4. Update `template/mise.toml` to:
-   - call `tasks/mise-uv-init.py` without subcommands
-   - set `_.python.venv.create = true`
-   - set `UV_PYTHON = "{{ env.UV_PROJECT_ENVIRONMENT }}/bin/python"`
-   - add `[hooks] enter = "uv sync"`
-   - add `[settings] idiomatic_version_file_enable_tools = ["python"]`
-   - remove `[tools].python`
+    - call `tasks/mise-uv-init.py` without subcommands
+    - set `_.python.venv.create = true`
+    - set `UV_PYTHON = "{{ env.UV_PROJECT_ENVIRONMENT }}/bin/python"`
+    - add `[hooks] enter = "uv sync"`
+    - add `[settings] idiomatic_version_file_enable_tools = ["python"]`
+    - remove `[tools].python`
 5. Carry forward the staged `template/tasks/mise-uv-init.py` change that appends a short
    hash to centralized venv names and supports `COPPY_VENV_HASH_LEN`.
 6. Update template tests to cover both `requires-python` render paths and assert generated

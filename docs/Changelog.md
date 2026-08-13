@@ -150,8 +150,8 @@
 
         - For existing projects that aren't ready to be updated to the latest Coppy
           version, you
-  should add the `UV_PROJECT_ENVIRONMENT` definition to a project specific `mise.local.toml`
-  file:
+  should add the `UV_PROJECT_ENVIRONMENT` definition to a project specific
+  `mise.local.toml` file:
 
           ```toml
           [env]

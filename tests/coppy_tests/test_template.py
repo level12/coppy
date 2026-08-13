@@ -79,16 +79,14 @@ class TestTemplateGen:
         assert 'UV_PYTHON' not in mise_config.get('env', {})
 
         assert mise_config.tools.rumdl == 'latest'
-        assert 'rumdl-fmt' in gen_pkg.read_text('prek.toml')
-        assert 'rumdl' in gen_pkg.read_text('prek.toml')
+        assert "{ id = 'rumdl' }" in gen_pkg.read_text('prek.toml')
 
     def test_without_rumdl(self, package: Package):
         package.generate(use_rumdl=False)
 
         assert not package.exists('rumdl.toml')
         assert 'tools' not in package.toml_config('mise.toml')
-        assert 'rumdl-fmt' not in package.read_text('prek.toml')
-        assert 'rumdl-pre-commit' not in package.read_text('prek.toml')
+        assert 'rumdl' not in package.read_text('prek.toml')
 
     def test_supply_chain_configs(self, gen_pkg: Package, package: Package):
         template_expected = {
