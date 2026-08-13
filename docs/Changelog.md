@@ -4,6 +4,111 @@
 
 <!-- towncrier release notes start -->
 
+## [1.20260812.1](https://github.com/level12/coppy/releases/tag/v1.20260812.1)
+
+
+### Breaking
+
+- Add project-local npm, pnpm, Bun, Yarn, and uv cooldown config files with a 3-day
+  default for generated projects. Projects without a JavaScript build can opt out of the
+  JavaScript package-manager configs.
+
+  The uv cooldown requires uv 0.9.17 or newer. Before updating an existing project,
+  upgrade Coppy itself with `uv tool upgrade coppy`. The updated `coppy update` checks the
+  installed uv version and stops with upgrade instructions when it is too old.
+- Add a `pytest.ini` to generated project roots and move pytest warning configuration
+  there from `tests/conftest.py` so the filters apply during every pytest lifecycle phase,
+  including configuration and collection
+  ([#96](https://github.com/level12/coppy/issues/96)).
+
+  This makes the intended warnings-as-errors policy effective. After updating, warnings
+  that previously appeared only in pytest's warning summary may fail the test run.
+
+  **Manual update required:** migrate any project-specific `warnings.filterwarnings()`
+  calls from `tests/conftest.py` to `pytest.ini`'s `filterwarnings` list. Put the general
+  `error` rule first and more specific `ignore` rules afterward because the last matching
+  rule takes precedence.
+- Get rid of dependency on hatch cli and related
+
+  This is a breaking change if a project:
+
+    - Uses Hatch environments or other Hatch CLI functionality
+    - Customizes the old `bump` task or has built automations on it
+    - Depends on a "v" prefix in the version in `version.py` (a "v" is still present in
+      the Git tag added by version bumping)
+
+  CLI replacements:
+
+    - `hatch build` → `mise run build`
+    - `hatch version` → `mise run version show`
+    - `mise run bump` → `mise run version bump`
+- Use `prek` instead of `pre-commit`.
+
+  Coppy now requires Copier 9.5+.
+
+  Upgrade path for existing projects:
+
+    - Run `coppy update` like normal.
+    - Coppy's migrations will
+        - Convert your `.pre-commit-config.yaml` into `prek.toml`.
+        - Replace an existing Git `pre-commit` hook with a `prek` hook
+
+  If the conversion step fails, `coppy update` aborts immediately. Restore a clean working
+  tree, fix the hook config, and rerun the update.
+
+  **Manual Updates**:
+
+    - update any custom CI/scripts/docs that still run `nox -s precommit`; the session is
+      now `nox -s prek`
+    - replace any direct use of the old Python `pre-commit` API (for example
+      `pre_commit.main`)
+
+
+### Fixed
+
+- Ignore blank lines in `pip-audit-ignore.txt` when building `pip-audit` ignore arguments
+
+
+### Added
+
+- Add rumdl Markdown linting and formatting behind a `use_rumdl` Copier option.
+- Projects can omit the Codecov upload and OIDC permissions from the GitHub nox workflow.
+
+
+### Changed
+
+- Add `mise lock` support by placing a `mise.lock` file.
+
+  `copy update`: if `mise.lock` is blank, coppy runs `mise lock`.
+- Generated `ruff.toml` no longer pins `target-version`
+
+  Ruff now auto-derives its target from `pyproject.toml`'s `requires-python`, so edits to
+  the project's supported Python versions stay in sync with ruff without re-running
+  copier.
+
+  <https://docs.astral.sh/ruff/configuration/#inferring-the-python-version>
+- Modify the uv/mise/Python integration.
+
+    - Standardize on `.python-version` for Python version selection.
+        - It works for mise, uv, and GitHub's `setup-python` action.
+    - mise
+        - Uses `python.uv_venv_auto = "create|source"` to create and activate uv's
+          project environment.
+        - Gets its Python tool spec from `.python-version`.
+        - Uses an `enter` hook to run `uv sync`
+    - Add a `python_version_min` Copier template setting so the `pyproject.toml` Python
+      spec can be different from the interpreter version used for local development.
+        - This is useful for library projects that want to test on a given version but may
+          support older or newer versions.
+        - Applications should keep `python_version_min = python_version`.
+    - Remove the custom `mise-uv-init.py` task and its `UV_PROJECT_ENVIRONMENT` and
+      `UV_PYTHON` overrides.
+    - Centralized environments are now an optional developer-level uv setting rather than
+      project configuration.
+- The `upgrade-deps` task now refreshes `mise.lock` so tools using fuzzy version selectors
+  such as `latest` advance to the latest published matching version.
+
+
 ## [1.20251025.1](https://github.com/level12/coppy/releases/tag/v1.20251025.1)
 
 
