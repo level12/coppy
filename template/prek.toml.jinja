@@ -20,7 +20,7 @@ repo = 'https://github.com/astral-sh/ruff-pre-commit'
 rev = "v0.16.2"
 hooks = [
   { id = 'ruff' },
-  # Due to the Ruff config we use (see comment in pyproject.toml), it's possible that the
+  # Due to the Ruff config we use (see comment in ruff.toml), it's possible that the
   # formatter creates linting failures. By only doing a check here, it forces the dev to run
   # the formatter before prek runs (presumably on save through their editor) and then the
   # linting check above would always catch a problem created by the formatter.
