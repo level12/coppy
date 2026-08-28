@@ -7,8 +7,8 @@ repo = 'https://github.com/pre-commit/pre-commit-hooks'
 rev = 'v6.0.0'
 hooks = [
   { id = 'check-merge-conflict' },
-  { id = 'check-ast', types = ['python'], exclude = 'tasks/version' },
-  { id = 'debug-statements', types = ['python'], exclude = 'tasks/version' },
+  { id = 'check-ast', types = ['python'] },
+  { id = 'debug-statements', types = ['python'] },
   { id = 'trailing-whitespace' },
   { id = 'end-of-file-fixer' },
   { id = 'check-added-large-files' },
@@ -19,12 +19,12 @@ hooks = [
 repo = 'https://github.com/astral-sh/ruff-pre-commit'
 rev = "v0.16.2"
 hooks = [
-  { id = 'ruff', exclude = 'tasks/version' },
+  { id = 'ruff' },
   # Due to the Ruff config we use (see comment in pyproject.toml), it's possible that the
   # formatter creates linting failures. By only doing a check here, it forces the dev to run
   # the formatter before prek runs (presumably on save through their editor) and then the
   # linting check above would always catch a problem created by the formatter.
-  { id = 'ruff-format', args = ['--check'], exclude = 'tasks/version' },
+  { id = 'ruff-format', args = ['--check'] },
 ]
 
 [[repos]]

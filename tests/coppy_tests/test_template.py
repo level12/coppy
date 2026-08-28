@@ -75,6 +75,7 @@ class TestTemplateGen:
         assert not gen_pkg.exists('tasks/mise-uv-init.py')
 
         assert "{ id = 'rumdl' }" in gen_pkg.read_text('prek.toml')
+        assert "exclude = 'tasks/version'" not in gen_pkg.read_text('prek.toml')
 
     def test_mise(self, gen_pkg: Package):
         assert_pkg_file_eq(gen_pkg, 'mise.toml', 'mise.toml')
