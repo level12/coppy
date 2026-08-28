@@ -24,14 +24,19 @@ config.
       point
 
 
-## Versions & releases
+## Versions
 
-Versions are date based. Tools:
+Versions are date based. The latest tag is used by `copier update` and `uv tool install`.
 
-- Current version: `mise version show`
-- Bump version based on date, tag, push: `mise version bump`
-    - Options: `mise version -- --help`
 
-There is no actual "release" for this project since it only lives on GitHub and no
-artifacts need to be published. But, the most recent tag is, by default, what is used by
-`copier update` and `uv tool install`.
+## Release checklist
+
+- Push `main`, confirm CI is passing
+- `mise run version -- bump` to commit, sign, tag, and push
+    - Bumping first since `changelog` task uses the current version
+- `mise run changelog`
+    - `rumdl fmt docs/Changelog.md`
+    - Review, commit and push the changelog
+- `mise run demo-update` to update [coppy-demo](https://github.com/level12/coppy-demo)
+  locally
+    - commit & push that repo
