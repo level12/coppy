@@ -35,7 +35,7 @@ run = 'pytest --cov --cov-report=html --no-cov-on-fail'
 description = 'Upgrade mise, uv, and prek dependencies'
 dir = "{{ config_root }}"
 run = [
-    'mise lock --bump',
+    'mise upgrade --local',
     'uv sync --upgrade',
     'prek auto-update',
 ]
