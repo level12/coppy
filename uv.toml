@@ -1,2 +1,6 @@
 # Supply-chain hardening for uv project commands.
 exclude-newer = "3 days"
+
+# Make ruff a bit less strict since, when it fails, it can cause the check
+# in prek for ruff version mismatch to fail, which fails CI.
+exclude-newer-package = { ruff = "1 day" }
