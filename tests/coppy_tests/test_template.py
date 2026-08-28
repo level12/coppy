@@ -1,4 +1,5 @@
 import datetime
+import json
 from pathlib import Path
 
 import pytest
@@ -86,6 +87,22 @@ max_line_length = 90
 """.lstrip()
         assert expected in gen_pkg.read_text('.editorconfig')
 
+    def test_vscode_settings(self, gen_pkg: Package):
+        settings = json.loads(gen_pkg.read_text('.vscode/settings.json'))
+
+        assert settings == {
+            'editor.rulers': [100],
+            '[markdown]': {'editor.rulers': [90]},
+            '[python]': {
+                'editor.formatOnSave': True,
+                'editor.defaultFormatter': 'charliermarsh.ruff',
+                'editor.codeActionsOnSave': {
+                    'source.fixAll.ruff': 'explicit',
+                    'source.organizeImports.ruff': 'explicit',
+                },
+            },
+        }
+
     def test_rumdl(self, gen_pkg: Package):
         utils.sub_run('rumdl', 'check', '.', cwd=gen_pkg.dpath)
 
@@ -96,6 +113,7 @@ max_line_length = 90
         assert_pkg_file_eq(package, 'mise.toml', 'mise-no-rumdl.toml')
         assert 'rumdl' not in package.read_text('prek.toml')
         assert 'max_line_length' not in package.read_text('.editorconfig')
+        assert '[markdown]' not in json.loads(package.read_text('.vscode/settings.json'))
 
     def test_supply_chain_configs(self, gen_pkg: Package, package: Package):
         template_expected = {

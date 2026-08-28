@@ -1,0 +1,18 @@
+{
+    "editor.rulers": [100],
+{% if use_rumdl %}
+
+    "[markdown]": {
+        "editor.rulers": [90]
+    },
+{% endif %}
+
+    "[python]": {
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "charliermarsh.ruff",
+        "editor.codeActionsOnSave": {
+            "source.fixAll.ruff": "explicit",
+            "source.organizeImports.ruff": "explicit"
+        }
+    }
+}
