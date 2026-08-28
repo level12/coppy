@@ -230,7 +230,7 @@ class TestTemplateWithSandbox:
             # Task listing
             task_meta = sb.mise('tasks', '--json', json=True)
 
-            assert len(task_meta) == 4
+            assert len(task_meta) == 5
             task_meta = {rec['name']: LazyDict(rec) for rec in task_meta}
 
             bootstrap = task_meta['bootstrap']
