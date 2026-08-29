@@ -34,9 +34,10 @@ Versions are date based. The latest tag is used by `copier update` and `uv tool 
 - Push `main`, confirm CI is passing
 - `mise run version -- bump` to commit, sign, tag, and push
     - Bumping first since `changelog` task uses the current version
+- `mise run demo-update` to update [coppy-demo](https://github.com/level12/coppy-demo)
+  locally
+    - Ensure nothing looks off/wrong
+    - Commit & push that repo
 - `mise run changelog`
     - `rumdl fmt docs/Changelog.md`
     - Review, commit and push the changelog
-- `mise run demo-update` to update [coppy-demo](https://github.com/level12/coppy-demo)
-  locally
-    - commit & push that repo
