@@ -41,6 +41,10 @@ jobs:
           # Copier errors out with a shallow repo clone.  This makes it a full clone.
           fetch-depth: 0
 
+      - uses: jdx/mise-action@v4
+        with:
+          install_args: rumdl
+
       - name: Prep test user
         run: |
           # The script returns early after adding the current user to the new user's group.
@@ -72,4 +76,4 @@ jobs:
           # Permissive umask to avoid group write being masked out
           umask 000
 
-          sg coppy-tests -c 'uv run --frozen --exact --only-group nox -- nox -s pytest'
+          sg coppy-tests -c 'mise exec -- uv run --frozen --exact --only-group nox -- nox -s pytest'
