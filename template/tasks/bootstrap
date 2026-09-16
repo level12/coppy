@@ -11,7 +11,7 @@ echo 'PATH:' $PATH
 git init
 uv sync
 prek install
-prek auto-update
+prek update
 ruff check --fix
 ruff format
 git add .
