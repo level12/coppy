@@ -249,7 +249,7 @@ class TestTemplateWithSandbox:
             # Task listing
             task_meta = sb.mise('tasks', '--json', json=True)
 
-            assert len(task_meta) == 5
+            assert len(task_meta) == 6
             task_meta = {rec['name']: LazyDict(rec) for rec in task_meta}
 
             bootstrap = task_meta['bootstrap']
@@ -259,6 +259,9 @@ class TestTemplateWithSandbox:
             version_task = task_meta['version']
             assert version_task.name == 'version'
             assert version_task.description == 'Manage version'
+
+            rm_unused_imports = task_meta['rm-unused-imports']
+            assert rm_unused_imports.description == 'Remove unused imports using ruff'
 
             # Prepare a minimal git repo so bump can create a commit and tag.
             assert not pkg.path_exists('.git')
