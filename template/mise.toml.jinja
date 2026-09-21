@@ -39,3 +39,8 @@ run = [
     'uv sync --upgrade',
     'prek update',
 ]
+
+[tasks.rm-unused-imports]
+description = 'Remove unused imports using ruff'
+dir = "{% raw %}{{ config_root }}{% endraw %}"
+run = 'ruff check --select F401 --fix --fixable F401 .'
