@@ -275,7 +275,10 @@ class TestTemplateWithSandbox:
 
             # Mirror real usage: initialize the project's managed environment before running tasks.
             sb.mise_exec('uv', 'sync')
-            assert sb.mise_exec('python', '-c', 'import click, enterprise_tasks_lib') == ''
+            assert (
+                sb.mise_exec('python', '-c', 'import click; from enterprise.utils import sub_run')
+                == ''
+            )
 
             # Run bump
             # Tests have no release signing key; exercise the environment-variable override while
