@@ -93,7 +93,11 @@ max_line_length = 90
 
         assert settings == {
             'editor.rulers': [100],
-            '[markdown]': {'editor.rulers': [90]},
+            '[markdown]': {
+                'editor.rulers': [90],
+                'editor.formatOnSave': True,
+                'editor.defaultFormatter': 'rvben.rumdl',
+            },
             '[python]': {
                 'editor.formatOnSave': True,
                 'editor.defaultFormatter': 'charliermarsh.ruff',
@@ -299,7 +303,9 @@ class TestTemplateWithSandbox:
             assert sb.exec_stdout('git', 'tag', '--list') == f'v{version}'
             assert f'Release v{version}' in sb.exec_stdout('git', 'cat-file', '-p', f'v{version}')
 
-    def test_script_run(self, pkg: UserPackage):
+    def test_script_run(self):
+        # Keep this project independent of the Git repo created by test_tasks.
+        pkg = UserPackage('template-script-run')
         pkg.generate(script_name='ent')
 
         with pkg.sandbox() as sb:
