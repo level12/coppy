@@ -1,9 +1,11 @@
 {
     "editor.rulers": [100],
 {% if use_rumdl %}
-
+   
     "[markdown]": {
-        "editor.rulers": [90]
+        "editor.rulers": [90],
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "rvben.rumdl"
     },
 {% endif %}
 
